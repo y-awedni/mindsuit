@@ -7,7 +7,7 @@ services:
     #___________________________________________________________________________exception listener
     kernel.listener.acme_foo_exception_listener:
         class: AppBundle\EventListener\ExceptionListener
-        arguments: ["@templating", "@kernel"]
+        arguments: ["@twig", "@kernel"]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
     #___________________________________________________________________________flash message

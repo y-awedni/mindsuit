@@ -4,14 +4,14 @@ namespace AppBundle\EventListener;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Twig\Environment;
 
 class ExceptionListener {
 
     protected $templating;
     protected $kernel;
 
-    public function __construct(EngineInterface $templating, $kernel) {
+    public function __construct(Environment $templating, $kernel) {
         $this->templating = $templating;
         $this->kernel = $kernel;
     }
@@ -29,7 +29,7 @@ class ExceptionListener {
             $response->setContent(
                     // create you custom template AcmeFooBundle:Exception:exception.html.twig
                     $this->templating->render(
-                            'AppBundle:Exception:exception.html.twig', array('exception' => $exception)
+                            '@App/Exception/exception.html.twig', array('exception' => $exception)
                     )
             );
 
