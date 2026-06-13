@@ -237,7 +237,7 @@
                                                 </a>
                                                 <a class="list-group-item">
                                                     Timbre
-                                                    <span class="pull-right text-muted small"><em>0.600</em>
+                                                    <span class="pull-right text-muted small"><em>{{ timbre.valeur }}</em>
                                                     </span>
                                                 </a>
                                                 <a class="list-group-item">
@@ -628,20 +628,21 @@
                 document.getElementById("appbundle_facture_saveAndPrint").removeAttribute("disabled");
                 document.getElementById("appbundle_facture_saveAndPrint").removeAttribute("title");
             }
+            var timbre = parseFloat("{{ timbre.valeur }}");
             document.getElementById('totalHT').innerHTML = parseFloat(ht).toFixed(3);
             document.getElementById('totalREMISE').innerHTML = parseFloat(remise).toFixed(3);
             document.getElementById('totalTVA').innerHTML = parseFloat(tva).toFixed(3);
-            document.getElementById('totalTTC').innerHTML = parseFloat(ttc + 0.6).toFixed(3);
+            document.getElementById('totalTTC').innerHTML = parseFloat(ttc + timbre).toFixed(3);
 
-            if (montantRetenu >= 0 && (ttc + 0.6) >= montantRetenu) {
+            if (montantRetenu >= 0 && (ttc + timbre) >= montantRetenu) {
                 var tauxRetenu = jQuery('#retenu').val();
-                var mntTauxRetenu = ((ttc + 0.6) / 100 * tauxRetenu);
+                var mntTauxRetenu = ((ttc + timbre) / 100 * tauxRetenu);
                 jQuery('#totalRETENU').html(parseFloat(mntTauxRetenu).toFixed(3));
                 jQuery('#appbundle_facture_tauxRetenu').val(parseFloat(jQuery('#retenu').val()).toFixed(3));
                 jQuery('#appbundle_facture_totalRetenu').val(mntTauxRetenu);
             } else {
                 var tauxRetenu = jQuery('#retenu').val();
-                var mntTauxRetenu = ((ttc + 0.6) / 100 * tauxRetenu);
+                var mntTauxRetenu = ((ttc + timbre) / 100 * tauxRetenu);
                 jQuery('#totalRETENU').html(parseFloat(0).toFixed(3));
                 jQuery('#appbundle_facture_tauxRetenu').val(0);
                 jQuery('#appbundle_facture_totalRetenu').val(0);
@@ -649,7 +650,7 @@
             document.getElementById('appbundle_facture_ht').value = parseFloat(ht).toFixed(3);
             document.getElementById('appbundle_facture_remise').value = parseFloat(remise).toFixed(3);
             document.getElementById('appbundle_facture_tva').value = parseFloat(tva).toFixed(3);
-            document.getElementById('appbundle_facture_total').value = parseFloat(ttc + 0.6).toFixed(3);
+            document.getElementById('appbundle_facture_total').value = parseFloat(ttc + timbre).toFixed(3);
         }, 1);
     </script>
 {% endblock %}

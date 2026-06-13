@@ -229,7 +229,7 @@ class FactureAvoirController extends BaseController {
      *
      * @Route("/{id}/facture/new", name="factureavoir_facture_new", methods={"GET", "POST"})
      */
-    public function factureNewAction(Request $request, Facture $facture) {
+    public function factureNewAction(Request $request, Facture $facture, \App\Service\TimbreProvider $timbreProvider) {
         if (!$facture->getTermine()) {
             $this->get('session')->getFlashBag()->add('info', 'Il faut terminer la facture pour faire un avoir');
             return $this->redirectToRoute('facture_show', array('id' => $facture->getId()));
@@ -277,6 +277,8 @@ class FactureAvoirController extends BaseController {
                 }
             }
             if ($form->isValid()) {
+                // Capture the timbre that applied at creation (avoirs now bear it too).
+                $factureAvoir->setTimbre($timbreProvider->getValeur());
                 $em->persist($factureAvoir);
                 $em->flush($factureAvoir);
                 return $this->redirectToRoute('factureavoir_show', array('id' => $factureAvoir->getId()));

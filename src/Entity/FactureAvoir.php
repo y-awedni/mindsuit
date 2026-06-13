@@ -63,6 +63,16 @@ class FactureAvoir {
     private $total;
 
     /**
+     * Droit de timbre applied to this credit note, captured at creation.
+     * Historical avoirs predate timbre on avoirs, so they backfill to 0.000.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="timbre", type="decimal", precision=10, scale=3, nullable=false, options={"default": "0.000"})
+     */
+    private $timbre = '0.000';
+
+    /**
      * @var string
      *
      * @ORM\Column(name="benifice", type="decimal", precision=10, scale=3, nullable=true)
@@ -281,6 +291,28 @@ class FactureAvoir {
      */
     public function getTotal() {
         return $this->total;
+    }
+
+    /**
+     * Set timbre
+     *
+     * @param string $timbre
+     *
+     * @return FactureAvoir
+     */
+    public function setTimbre($timbre) {
+        $this->timbre = $timbre;
+
+        return $this;
+    }
+
+    /**
+     * Get timbre
+     *
+     * @return string
+     */
+    public function getTimbre() {
+        return $this->timbre;
     }
 
     /**

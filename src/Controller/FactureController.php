@@ -317,13 +317,16 @@ class FactureController extends BaseController {
      *
      * @Route("/new", name="facture_new", methods={"GET", "POST"})
      */
-    public function newAction(Request $request) {
+    public function newAction(Request $request, \App\Service\TimbreProvider $timbreProvider) {
         $em = $this->getDoctrine()->getManager();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $facture = new Facture();
         $form = $this->createForm('App\Form\FactureType', $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            // Capture the timbre that applied at creation so the stored total
+            // stays consistent if the configured value changes later.
+            $facture->setTimbre($timbreProvider->getValeur());
             $em->persist($facture);
             $em->flush($facture);
             if ($form->get('saveAndPrint')->isClicked()) {

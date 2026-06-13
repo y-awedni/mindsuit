@@ -21,6 +21,11 @@ services:
     App\Service\FormatDate: ~
     App\Service\ExcelCustomConfig: ~
     App\Service\ExcelFactory: ~
+
+    # Current droit de timbre value; also exposed as the `timbre` Twig global.
+    App\Service\TimbreProvider:
+        arguments: ['@doctrine.orm.entity_manager']
+        public: true
     App\Service\NotificationSystem:
         arguments: ['@doctrine.orm.entity_manager']
 

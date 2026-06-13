@@ -192,6 +192,11 @@
                                                     </span>
                                                 </a>
                                                 <a class="list-group-item">
+                                                    Timbre
+                                                    <span class="pull-right text-muted small"><em>{{ timbre.valeur }}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
                                                     Total TTC
                                                     <span class="pull-right text-muted small"><em id="totalTTC">0.000</em>
                                                     </span>
@@ -473,15 +478,16 @@
                 document.getElementById("appbundle_factureavoir_saveAndPrint").removeAttribute("disabled");
                 document.getElementById("appbundle_factureavoir_saveAndPrint").removeAttribute("title");
             }
+            var timbre = parseFloat("{{ timbre.valeur }}");
             document.getElementById('totalHT').innerHTML = parseFloat(ht).toFixed(3);
             document.getElementById('totalREMISE').innerHTML = parseFloat(remise).toFixed(3);
             document.getElementById('totalTVA').innerHTML = parseFloat(tva).toFixed(3);
-            document.getElementById('totalTTC').innerHTML = parseFloat(ttc).toFixed(3);
+            document.getElementById('totalTTC').innerHTML = parseFloat(ttc + timbre).toFixed(3);
 
             document.getElementById('appbundle_factureavoir_ht').value = parseFloat(ht).toFixed(3);
             document.getElementById('appbundle_factureavoir_remise').value = parseFloat(remise).toFixed(3);
             document.getElementById('appbundle_factureavoir_tva').value = parseFloat(tva).toFixed(3);
-            document.getElementById('appbundle_factureavoir_total').value = parseFloat(ttc).toFixed(3);
+            document.getElementById('appbundle_factureavoir_total').value = parseFloat(ttc + timbre).toFixed(3);
         }, 1);
     </script>
 {% endblock %}

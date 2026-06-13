@@ -69,8 +69,19 @@ class Facture {
      * @Groups({"facture", "lignes"})
      */
     private $total = 0;
-    
-     
+
+    /**
+     * Droit de timbre applied to this invoice, captured at creation so the
+     * stored total stays self-consistent even if the configured value changes.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="timbre", type="decimal", precision=10, scale=3, nullable=false, options={"default": "0.600"})
+     * @Groups({"facture", "lignes"})
+     */
+    private $timbre = '0.600';
+
+
     /**
      * @var string
      *
@@ -345,6 +356,28 @@ class Facture {
      */
     public function getTotal() {
         return $this->total;
+    }
+
+    /**
+     * Set timbre
+     *
+     * @param string $timbre
+     *
+     * @return Facture
+     */
+    public function setTimbre($timbre) {
+        $this->timbre = $timbre;
+
+        return $this;
+    }
+
+    /**
+     * Get timbre
+     *
+     * @return string
+     */
+    public function getTimbre() {
+        return $this->timbre;
     }
 
     /**
