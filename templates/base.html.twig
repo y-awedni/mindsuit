@@ -17,7 +17,7 @@
     <link rel="icon" href="{{ asset('bundles/app/favicon.png')}} " type="image/gif" sizes="16x16">
 </head>
 <body>
-    <img id="loader" src="{{asset('loader.svg')}}" style="display: none;"/>
+    <div id="loader"><div class="app-spinner"></div></div>
     {% if  app.user is not null and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container-fluid">
@@ -202,7 +202,6 @@
 
 
 <script src="{{ asset('bundles/app/vendor/jquery/jquery.min.js')}}"></script>
-<script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script src="{{ asset('bundles/app/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 <script src="{{ asset('bundles/app/vendor/metisMenu/metisMenu.min.js')}}"></script>
@@ -248,11 +247,17 @@
             toggleActive: true,
             language: "{{ app.request.locale }}"
         });
-        $(window).bind('beforeunload', function () {
-            document.getElementById('loader').removeAttribute('style');
-            $('.container-fluid').css("filter", "blur(2px)");
-            $('.container-fluid').css("opacity", "0.5");
-        });
+        var loaderEl = document.getElementById('loader');
+        function showLoader() { if (loaderEl) { loaderEl.style.display = 'flex'; } }
+        function hideLoader() { if (loaderEl) { loaderEl.style.display = 'none'; } }
+
+        // Show on real navigation (link clicks that leave the page).
+        $(window).on('beforeunload', showLoader);
+        // Show on form submit.
+        $(document).on('submit', 'form', showLoader);
+        // Hide if the page is restored from the back/forward cache, so the
+        // overlay never sticks after navigating back.
+        $(window).on('pageshow', hideLoader);
 
         $('.form-control').attr('autocomplete', 'off');
 
