@@ -56,7 +56,7 @@ db-reset: ## Drop the database volume and re-seed from docker/mysql/init dumps
 
 .PHONY: db-import
 db-import: ## Import a dump: make db-import f=path/to/dump.sql
-	$(PHP) sh -c 'mysql -h database -u$$MARIADB_USER -p$$MARIADB_PASSWORD $$MARIADB_DATABASE' < $(f)
+	$(DC) exec -T database sh -c 'exec mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE' < $(f)
 
 .PHONY: test
 test: ## Run the PHPUnit test suite

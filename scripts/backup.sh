@@ -20,7 +20,7 @@ mkdir -p "${OUT}"
 echo "[backup] dumping all databases..."
 # --all-databases captures the control DB and every tenant DB in one shot.
 docker compose -f docker-compose.prod.yml exec -T database \
-  sh -c 'exec mysqldump --single-transaction --quick --all-databases -uroot -p"$MARIADB_ROOT_PASSWORD"' \
+  sh -c 'exec mysqldump --single-transaction --quick --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD"' \
   | gzip > "${OUT}/all-databases.sql.gz"
 
 echo "[backup] archiving uploads..."

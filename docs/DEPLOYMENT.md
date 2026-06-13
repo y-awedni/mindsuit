@@ -45,14 +45,14 @@ CF_API_TOKEN=<cloudflare-scoped-token>
 # App
 APP_ENV=prod
 APP_SECRET=<openssl rand -hex 32>
-DATABASE_URL=mysql://mindsuit:<pass>@database:3306/mindsuit_control?serverVersion=mariadb-10.6
+DATABASE_URL=mysql://mindsuit:<pass>@database:3306/mindsuit_control?serverVersion=8.0
 MAILER_DSN=smtp://<user>:<pass>@<smtp-host>:587
 
-# MariaDB
-MARIADB_ROOT_PASSWORD=<strong>
-MARIADB_DATABASE=mindsuit_control
-MARIADB_USER=mindsuit
-MARIADB_PASSWORD=<strong>
+# MySQL
+MYSQL_ROOT_PASSWORD=<strong>
+MYSQL_DATABASE=mindsuit_control
+MYSQL_USER=mindsuit
+MYSQL_PASSWORD=<strong>
 ```
 
 ## 4. First boot

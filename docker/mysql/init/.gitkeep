@@ -1,7 +1,7 @@
 # Place a production database dump here (e.g. mindsuit.sql or mindsuit.sql.gz)
-# to seed a fresh MariaDB volume on first `make up`.
+# to seed a fresh MySQL volume on first `make up`.
 #
-# Dumps are loaded automatically by the MariaDB entrypoint, in alphabetical order,
+# Dumps are loaded automatically by the MySQL entrypoint, in alphabetical order,
 # ONLY when the db_data volume is empty. To re-import after the volume exists:
 #   make db-reset
 #

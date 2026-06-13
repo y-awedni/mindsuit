@@ -18,7 +18,7 @@ stock, payments (règlements), treasury and reporting. It is being revived from 
 | ORM          | Doctrine ORM 2.5              | Doctrine ORM 2.x + Migrations    |
 | Auth         | FOSUserBundle                 | Native Symfony Security          |
 | Templating   | Twig + static Bootstrap/sb-admin-2 | Twig + AssetMapper          |
-| Database     | MySQL/MariaDB                 | MariaDB 10.6 (DB-per-tenant)     |
+| Database     | MySQL 5.7                     | MySQL 8.0 (DB-per-tenant)        |
 | Deployment   | cPanel / Apache               | Docker Compose on a VPS + Caddy  |
 
 ## Quickstart (local dev)
@@ -28,7 +28,7 @@ matches the original host while we modernize it.
 
 ```bash
 make init          # creates docker/.env from the example
-make up            # build + start php, nginx, mariadb, mailpit
+make up            # build + start php, nginx, mysql, mailpit
 make install       # composer install + install web assets
 ```
 

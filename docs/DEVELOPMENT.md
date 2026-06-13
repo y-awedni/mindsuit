@@ -29,11 +29,11 @@ docker compose exec php php bin/console assets:install web
 | nginx    | http://localhost:8080     | App (prod front controller `app.php`)  |
 | dev FC   | .../app_dev.php           | Symfony profiler & debug               |
 | mailpit  | http://localhost:8025     | Captures all outbound email            |
-| mariadb  | localhost:3307            | user/pass/db all `mindsuit` (dev only) |
+| mysql    | localhost:3307            | MySQL 5.7; user/pass/db all `mindsuit` (dev only) |
 
 ## Seeding the database
 
-The MariaDB entrypoint auto-imports any `*.sql` / `*.sql.gz` in
+The MySQL entrypoint auto-imports any `*.sql` / `*.sql.gz` in
 `docker/mysql/init/` **the first time** the volume is created.
 
 ```bash

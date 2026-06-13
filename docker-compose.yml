@@ -35,7 +35,8 @@ services:
       - php
 
   database:
-    image: mariadb:10.6
+    # MySQL 5.7 matches the original cPanel host exactly (faithful baseline).
+    image: mysql:5.7
     env_file:
       - docker/.env
     ports:
@@ -45,10 +46,10 @@ services:
       # Drop a production dump (*.sql / *.sql.gz) here to seed a fresh volume.
       - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 15
 
   mailer:
     image: axllent/mailpit:latest

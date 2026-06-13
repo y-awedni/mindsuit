@@ -2,7 +2,7 @@
 # Activated after Phase 2 (framework upgrade). See docs/DEPLOYMENT.md.
 #
 # Secrets come from a server-side .env (NOT committed):
-#   APP_IMAGE, ACME_EMAIL, CF_API_TOKEN, MARIADB_*, APP_SECRET, DATABASE_URL...
+#   APP_IMAGE, ACME_EMAIL, CF_API_TOKEN, MYSQL_*, APP_SECRET, DATABASE_URL...
 
 services:
   php:
@@ -35,17 +35,18 @@ services:
       - php
 
   database:
-    image: mariadb:10.6
+    # Same engine family as dev and the original host (MySQL).
+    image: mysql:8.0
     restart: unless-stopped
     env_file:
       - .env
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 15
 
 volumes:
   db_data:
