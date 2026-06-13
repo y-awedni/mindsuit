@@ -22,6 +22,7 @@
         "knplabs/knp-paginator-bundle": "^6.0",
         "knplabs/knp-time-bundle": "^2.0",
         "masterminds/html5": "^2.10",
+        "mpdf/mpdf": "^8.3",
         "pear/numbers_words": "^0.18.1",
         "phpoffice/phpspreadsheet": "^1.29",
         "symfony/monolog-bundle": "^3.8",

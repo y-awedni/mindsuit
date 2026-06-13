@@ -426,19 +426,35 @@ class FactureController extends BaseController {
      *
      * @Route("/{id}/print", name="facture_print", methods={"GET"})
      */
-    public function printAction(Facture $facture, Request $request) {
+    public function printAction(Facture $facture, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
         $em = $this->getDoctrine()->getManager();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($facture->getTotal());
         $totalMillimesEnTtLettres = explode('.', number_format($facture->getTotal() - intval($facture->getTotal()), 3))[1];
         $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
-        return $this->render('facture/print.html.twig', array(
-                    'facture' => $facture,
-                    'societe' => $societe,
-                    'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
-                    'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres
-        ));
+
+        return $pdf->renderResponse('facture/pdf.html.twig', [
+            'facture' => $facture,
+            'societe' => $societe,
+            'logoPath' => $this->societeLogoPath($societe),
+            'tvaBreakdown' => $calc->tvaBreakdown($facture->getLignesFactures()),
+            'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
+            'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres,
+        ], 'Facture-' . $facture->getCode());
+    }
+
+    /**
+     * Absolute filesystem path to the company logo for embedding in PDFs,
+     * or null when no logo is configured.
+     */
+    private function societeLogoPath($societe): ?string
+    {
+        if (!$societe || !$societe->getMedia()) {
+            return null;
+        }
+
+        return $this->getParameter('kernel.project_dir') . '/public/' . $societe->getMedia()->getAssetPath();
     }
 
     /**

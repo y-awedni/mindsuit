@@ -523,12 +523,6 @@ parameters:
 			path: src/Controller/DevisController.php
 
 		-
-			message: '#^Argument of an invalid type App\\Entity\\LigneFacture supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/Controller/FactureAvoirController.php
-
-		-
 			message: '#^Argument of an invalid type App\\Entity\\LigneFactureAvoir supplied for foreach, only iterables are supported\.$#'
 			identifier: foreach.nonIterable
 			count: 2
@@ -589,20 +583,8 @@ parameters:
 			path: src/Controller/FactureAvoirController.php
 
 		-
-			message: '#^Argument of an invalid type App\\Entity\\LigneFacture supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/Controller/FactureController.php
-
-		-
 			message: '#^Binary operation "\-" between string and int results in an error\.$#'
 			identifier: binaryOp.invalid
-			count: 1
-			path: src/Controller/FactureController.php
-
-		-
-			message: '#^Call to an undefined method App\\Entity\\LigneFacture\:\:contains\(\)\.$#'
-			identifier: method.notFound
 			count: 1
 			path: src/Controller/FactureController.php
 
@@ -2875,13 +2857,13 @@ parameters:
 			path: src/Entity/Devis.php
 
 		-
-			message: '#^Argument of an invalid type App\\Entity\\LigneFacture supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
+			message: '#^Binary operation "\-" between string and string results in an error\.$#'
+			identifier: binaryOp.invalid
 			count: 2
 			path: src/Entity/Facture.php
 
 		-
-			message: '#^Binary operation "\-" between string and string results in an error\.$#'
+			message: '#^Binary operation "/" between string and 100 results in an error\.$#'
 			identifier: binaryOp.invalid
 			count: 2
 			path: src/Entity/Facture.php

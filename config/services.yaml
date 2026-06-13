@@ -26,6 +26,11 @@ services:
     App\Service\TimbreProvider:
         arguments: ['@doctrine.orm.entity_manager']
         public: true
+
+    # Server-side PDF rendering for printable documents.
+    App\Service\PdfGenerator:
+        arguments: ['@twig', '%kernel.project_dir%']
+    App\Service\DocumentCalculator: ~
     App\Service\NotificationSystem:
         arguments: ['@doctrine.orm.entity_manager']
 

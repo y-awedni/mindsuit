@@ -1,0 +1,146 @@
+<html>
+<head>
+    <style>
+        body { font-family: sans-serif; font-size: 11px; color: #333; }
+        .doc-title { font-size: 20px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        td { vertical-align: top; }
+        .header td { padding: 0; }
+        .parties { margin-top: 8px; }
+        .parties td { width: 50%; padding: 4px 0; }
+        .client-box { border: 1px solid #999; padding: 6px; }
+        .lines { margin-top: 10px; }
+        .lines th { background: #13b3d9; color: #fff; border: 1px solid #ddd; padding: 4px; font-size: 11px; }
+        .lines td { border: 1px solid #eee; padding: 4px; }
+        .lines tr:nth-child(even) td { background: #f6f6f6; }
+        .center { text-align: center; }
+        .right { text-align: right; }
+        .totaux table, .tva table { border: 1px solid #ddd; }
+        .totaux th, .totaux td, .tva th, .tva td { border: 1px solid #ddd; padding: 4px; }
+        .tva th { background: #13b3d9; color: #fff; }
+        .totaux th { background: #eee; text-align: left; width: 55%; }
+        .summary { margin-top: 14px; }
+        .summary td { width: 50%; vertical-align: bottom; }
+        .lettres { font-size: 11px; }
+        .signatures { margin-top: 18px; }
+        .signatures td { border: 1px solid #999; height: 60px; width: 33%; padding: 4px; font-size: 10px; }
+    </style>
+</head>
+<body>
+    <table class="header">
+        <tr>
+            <td style="width:25%">
+                {% if societe.desactiverPhoto == false and logoPath %}
+                    <img src="{{ logoPath }}" style="width:80px;">
+                {% endif %}
+            </td>
+            <td style="width:50%" class="center">
+                <span class="doc-title">Facture : {{ facture.code }}</span>
+            </td>
+            <td style="width:25%" class="right">
+                Date : {{ facture.dateCreation|date("d/m/Y") }}
+            </td>
+        </tr>
+    </table>
+
+    <table class="parties">
+        <tr>
+            <td>
+                {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
+                {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
+                {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
+                {% if societe.mobile %}<b>Mobile : </b>{{ societe.mobile }}<br>{% endif %}
+                {% if societe.mf %}<b>M.F : </b>{{ societe.mf }}<br>{% endif %}
+                {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
+                {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
+            </td>
+            <td>
+                <div class="client-box">
+                    <b>Code client : </b>{{ facture.client.code }}<br>
+                    {% if facture.client.rs %}<b>Client : </b>{{ facture.client.rs }}<br>{% endif %}
+                    {% if facture.client.email %}<b>Email : </b>{{ facture.client.email }}<br>{% endif %}
+                    {% if facture.client.ville %}<b>Ville : </b>{{ facture.client.ville }}<br>{% endif %}
+                    {% if facture.client.mf %}<b>M.F : </b>{{ facture.client.mf }}<br>{% endif %}
+                    {% if facture.client.note %}<b>Note : </b>{{ facture.client.note }}<br>{% endif %}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="lines">
+        <thead>
+            <tr>
+                <th>Réf</th>
+                <th>Désignation</th>
+                <th class="center">Unité</th>
+                <th class="right">PU HT</th>
+                {% if facture.remise != 0.000 %}<th class="right">Remise</th>{% endif %}
+                <th class="center">TVA</th>
+                <th class="right">PU TTC</th>
+                <th class="right">Qte</th>
+                <th class="right">Total TTC</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in facture.lignesFactures %}
+                <tr>
+                    <td>{{ ligne.article.code }}</td>
+                    <td>{{ ligne.designation }}</td>
+                    <td class="center">{{ ligne.article.unite }}</td>
+                    <td class="right">{{ ligne.prixUnitaire|number_format(3, '.', ' ') }}</td>
+                    {% if facture.remise != 0.000 %}<td class="right">{{ ligne.remise|number_format(0, '.', '') }} %</td>{% endif %}
+                    <td class="center">{{ ligne.tva }} %</td>
+                    <td class="right">{{ (ligne.ttc / ligne.qte)|number_format(3, '.', ' ') }}</td>
+                    <td class="right">{{ ligne.qte|number_format(0, '.', '') }}</td>
+                    <td class="right">{{ ligne.ttc|number_format(3, '.', ' ') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="summary">
+        <tr>
+            <td>
+                <div class="lettres">
+                    Arreté la présente facture à la somme de:<br>
+                    <b>{{ totalDinarsEnTtLettres|upper }} DINARS</b>
+                    {% if totalMillimesEnTtLettres %}<b>{{ totalMillimesEnTtLettres }} MILLIMES</b>{% endif %}
+                </div>
+            </td>
+            <td>
+                <table class="tva" style="margin-bottom:6px;">
+                    <tr>
+                        <th class="center">Taux</th>
+                        <th class="center">Base</th>
+                        <th class="center">TVA</th>
+                    </tr>
+                    {% for row in tvaBreakdown %}
+                        <tr>
+                            <td class="right">{{ row.taux }}%</td>
+                            <td class="right">{{ row.base|number_format(3, '.', ' ') }}</td>
+                            <td class="right">{{ row.tva|number_format(3, '.', ' ') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="totaux">
+                    <table>
+                        <tr><th>Total HT</th><td class="right">{{ facture.ht|number_format(3, '.', ' ') }}</td></tr>
+                        {% if facture.remise != 0.000 %}<tr><th>Total Remise</th><td class="right">{{ facture.remise|number_format(3, '.', ' ') }}</td></tr>{% endif %}
+                        <tr><th>Total TVA</th><td class="right">{{ facture.tva|number_format(3, '.', ' ') }}</td></tr>
+                        <tr><th>Timbre</th><td class="right">{{ facture.timbre|number_format(3, '.', ' ') }}</td></tr>
+                        <tr><th>Total TTC</th><td class="right"><b>{{ facture.total|number_format(3, '.', ' ') }}</b></td></tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="signatures">
+        <tr>
+            <td>Note<br>{{ facture.note }}</td>
+            <td>Signature Client</td>
+            <td>Signature Societé</td>
+        </tr>
+    </table>
+</body>
+</html>

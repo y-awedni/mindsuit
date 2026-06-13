@@ -758,7 +758,7 @@ class Facture {
     /**
      * Get lignesFactures
      *
-     * @return \App\Entity\LigneFacture
+     * @return \Doctrine\Common\Collections\Collection|\App\Entity\LigneFacture[]
      */
     public function getLignesFactures() {
         return $this->lignesFactures;
