@@ -56,6 +56,10 @@ jobs:
           echo "database did not become healthy" && docker compose logs database && exit 1
       - name: Install dependencies
         run: docker compose exec -T php composer install --no-interaction --prefer-dist
+      - name: Warm dev cache (for PHPStan symfony extension)
+        run: docker compose exec -T php php bin/console cache:warmup --env=dev
+      - name: Static analysis (PHPStan)
+        run: docker compose exec -T php vendor/bin/phpstan analyse --memory-limit=1G --no-progress
       - name: Route smoke test
         run: docker compose exec -T php vendor/bin/phpunit -c phpunit.xml.dist
       - name: Smoke test (login page responds)
