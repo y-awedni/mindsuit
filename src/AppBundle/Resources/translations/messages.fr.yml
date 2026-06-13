@@ -13,7 +13,6 @@ Prix vente ht: Prix de vente HT
 Prix vente ttc: Prix de vente TTC
 Tva: Taux Tva
 Categorie: Catégorie
-Famille: Famille
 Sousfamille: Sous famille
 Note: Note
 Photo: Photo
@@ -30,10 +29,10 @@ Fax: Fax
 Email: Email
 Siteweb: Siteweb
 #flash messages :)
-'%name% entityRemoved': %name% supprimé(e) avec succées
-'%name% entityAdded': %name% ajouté(e) avec succées
-'%name% entityEdited': %name% modifié(e) avec succées 
-Qte en stock de "%article%" est "%qteEnStock%": Quantité en stock de %article% est %qteEnStock%
+'%name% entityRemoved': '%name% supprimé(e) avec succées'
+'%name% entityAdded': '%name% ajouté(e) avec succées'
+'%name% entityEdited': '%name% modifié(e) avec succées'
+'Qte en stock de "%article%" est "%qteEnStock%"': 'Quantité en stock de %article% est %qteEnStock%'
 Status : Status
 Client : Client
 Prospect : Prospect

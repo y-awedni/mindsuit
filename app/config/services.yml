@@ -4,6 +4,11 @@ parameters:
 #    parameter_name: value
 
 services:
+    # Symfony 4 makes services private by default; this app accesses its own
+    # services via $this->get(...), so keep them public (legacy behaviour).
+    _defaults:
+        public: true
+
     #___________________________________________________________________________exception listener
     kernel.listener.acme_foo_exception_listener:
         class: AppBundle\EventListener\ExceptionListener
