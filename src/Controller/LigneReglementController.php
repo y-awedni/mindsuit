@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\LigneReglement;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lignereglement controller.
  *
  * @Route("lignereglement")
  */
-class LigneReglementController extends Controller
+class LigneReglementController extends BaseController
 {
     /**
      * Lists all ligneReglement entities.

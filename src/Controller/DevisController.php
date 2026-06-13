@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Devis;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Facture;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("devis")
  */
-class DevisController extends Controller {
+class DevisController extends BaseController {
     
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';

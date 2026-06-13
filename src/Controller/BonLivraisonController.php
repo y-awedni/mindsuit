@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\BonLivraison;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\LigneReglementBonLivraison;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("bonlivraison")
  */
-class BonLivraisonController extends Controller {
+class BonLivraisonController extends BaseController {
 
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';

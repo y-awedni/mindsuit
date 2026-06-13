@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Famille;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @Route("famille")
  */
-class FamilleController extends Controller {
+class FamilleController extends BaseController {
 
     /**
      * Lists all famille entities.

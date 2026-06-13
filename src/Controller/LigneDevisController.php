@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\LigneDevis;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lignedevi controller.
  *
  * @Route("lignedevis")
  */
-class LigneDevisController extends Controller
+class LigneDevisController extends BaseController
 {
     /**
      * Lists all ligneDevi entities.

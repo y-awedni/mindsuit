@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Sousfamille;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @Route("sousfamille")
  */
-class SousfamilleController extends Controller {
+class SousfamilleController extends BaseController {
 
     /**
      * Lists all sousfamille entities.

@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Controller\Mouvement;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("etat")
  */
-class EtatController extends Controller {
+class EtatController extends BaseController {
 
     public function getTotalEtat($request, $etat, $modeReglement,$mouvement) {
         $em = $this->getDoctrine()->getManager();

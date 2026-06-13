@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\FactureAvoir;
 use App\Entity\Facture;
 use App\Entity\LigneFactureAvoir;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
 use Numbers_Words;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("factureavoir")
  */
-class FactureAvoirController extends Controller {
+class FactureAvoirController extends BaseController {
     
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';

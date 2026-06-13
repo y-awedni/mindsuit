@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\LigneBonCommandeFrs;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Ligneboncommandefr controller.
  *
  * @Route("ligneboncommandefrs")
  */
-class LigneBonCommandeFrsController extends Controller
+class LigneBonCommandeFrsController extends BaseController
 {
     /**
      * Lists all ligneBonCommandeFr entities.

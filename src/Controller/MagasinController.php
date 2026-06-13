@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Magasin;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("magasin")
  */
-class MagasinController extends Controller {
+class MagasinController extends BaseController {
 
     /**
      * Lists all magasin entities.

@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Fournisseur;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @Route("fournisseur")
  */
-class FournisseurController extends Controller {
+class FournisseurController extends BaseController {
     
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';

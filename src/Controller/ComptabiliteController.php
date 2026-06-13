@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("comptabilite")
  */
-class ComptabiliteController extends Controller {
+class ComptabiliteController extends BaseController {
 
     /**
      * Lists all article entities.

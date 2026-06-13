@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\LigneReglementBonLivraison;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lignereglementbonlivraison controller.
  *
  * @Route("lignereglementbonlivraison")
  */
-class LigneReglementBonLivraisonController extends Controller
+class LigneReglementBonLivraisonController extends BaseController
 {
     /**
      * Lists all ligneReglementBonLivraison entities.

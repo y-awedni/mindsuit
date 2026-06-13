@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Unite;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("unite")
  */
-class UniteController extends Controller {
+class UniteController extends BaseController {
 
     /**
      * Lists all unite entities.

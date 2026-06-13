@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Tva;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("tva")
  */
-class TvaController extends Controller {
+class TvaController extends BaseController {
 
     /**
      * Lists all tva entities.

@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\LigneFacture;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lignefacture controller.
  *
  * @Route("lignefacture")
  */
-class LigneFactureController extends Controller
+class LigneFactureController extends BaseController
 {
     /**
      * Lists all ligneFacture entities.

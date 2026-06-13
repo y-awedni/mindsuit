@@ -2,8 +2,8 @@
 
 namespace App\Controller\Stats;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("stats/fournisseur")
  */
-class FournisseurController extends Controller {
+class FournisseurController extends BaseController {
 
     /**
      * Lists all fournisseur entities.

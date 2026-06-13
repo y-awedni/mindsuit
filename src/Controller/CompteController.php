@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Compte;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("compte")
  */
-class CompteController extends Controller {
+class CompteController extends BaseController {
 
     /**
      * Lists all compte entities.

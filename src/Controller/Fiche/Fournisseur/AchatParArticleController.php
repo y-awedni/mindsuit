@@ -2,8 +2,8 @@
 
 namespace App\Controller\Fiche\Fournisseur;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Fournisseur;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("fiche/fournisseur/achat/article")
  */
-class AchatParArticleController extends Controller {
+class AchatParArticleController extends BaseController {
 
     public function getTitreAchatParArticleByParameteres($em, $request) {
         $chaine = '(';

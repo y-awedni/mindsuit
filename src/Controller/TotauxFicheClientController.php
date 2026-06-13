@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Fiche client controller.
  *
  * @Route("fiche/client/vente/document")
  */
-class TotauxFicheClientController extends Controller {
+class TotauxFicheClientController extends BaseController {
 
     public function getVenteParDocumentQbByParametres($em, $code, $typeDoc, $client, $startDateCreation, $endDateCreation) {
         $qb = $em->getRepository('App\\Entity\\Stock')

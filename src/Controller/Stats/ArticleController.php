@@ -2,8 +2,8 @@
 
 namespace App\Controller\Stats;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Article;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @Route("stats/article")
  */
-class ArticleController extends Controller {
+class ArticleController extends BaseController {
 
     public function dixArticlesPlusBenefiques($em, $startDateCreation, $endDateCreation) {
         $result = $em->createQueryBuilder()

@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\LigneBonReception;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lignebonreception controller.
  *
  * @Route("lignebonreception")
  */
-class LigneBonReceptionController extends Controller
+class LigneBonReceptionController extends BaseController
 {
     /**
      * Lists all ligneBonReception entities.

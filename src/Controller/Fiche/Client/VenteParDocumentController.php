@@ -2,8 +2,8 @@
 
 namespace App\Controller\Fiche\Client;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Client;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("fiche/client/vente/document")
  */
-class VenteParDocumentController extends Controller {
+class VenteParDocumentController extends BaseController {
 
     public function getTitreVenteParDocumentByParameteres($em, $request) {
         $chaine = '(';

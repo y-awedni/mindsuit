@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Reglement;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Reglement controller.
  *
  * @Route("reglement")
  */
-class ReglementController extends Controller
+class ReglementController extends BaseController
 {
     /**
      * Lists all reglement entities.

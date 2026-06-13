@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Mouvement;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("mouvement")
  */
-class MouvementController extends Controller {
+class MouvementController extends BaseController {
 
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';

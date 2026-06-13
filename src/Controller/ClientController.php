@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Client;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Form\FormError;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("client")
  */
-class ClientController extends Controller {
+class ClientController extends BaseController {
 
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';

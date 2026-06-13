@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Controller\BaseController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  *
  * @Route("article")
  */
-class ArticleController extends Controller {
+class ArticleController extends BaseController {
 
     public function getTitreByParameteres($em, $request) {
         $chaine = '(';
