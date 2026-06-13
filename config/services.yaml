@@ -1,0 +1,138 @@
+parameters:
+    locale: fr
+    images_directory: '%kernel.project_dir%/public/uploads/images'
+
+services:
+    # Legacy behaviour: this app reaches its own services via $this->get(...),
+    # so services stay public with their historical ids. Controllers are
+    # container-aware (legacy base Controller) and are instantiated directly
+    # by the router.
+    _defaults:
+        public: true
+
+    # --- Exception listener -------------------------------------------------
+    kernel.listener.acme_foo_exception_listener:
+        class: App\EventListener\ExceptionListener
+        arguments: ['@twig', '@kernel']
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    # --- Flash messages -----------------------------------------------------
+    flash_messages:
+        class: App\EventListener\FlashMessages
+        arguments: ['@session', '@translator']
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: postPersist }
+
+    # --- Stock movement listeners ------------------------------------------
+    app.doctrine_set_qte_article_listener:
+        class: App\EventListener\SetQteArticleListener
+        arguments: ['@service_container']
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
+    app.doctrine_add_stock_listener:
+        class: App\EventListener\AddStockListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postUpdate }
+
+    app.doctrine_remove_stock_listener:
+        class: App\EventListener\RemoveStockListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postUpdate }
+
+    # --- Financial movement listeners --------------------------------------
+    app.doctrine_set_revenu_listener:
+        class: App\EventListener\SetRevenuListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    app.doctrine_set_depense_listener:
+        class: App\EventListener\SetDepenseListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    app.doctrine_retenu_a_la_source_listener:
+        class: App\EventListener\RetenuAlaSourceListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postUpdate }
+
+    app.doctrine_facture_avoir_listener:
+        class: App\EventListener\FactureAvoirListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+
+    # --- Code generation / regle flags -------------------------------------
+    app.doctrine_code_generator_listener:
+        class: App\EventListener\CodeGeneratorListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    app.doctrine_set_regle_facture_listener:
+        class: App\EventListener\SetRegleFactureListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    app.doctrine_set_regle_bon_reception_listener:
+        class: App\EventListener\SetRegleBonReceptionListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    app.doctrine_set_regle_bon_livraison_listener:
+        class: App\EventListener\SetRegleBonLivraisonListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preRemove }
+
+    # --- Media listener -----------------------------------------------------
+    app.doctrine_media_listener:
+        class: App\EventListener\MediaListener
+        arguments: ['%images_directory%']
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postRemove }
+
+    # --- Request / search listeners ----------------------------------------
+    your.user_login_route_listener:
+        class: App\Event\UserLoginRouteListener
+        arguments: ['@security.token_storage', '@router']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    my.subscriber:
+        class: App\EventListener\SearchIndexerSubscriber
+        arguments: ['@security.token_storage']
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    # --- Application services ----------------------------------------------
+    app.format_date:
+        class: App\Service\FormatDate
+
+    app.notification_system:
+        class: App\Service\NotificationSystem
+        arguments: ['@doctrine.orm.entity_manager']
+
+    app.excel_custom_config:
+        class: App\Service\ExcelCustomConfig
+
+    # Drop-in replacement for the removed liuggio/excelbundle "phpexcel" service.
+    phpexcel:
+        class: App\Service\ExcelFactory

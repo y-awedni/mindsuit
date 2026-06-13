@@ -25,13 +25,9 @@ down: ## Stop the stack
 	$(DC) down
 
 .PHONY: install
-install: ## Install PHP dependencies and install assets
+install: ## Install PHP dependencies
 	$(PHP) composer install --no-interaction --prefer-dist
-	$(PHP) php bin/console assets:install web --symlink --relative || $(PHP) php bin/console assets:install web
-
-.PHONY: assets
-assets: ## Re-install front-end assets into web/bundles
-	$(PHP) php bin/console assets:install web
+	$(PHP) php bin/console cache:clear
 
 .PHONY: cache
 cache: ## Clear and warm the Symfony cache (dev)
@@ -60,4 +56,4 @@ db-import: ## Import a dump: make db-import f=path/to/dump.sql
 
 .PHONY: test
 test: ## Run the PHPUnit test suite
-	$(PHP) php bin/phpunit || $(PHP) ./vendor/bin/phpunit
+	$(PHP) vendor/bin/phpunit -c phpunit.xml.dist

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Erreur 404' }}{% endblock %}
+{% block stylesheets %}
+    <style type="text/css">
+        .error-template {padding: 40px 15px;text-align: center;}
+        .error-actions {margin-top:15px;margin-bottom:15px;}
+        .error-actions .btn { margin-right:10px; }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="error-template">
+                <h1>Oops!</h1>
+                <h2>404 introuvable</h2>
+                <div class="error-details">
+                    Désolé, une erreur est survenue, la page demandée non trouvé!<br>
+                </div>
+                <div class="error-actions">
+                    <a href="{{ path('homepage') }}" class="btn btn-primary">
+                        <i class="icon-home icon-white"></i> Tableau du bord 
+                    </a>
+                    <a onclick="contacterSav();" class="btn btn-default">
+                        <i class="icon-envelope"></i> Contacter Service aprés vente
+                    </a>
+                </div>
+                <img src="https://a0.muscache.com/airbnb/static/error_pages/404-Airbnb_final-d652ff855b1335dd3eedc3baa8dc8b69.gif" width="313" height="428" alt="Girl has dropped her ice cream.">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function contacterSav(){
+            window.open('mailto:contact@minduos.com?subject="Erreur en page"');
+        }
+    </script>
+{% endblock %}
