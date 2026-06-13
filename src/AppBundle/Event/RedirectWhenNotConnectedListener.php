@@ -4,7 +4,7 @@
 
 namespace AppBundle\Event;
 
-use FOS\UserBundle\Model\User;
+use AppBundle\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

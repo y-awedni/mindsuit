@@ -169,14 +169,7 @@
                                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ path('fos_user_profile_show')}}"><i class="fa fa-user fa-fw"></i> Afficher Profil</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('fos_user_profile_edit')}}"><i class="fa fa-gear fa-fw"></i> Modifier profil</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out fa-fw"></i> {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                <li><a href="{{ path('app_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
                                 </li>
                             </ul>
                             <!-- /.dropdown-user -->
