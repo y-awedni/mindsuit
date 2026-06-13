@@ -473,7 +473,7 @@ class BonLivraisonController extends BaseController {
 
         $totalDinars = intval($bonlivraison->getTotal());
         $totalMillimesEnTtLettres = explode('.', number_format($bonlivraison->getTotal() - intval($bonlivraison->getTotal()), 3))[1];
-        $totalDinarsEnTtLettres = Numbers_Words::toWords($totalDinars, $request->getLocale());
+        $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
         return $this->render('bonlivraison/print.html.twig', array(
                     'bonlivraison' => $bonlivraison,
                     'societe' => $societe,

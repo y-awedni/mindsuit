@@ -453,7 +453,7 @@ class BonReceptionController extends BaseController {
 
         $totalDinars = intval($bonreception->getTotal());
         $totalMillimesEnTtLettres = explode('.', number_format($bonreception->getTotal() - intval($bonreception->getTotal()), 3))[1];
-        $totalDinarsEnTtLettres = Numbers_Words::toWords($totalDinars, $request->getLocale());
+        $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
 
         return $this->render('bonreception/print.html.twig', array(
                     'bonreception' => $bonreception,

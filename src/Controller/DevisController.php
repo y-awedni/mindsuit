@@ -317,7 +317,7 @@ class DevisController extends BaseController {
         
         $totalDinars = intval($devi->getTotal());
         $totalMillimesEnTtLettres=explode('.',number_format($devi->getTotal()-intval($devi->getTotal()),3) )[1];
-        $totalDinarsEnTtLettres = Numbers_Words::toWords($totalDinars, $request->getLocale());
+        $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
         
         return $this->render('devis/print.html.twig', array(
                     'devis' => $devi,

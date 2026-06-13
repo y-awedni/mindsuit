@@ -364,7 +364,7 @@ class FactureAvoirController extends BaseController {
 
         $totalDinars = intval($factureAvoir->getTotal());
         $totalMillimesEnTtLettres = explode('.', number_format($factureAvoir->getTotal() - intval($factureAvoir->getTotal()), 3))[1];
-        $totalDinarsEnTtLettres = Numbers_Words::toWords($totalDinars, $request->getLocale());
+        $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
         return $this->render('factureavoir/print.html.twig', array(
                     'factureAvoir' => $factureAvoir,
                     'societe' => $societe,
