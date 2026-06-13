@@ -17,6 +17,10 @@ services:
       - docker/.env
     volumes:
       - .:/var/www/html:cached
+      # Keep vendor/ inside the Linux VM (named volume), not on the Windows
+      # bind mount: avoids filesystem errors installing big packages and is
+      # much faster. Run `make install` to populate it.
+      - vendor:/var/www/html/vendor
       - composer_cache:/root/.composer/cache
     depends_on:
       database:
@@ -63,3 +67,4 @@ services:
 volumes:
   db_data:
   composer_cache:
+  vendor:
