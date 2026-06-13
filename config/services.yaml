@@ -29,7 +29,7 @@ services:
 
     # Server-side PDF rendering for printable documents.
     App\Service\PdfGenerator:
-        arguments: ['@twig', '%kernel.project_dir%']
+        arguments: ['@twig', '%kernel.cache_dir%']
     App\Service\DocumentCalculator: ~
     App\Service\NotificationSystem:
         arguments: ['@doctrine.orm.entity_manager']

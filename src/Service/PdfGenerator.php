@@ -18,10 +18,13 @@ class PdfGenerator
     private Environment $twig;
     private string $tempDir;
 
-    public function __construct(Environment $twig, string $projectDir)
+    public function __construct(Environment $twig, string $cacheDir)
     {
         $this->twig = $twig;
-        $this->tempDir = $projectDir . '/var/mpdf';
+        // Under cacheDir so Symfony already keeps it writable for both CLI and
+        // php-fpm. Mixing FPM/CLI runs under different users on a shared var/
+        // subdir used to break mPDF's tempDir mkdir.
+        $this->tempDir = $cacheDir . '/mpdf';
     }
 
     /**
