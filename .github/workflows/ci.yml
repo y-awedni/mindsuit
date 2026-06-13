@@ -19,7 +19,7 @@ jobs:
       - name: php -l on all sources
         run: |
           docker run --rm -v "$PWD:/app" -w /app php:7.2-cli \
-            sh -c 'find src app web bin -name "*.php" -print0 | xargs -0 -n1 -P4 php -l > /dev/null'
+            sh -c 'find src config public bin -name "*.php" -print0 | xargs -0 -n1 -P4 php -l > /dev/null'
 
   build:
     name: Build dev image
@@ -41,10 +41,6 @@ jobs:
   smoke:
     name: Boot + smoke test
     runs-on: ubuntu-latest
-    # The stack boot depends on legacy dependencies resolving via composer.
-    # Until the dev-master deps are pinned (see docs/UPGRADE.md, Phase 2 step 1),
-    # this job is allowed to fail without blocking the pipeline.
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Prepare env
@@ -60,6 +56,8 @@ jobs:
           echo "database did not become healthy" && docker compose logs database && exit 1
       - name: Install dependencies
         run: docker compose exec -T php composer install --no-interaction --prefer-dist
+      - name: Route smoke test
+        run: docker compose exec -T php vendor/bin/phpunit -c phpunit.xml.dist
       - name: Smoke test (login page responds)
         run: |
           for i in $(seq 1 20); do

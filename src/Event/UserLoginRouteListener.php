@@ -7,7 +7,7 @@ namespace App\Event;
 use App\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -28,7 +28,11 @@ class UserLoginRouteListener {
         $this->routerInterface = $routerInterface;
     }
 
-    public function onKernelRequest(GetResponseEvent $event) {
+    public function onKernelRequest(RequestEvent $event) {
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
         $request = $event->getRequest();
         if ($request->get('_route') !== 'app_login') {
             return false;

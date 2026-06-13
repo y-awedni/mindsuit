@@ -182,7 +182,7 @@ class Client {
      *
      * @ORM\Column(name="remise", type="decimal", nullable=false)
      */
-    private $remise = 0;
+    private $remise = '0.000';
 
     /**
      * @var string

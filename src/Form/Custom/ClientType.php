@@ -3,6 +3,8 @@
 namespace App\Form\Custom;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PercentType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,8 +16,8 @@ class ClientType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('code')
                 ->add('rs')
-                ->add('remise')
-                ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class,array(
+                ->add('remise', PercentType::class, ['required' => false, 'scale' => 3, 'type' => 'integer'])
+                ->add('save', SubmitType::class, array(
             'label' => 'Save', 'attr' => array('class' => 'btn-success fa fa-save btn-lg')
         ));
     }
