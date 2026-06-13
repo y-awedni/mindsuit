@@ -41,6 +41,10 @@ services:
   database:
     # MySQL 5.7 matches the original cPanel host exactly (faithful baseline).
     image: mysql:5.7
+    # Relax sql_mode to match the app's MySQL 5.6-era origin: the legacy ERP has
+    # aggregate queries without GROUP BY and zero-dates that ONLY_FULL_GROUP_BY /
+    # strict mode reject. Keeps the faithful baseline working.
+    command: --sql-mode=NO_ENGINE_SUBSTITUTION
     env_file:
       - docker/.env
     ports:

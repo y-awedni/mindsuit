@@ -37,6 +37,9 @@ services:
   database:
     # Same engine family as dev and the original host (MySQL).
     image: mysql:8.0
+    # Match the legacy app's MySQL 5.6-era expectations (no ONLY_FULL_GROUP_BY /
+    # strict mode); see docker-compose.yml for rationale.
+    command: --sql-mode=NO_ENGINE_SUBSTITUTION
     restart: unless-stopped
     env_file:
       - .env
