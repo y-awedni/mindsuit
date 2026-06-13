@@ -1,0 +1,487 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Ajout Facture avoir' }}{% endblock %}
+
+{% block body %}
+    <script type="text/javascript">
+        var $arrayOfIndexes = [];
+        var $cmp = 0;
+    </script>
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('factureavoir_index')}}"><span class="glyphicon glyphicon-align-justify"></span> Liste</a></li>
+                        <li>
+                            <a href="{{ path('factureavoir_facture', { 'id': factureAvoir.facture.id }) }}">
+                                <span class="fa fa-reply-all"></span>
+                                Avoirs de Facture : {{ factureAvoir.facture }}
+                            </a>
+                        </li>                   
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Ajout du facture avoir
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(form) }}
+                        <!-- entete -->
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-align-justify"></span> Détails du facture avoir</a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{ form_row(form.code) }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            {{ form_row(form.dateCreation) }}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {{ form_row(form.note) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- lignes -->
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-tasks"></span> Lignes du facture avoir</a>
+                                </h4>
+                            </div>
+                            {{ form_errors(form) }}
+                            {% macro prototype_lignes(ligne) %}
+                                <div class="col-md-2">{{ form_row(ligne.article,{'label':false,'required':false,'attr':{'onchange':'changeArticle(this)' }} ) }}</div>
+                                <div class="col-md-2">{{ form_row(ligne.designation,{'label':false,'required':false,'attr':{'style': 'height:34px!important'} } ) }}</div>
+                                <div class="col-md-1">{{ form_row(ligne.qte,{'label':false,'required':false,'attr':{'autocomplete':'off','value':'1','onkeyup':'changeTTC(this)' }} ) }}</div>
+                                <div class="col-md-2">{{ form_row(ligne.prixUnitaire,{ 'label':false,'required':false,'attr': {'autocomplete':'off','onkeyup':'changeTTC(this)','readonly':true }} ) }}</div>
+                                <div class="col-md-1">{{ form_row(ligne.remise,{'label':false,'required':false,'attr':{'value':'0','onkeyup':'changeTTC(this)','readonly':true }} ) }}</div>
+                                <div class="col-md-1">{{ form_row(ligne.tva,{'label':false,'required':false,'attr':{'onchange':'changeTTCbyTVA(this)','readonly':true }} ) }}</div>
+                                <div class="col-md-2">{{ form_row(ligne.ttc, {'label':false,'required':false, 'attr': {'autocomplete':'off','readonly':true }} ) }}</div>
+                            {% endmacro %}
+                            <div id="collapseTwo" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label">Article</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label required">Désignation</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">Qte</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">Prix unitaire</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">Remise</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">Taux Tva</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label">TTC</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label">Stock</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label">Remboursement</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ligneFactureAvoirs" data-prototype="{{ _self.prototype_lignes(form.ligneFactureAvoirs.vars.prototype)|e }}">
+                                        {# iterate over each existing tag and render its only field: name #}
+                                        {% for ligne in form.ligneFactureAvoirs %}
+                                            <script type="text/javascript">
+                                                $arrayOfIndexes.push($cmp);
+                                                $cmp++;
+                                            </script>
+                                            <div class="row">
+                                                <div class="col-md-2">{{ form_row(ligne.article,{'label':false,'required':false, 'attr': {'readonly':true }}) }}</div>
+                                                <div class="col-md-2">{{ form_row(ligne.designation,{'label':false,'required':false,'attr':{'readonly':true,'style': 'height:34px!important'} } ) }}</div>
+                                                <div class="col-md-1">{{ form_row(ligne.qte,{'label':false,'required':false,'attr':{ 'autocomplete':'off','onkeyup':'changeTTC(this)'}}) }}</div>
+                                                <div class="col-md-1">
+                                                    {% if ligne.vars.data.article.prixVenteTtc==null or ligne.vars.data.article.prixVenteTtc==0 %}
+                                                        {{ form_row(ligne.prixUnitaire,{'label':false,'required':false,'attr': {'autocomplete':'off','onkeyup':'changeTTC(this)','readonly':true}}) }}
+                                                    {% else %}
+                                                        {{ form_row(ligne.prixUnitaire,{'label':false,'required':false,'attr': {'autocomplete':'off','onkeyup':'changeTTC(this)','readonly':true}}) }}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-1">{{ form_row(ligne.remise,{'label':false,'required':false,'attr':{'autocomplete':'off','onkeyup':'changeTTC(this)','readonly':true}}) }}</div>
+                                                <div class="col-md-1">{{ form_row(ligne.tva,{'label':false,'required':false,'attr':{'onchange':'changeTTC(this)','readonly':true}}) }}</div>
+                                                <div class="col-md-2">{{ form_row(ligne.ttc, {'label':false,'required':false, 'attr': {'autocomplete':'off','readonly':true}} ) }}</div>
+                                                <div class="col-md-1">{{ form_row(ligne.stock, {'label':false,'required':false}) }}</div>
+                                                <div class="col-md-1">{{ form_row(ligne.reglement, {'label':false,'required':false}) }}</div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- totaux -->
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTotaux"><span class="glyphicon glyphicon-credit-card"></span> Totaux du facture avoir</a>
+                                </h4>
+                            </div>
+                            <div id="collapseTotaux" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-md-offset-2">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>% TVA</th>
+                                                        <th>Base</th>
+                                                        <th>TVA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="baseTVA">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4 col-md-offset-2">
+                                            <div class="list-group">
+                                                <a class="list-group-item">
+                                                    Total HT
+                                                    <span class="pull-right text-muted small"><em id="totalHT">0.000</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total REMISE
+                                                    <span class="pull-right text-muted small"><em id="totalREMISE">0 %</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total TVA
+                                                    <span class="pull-right text-muted small"><em id="totalTVA">0.000</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total TTC
+                                                    <span class="pull-right text-muted small"><em id="totalTTC">0.000</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>   
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.termine) }}
+                        {{ form_row(form.save) }}
+                        {{ form_row(form.saveAndPrint) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        function addLigneFormDeleteLink($ligneFormLi, index) {
+            var $removeFormA = $('');
+            $ligneFormLi.append($removeFormA);
+            $removeFormA.on('click', function (e) {
+                var i = Number(index) - 1;
+                $arrayOfIndexes.splice($arrayOfIndexes.indexOf(i), 1);
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                // remove the li for the tag form
+                $ligneFormLi.remove();
+            });
+        }
+        function addLigneForm($collectionHolder, $newLinkLi) {
+            if ($collectionHolder) {
+                // Get the data-prototype explained earlier
+                var prototype = $collectionHolder.data('prototype');
+                // get the new index
+                var index = $collectionHolder.data('index');
+                $arrayOfIndexes.push(index);
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                var newForm = prototype.replace(/__name__/g, index);
+                // increase the index with one for the next item
+                $collectionHolder.data('index', index + 1);
+                // Display the form in the page in an li, before the "Add a tag" link li
+                var $newFormLi = $('<div class="row"></div>').append(newForm);
+                $newLinkLi.before($newFormLi);
+                addLigneFormDeleteLink($newFormLi, $collectionHolder.data('index'));
+                jQuery('#appbundle_factureavoir_ligneFactureAvoirs_' + index + '_article').selectpicker('refresh');
+            }
+        }
+        var $collectionHolder;
+// setup an "add a tag" link
+        var $addLigneLink = $('');
+        var $newLinkLi = $('<div></div>').append($addLigneLink);
+        $(document).ready(function () {
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('div.ligneFactureAvoirs');
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('div.row').each(function () {
+                addLigneFormDeleteLink($(this), $collectionHolder.data('index'));
+            });
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $addLigneLink.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                // add a new tag form (see next code block)
+                addLigneForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+
+        function changeArticleFN(selectedOption, index) {
+            jQuery.ajax({
+                method: "GET",
+                url: "{{ path('article') }}",
+                data: {
+                    id: selectedOption
+                }
+            }).done(function (data) {
+                var obj = jQuery.parseJSON(JSON.stringify(data));
+                if (obj.success === true) {
+                    if (obj.article) {
+                        var article = jQuery.parseJSON(obj.article);
+                        if (article.prixVenteHt && article.prixVenteHt > 0) {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_prixUnitaire').value = article.prixVenteHt;
+                        } else {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_prixUnitaire').value = 0.000;
+                        }
+                        if (article.designation) {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_designation').value = article.designation;
+                        } else {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_designation').value = article.code;
+                        }
+
+                        if (article.tva) {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_tva').value = article.tva.taux;
+                        }
+                        if (article.prixVenteTtc === null) {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_ttc').value = 0.000;
+                        } else {
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_ttc').value = article.prixVenteTtc;
+                        }
+
+                        if (article.stockable) {
+                            if (article.qteEnStock <= 0) {
+                                document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_qte').value = 0;
+                            }
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_qte').setAttribute('title', 'Qte en stock = ' + article.qteEnStock);
+                            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_qte').setAttribute('max', article.qteEnStock);
+
+                        }
+                        changeTTCfn(index);
+                    }
+                }
+
+            });
+        }
+        function changeArticle(select) {
+            var selectedOption = select.options[select.selectedIndex].value;
+            var index = select.id.substring(42, select.id.lastIndexOf('_'));
+            changeArticleFN(selectedOption, index);
+        }
+        function changeArticleFirst(index) {
+            var select = document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_article');
+            var selectedOption = select.options[select.selectedIndex].value;
+            changeArticleFN(selectedOption, index);
+        }
+
+        function changeTTCfn(index) {
+            var remise = toNumberWith3Digits(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_remise').value);
+            if (remise > 100) {
+                remise = 100;
+            } else if (remise < 0) {
+                remise = 0;
+            }
+            var qte = toNumberWith3Digits(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_qte').value);
+            var pu = toNumberWith3Digits(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_prixUnitaire').value);
+            var tauxRemise = pu / 100 * remise;
+            var puHT = toNumberWith3Digits(toNumberWith3Digits(pu) - toNumberWith3Digits(tauxRemise));
+            var taux = pu / 100 * toNumberWith3Digits(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_tva').value);
+            var tauxTva = puHT / 100 * toNumberWith3Digits(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_tva').value);
+            var ttc = toNumberWith3Digits(toNumberWith3Digits(puHT) + toNumberWith3Digits(tauxTva));
+            document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + index + '_ttc').value = toNumberWith3Digits(ttc * qte);
+        }
+
+        function changeTTC(input) {
+            var index = input.id.substring(42, input.id.lastIndexOf('_'));
+            if (input.value.length === 0) {
+                input.value = 0;
+            }
+            changeTTCfn(index);
+        }
+        function changeTTCbyTVA(select) {
+            var index = select.id.substring(33, select.id.lastIndexOf('_'));
+            changeTTCfn(index);
+        }
+
+        Array.prototype.inArray = function (value)
+        {
+            // Returns true if the passed value is found in the
+            // array. Returns false if it is not.
+            var i;
+            for (i = 0; i < this.length; i++)
+            {
+                if (this[i] === value)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+
+        var $facture = jQuery('#appbundle_factureavoir_facture');
+        var $client = jQuery('#appbundle_factureavoir_client');
+        var $nom = jQuery('#appbundle_factureavoir_nom');
+        var $cin = jQuery('#appbundle_factureavoir_cin');
+        $facture.change(function () {
+            jQuery.ajax({
+                method: "GET",
+                url: "{{ path('facture') }}",
+                data: {
+                    id: $facture.val()
+                }
+            }).done(function (data) {
+                var facture = jQuery.parseJSON(data.facture);
+                $client.val("Code: " + facture.client.code + " RS: " + facture.client.rs);
+                $nom.val(facture.nom);
+                $cin.val(facture.cin);
+            });
+        });
+
+        setInterval(function () {
+            var occTtcZero = 0;
+            var ttc = 0;        //total TTC
+            var ht = 0;         //total HT
+            var remise = 0;     //total REMISE
+            var tva = 0;        //total TVA
+            var perCentTva = [];//taux TVA[]
+            var baseTva = [];   //base TVA[]
+            var ttTva = [];     //total TVA[]
+            var _tvaa = '';     //tr TVA[]
+            if ($arrayOfIndexes.length > 0) {
+                for (var i = 0; i < $arrayOfIndexes.length; i++) {
+                    if (document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_ttc') && document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_prixUnitaire').value !== '') {
+                        //calcule ttc pu remise tva_____________________________
+                        //incrementation du ttc
+                        var __ttc = Number(parseFloat(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_ttc').value).toFixed(3));
+                        ttc += __ttc;
+                        if (__ttc === 0 || __ttc === '' || __ttc.length === 0) {
+                            occTtcZero++;
+                        }
+                        //recuperation des input________________________________
+                        //input prix unitaire
+                        var pu = Number(parseFloat(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_prixUnitaire').value).toFixed(3));
+                        //input qte
+                        var qte = Number(parseFloat(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_qte').value).toFixed(3));
+                        //input remise
+                        var _remise = Number(parseFloat(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_remise').value).toFixed(3));
+                        //input tva
+                        var _tva = Number(parseFloat(document.getElementById('appbundle_factureavoir_ligneFactureAvoirs_' + $arrayOfIndexes[i] + '_tva').value).toFixed(3));
+                        //  calcule de cette ligne _____________________________
+                        //prix hors taxe avant remise de cette ligne
+                        var __htAvantRemise = pu * qte;
+                        //remise de cette ligne d'un seul article
+                        var __remise = (__htAvantRemise / 100 * _remise);
+                        //prix hors taxe apres remise de cette ligne
+                        var __htApresRemise = __htAvantRemise - __remise;
+                        //tva de cette ligne
+                        var __tva = __htApresRemise / 100 * _tva;
+                        // incrementation des variables totaux
+                        // prix ht
+                        ht += __htAvantRemise;
+                        //remise
+                        remise += __remise;
+                        //tva
+                        tva += __tva;
+
+                        //calcule du tableau tva
+                        if (!perCentTva.inArray(_tva)) {
+                            perCentTva.push(_tva);
+                            var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                            baseTva.push(__baseTva);
+                            ttTva.push(__baseTva / 100 * _tva);
+                        } else {
+                            var index = perCentTva.indexOf(_tva);
+                            var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                            var _baseTva = Number(parseFloat(baseTva[index]).toFixed(3));
+                            baseTva[index] = _baseTva + __baseTva;
+
+                            var __ttTva = __baseTva / 100 * _tva;
+                            var _ttTva = Number(parseFloat(ttTva[index]).toFixed(3));
+                            ttTva[index] = _ttTva + __ttTva;
+                        }
+                    }
+                }
+            }
+            for (var i = 0; i < perCentTva.length; i++) {
+                _tvaa += "<tr><td>" + perCentTva[i] + "</td><td>" + baseTva[i].toFixed(3) + "</td><td>" + ttTva[i].toFixed(3) + "</td></tr>";
+            }
+            document.getElementById('baseTVA').innerHTML = _tvaa;
+            if (ttc === 0) {
+                document.getElementById("appbundle_factureavoir_save").setAttribute("disabled", "true");
+                document.getElementById("appbundle_factureavoir_save").setAttribute("title", "Pour enregistrer cette facture avoir, le Total TTC doit étre supérieur à 0");
+                document.getElementById("appbundle_factureavoir_saveAndPrint").setAttribute("disabled", "true");
+                document.getElementById("appbundle_factureavoir_saveAndPrint").setAttribute("title", "Pour enregistrer cette facture avoir, le Total TTC doit étre supérieur à 0");
+            } else {
+                document.getElementById("appbundle_factureavoir_save").removeAttribute("disabled");
+                document.getElementById("appbundle_factureavoir_save").removeAttribute("title");
+                document.getElementById("appbundle_factureavoir_saveAndPrint").removeAttribute("disabled");
+                document.getElementById("appbundle_factureavoir_saveAndPrint").removeAttribute("title");
+            }
+            document.getElementById('totalHT').innerHTML = parseFloat(ht).toFixed(3);
+            document.getElementById('totalREMISE').innerHTML = parseFloat(remise).toFixed(3);
+            document.getElementById('totalTVA').innerHTML = parseFloat(tva).toFixed(3);
+            document.getElementById('totalTTC').innerHTML = parseFloat(ttc).toFixed(3);
+
+            document.getElementById('appbundle_factureavoir_ht').value = parseFloat(ht).toFixed(3);
+            document.getElementById('appbundle_factureavoir_remise').value = parseFloat(remise).toFixed(3);
+            document.getElementById('appbundle_factureavoir_tva').value = parseFloat(tva).toFixed(3);
+            document.getElementById('appbundle_factureavoir_total').value = parseFloat(ttc).toFixed(3);
+        }, 1);
+    </script>
+{% endblock %}

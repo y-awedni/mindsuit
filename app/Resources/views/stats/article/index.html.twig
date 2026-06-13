@@ -1,0 +1,251 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Statistiques sur les articles' }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModal">
+                                <span class="fa fa-bar-chart"></span> Statistique par article
+                            </a>
+                        </li>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Statistique par article</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form role="form" action="{{path('articles_stats_id')}}" method="GET">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6" id="factures">
+                                                    <label for="article">Sélectionner article</label>
+                                                    <select name='id' class="form-control selectpicker" data-live-search="true" title="Articles">
+                                                        {% for article in articles %}
+                                                            <option value="{{ article.id }}">{{ article }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-info">Statistique d'article</button>    
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-chevron-down"></span> Filtrage</a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form role="form" action="{{path('articles_stats')}}" method="GET">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="dateCreation">Date</label>
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="form-control" value="{{ app.request.get('startDateCreation')}}" name="startDateCreation" />
+                                            <span class="input-group-addon">vers</span>
+                                            <input type="text" class="form-control" value="{{ app.request.get('endDateCreation')}}" name="endDateCreation" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-filter"></span> Filtrer</button>
+                                <a href="{{path('articles_stats')}}" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span> Reinitialiser</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Les 10 articles les plus vendus
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart1" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Les 10 articles ayant plus de revenus
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart3" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Pourcentage d'états du stock des articles
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart2" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Bénifice par catégorie
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart4" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        //______________________________________________________________________les 10 articles les plus vendus
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawChart1);
+        let dixArticlesPlusVendus = [['', 'Quantité vendus']];
+        {% for element in dixArticlesPlusVendus %}
+            dixArticlesPlusVendus.push(['{{element.code}}', {{element.qte}}]);
+        {% endfor %}
+            function drawChart1() {
+                google.charts.load('current', {'packages': ['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+                function drawStuff() {
+                    var data = new google.visualization.arrayToDataTable(dixArticlesPlusVendus);
+                    var options = {
+                        legend: {position: 'none'},
+                        chart: {
+                            bars: 'vertical', // Required for Material Bar Charts.
+                            axes: {
+                                x: {
+                                    0: {side: 'bottom', label: 'Quantité'} // Top x-axis.
+                                }
+                            },
+                            bar: {groupWidth: "90%"}
+                        }
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('chart1'));
+                    chart.draw(data, options);
+                }
+            }
+
+
+            //______________________________________________________________________les 10 articles les plus vendus
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawChart3);
+            let dixArticlesPlusBenefiques = [['', 'TTC']];
+        {% for element in dixArticlesPlusBenefiques %}
+            dixArticlesPlusBenefiques.push(['{{element.code}}', {{element.ttc}}]);
+        {% endfor %}
+            function drawChart3() {
+                google.charts.load('current', {'packages': ['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+                function drawStuff() {
+                    var data = new google.visualization.arrayToDataTable(dixArticlesPlusBenefiques);
+                    var options = {
+                        legend: {position: 'none'},
+                        chart: {
+                            bars: 'vertical', // Required for Material Bar Charts.
+                            axes: {
+                                x: {
+                                    0: {side: 'bottom', label: 'Quantité'} // Top x-axis.
+                                }
+                            },
+                            bar: {groupWidth: "90%"}
+                        }
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('chart3'));
+                    chart.draw(data, options);
+                }
+            }
+
+
+            //______________________________________________________________________pourcentage des états des articles
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages': ['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart2);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart2() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                data.addRows([
+                    ['Etat normal', {{ nombreArticlesEnEtatNormal }}],
+                    ['En alert de stock',           {{ nombreArticlesEnAlerteStock }} ],
+                    ['En rupture de stock', {{ nombreArticlesEnRuptureStock }}]
+                ]);
+                var options = {
+                    pieHole: 0.4,
+                    colors: ['#5cb85c', '#f0ad4e', '#d9534f'],
+                    pieSliceText: 'none'
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('chart2'));
+                chart.draw(data, options);
+            }
+            //__________________________________________________________________categorie chart
+            google.charts.load('current', {'packages': ['bar']});
+            google.charts.setOnLoadCallback(drawChart4);
+
+            let categories = [['Catégories', 'Ventes', 'Achat', 'Bénéfice']];
+        {% for elementAchat in categoriesAchat %}
+            {% for elementVente in categoriesVente %}
+                {% if elementAchat.categorie == elementVente.categorie %}
+                    categories.push(['{{ elementAchat.categorie?elementAchat.categorie:'Non catégorisé' }}',     {{ elementVente.ttc }} ,     {{ elementAchat.ttc }} , {{ elementVente.ttc-elementAchat.ttc }}]);
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+            function drawChart4() {
+                var data = google.visualization.arrayToDataTable(categories);
+
+                var options = {
+                    bars: 'horizontal' // Required for Material Bar Charts.
+                };
+
+                var chart = new google.charts.Bar(document.getElementById('chart4'));
+
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
+            //________________________________________________________________________make charts responsive
+            $(window).resize(function () {
+                drawChart1();
+                drawChart2();
+                drawChart3();
+                drawChart4();
+            });
+    </script>
+{% endblock %}

@@ -1,0 +1,51 @@
+# syntax=docker/dockerfile:1
+#
+# Production image for the MODERNIZED app (Symfony 6.4 / PHP 8.3).
+# This is the deployment target after Phase 2 (framework upgrade) lands.
+# Before then it will not build, because Symfony 3.2 deps require PHP < 8.
+#
+# Multi-stage: dependencies + assets are baked in; the runtime image is lean.
+
+# ---------- Stage 1: build ----------
+FROM php:8.3-fpm-bookworm AS build
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        git unzip libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libzip-dev; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg; \
+    docker-php-ext-install -j"$(nproc)" pdo_mysql intl gd zip opcache; \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1
+
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --prefer-dist --no-interaction --no-progress
+COPY . .
+RUN composer dump-autoload --no-dev --optimize --classmap-authoritative; \
+    # Compile assets (AssetMapper) once the upgrade adds it:
+    php bin/console asset-map:compile || true
+
+# ---------- Stage 2: runtime ----------
+FROM php:8.3-fpm-bookworm AS runtime
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends libicu72 libpng16-16 libjpeg62-turbo libfreetype6 libzip4; \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --from=build /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+COPY docker/php/php.prod.ini /usr/local/etc/php/conf.d/zz-app.ini
+
+WORKDIR /app
+COPY --from=build /app /app
+
+# Runtime dirs writable by www-data.
+RUN mkdir -p var/cache var/log public/uploads && chown -R www-data:www-data var public/uploads
+USER www-data
+
+EXPOSE 9000
+CMD ["php-fpm"]

@@ -1,0 +1,194 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Aricle:'~article }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('article_edit',{'id':article.id})}}"><span class="glyphicon glyphicon-edit"></span> Modifier</a></li>
+                        <li><a href="{{path('article_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Article {{ article }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="list-group">
+                                            <a class="list-group-item article">
+                                                code
+                                                <span class="pull-right text-muted small"><em class="em">{{article.code}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Désignation
+                                                <span class="pull-right text-muted small"><em class="em">{{article.designation}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Unité
+                                                <span class="pull-right text-muted small"><em class="em">{{article.unite}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Catégorie
+                                                <span class="pull-right text-muted small"><em class="em">{{article.categorie}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Famille
+                                                <span class="pull-right text-muted small"><em class="em">{{article.sousfamille?article.sousfamille.famille:''}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Sous famille
+                                                <span class="pull-right text-muted small"><em class="em">{{article.sousfamille}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Note
+                                                <span class="pull-right text-muted small"><em class="em">{{article.note}}</em>
+                                                </span>
+                                            </a>
+                                            {% if article.desactiverPhoto==false and article.media %}
+                                                {% if article.media.path %}
+                                                    <a class="list-group-item" style="text-align: center;">
+                                                        <img style="text-align: center;" width="200px" heigh="150px" src="{{ asset(article.media.assetPath) }}">
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Tarifs
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="list-group">
+                                                    <a class="list-group-item article">
+                                                        Prix achat
+                                                        <span class="pull-right text-muted small"><em class="em">{{article.prixAchat}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Marge
+                                                        <span class="pull-right text-muted small"><em class="em">{{article.marge}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Prix Vente Ht
+                                                        <span class="pull-right text-muted small"><em class="em">{{article.prixVenteHt}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Tva
+                                                        <span class="pull-right text-muted small"><em class="em">{{article.tva}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Prix Vente Ttc
+                                                        <span class="pull-right text-muted small"><em class="em">{{article.prixVenteTtc}}</em>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                Stock
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="list-group">
+                                                    {% if article.stockable %}
+                                                        <a class="list-group-item article">
+                                                            Fournisseur
+                                                            <span class="pull-right text-muted small"><em class="em">{{article.fournisseur}}</em>
+                                                            </span>
+                                                        </a>
+                                                        <a class="list-group-item article">
+                                                            Date d'ajout
+                                                            <span class="pull-right text-muted small"><em class="em">{{article.dateAjout|date('d-m-Y')}}</em>
+                                                            </span>
+                                                        </a>
+                                                        <a class="list-group-item article">
+                                                            Quantité en départ
+                                                            <span class="pull-right text-muted small"><em class="em">{{article.qteEnDepart}}</em>
+                                                            </span>
+                                                        </a>
+                                                        <a class="list-group-item article">
+                                                            Seuil d'alert
+                                                            <span class="pull-right text-muted small"><em class="em">{{article.seuilAlert}}</em>
+                                                            </span>
+                                                        </a>
+                                                        <a class="list-group-item article">
+                                                            Quantité en stock
+                                                            <span class="pull-right text-muted small"><em class="em">{{article.qteEnStock}}</em>
+                                                            </span>
+                                                        </a>
+                                                    {% else %}
+                                                        <a class="list-group-item article">
+                                                            Quantité en stock
+                                                            <span class="pull-right text-muted small"><em class="em">Non stockable</em>
+                                                            </span>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#myModal{{article.id}}">
+                            <span class="glyphicon glyphicon-remove"></span> Supprimer
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal{{article.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">{{ article }}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous supprimer cette article
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('article_delete', { 'id': article.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer</a>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

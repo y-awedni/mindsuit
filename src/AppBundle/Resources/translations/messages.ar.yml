@@ -1,0 +1,20 @@
+## YAML Template.
+---
+Taux: Taux
+Libelle: صياغة
+Famille: Famille
+Nom: Nom
+Adresse: Adresse
+Code: رمز
+Designation: Désignation
+Unite: Unité
+Prix achat: Prix d'achat
+Marge: Marge
+Prix vente ht: Prix de vente HT
+Prix vente ttc: Prix de vente TTC
+Tva: Taux Tva
+Categorie: Catégorie
+Famille: Famille
+Sousfamille: Sous famille
+Note: Note
+Photo: Photo

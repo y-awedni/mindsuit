@@ -1,0 +1,75 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTotaux"><span class="glyphicon glyphicon-credit-card"></span> Totaux des bons du livraison</a>
+        </h4>
+    </div>
+    <div id="collapseTotaux" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-8">
+                    <div class="list-group">
+                        {% if total is defined %}
+                            <a class="list-group-item">
+                                Total
+                                <span class="pull-right text-muted small"><em>{{ total|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if regle is defined %}
+                            <a class="list-group-item">
+                                Réglé
+                                <span class="pull-right text-muted small"><em>{{ regle|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if reste is defined %}
+                            <a class="list-group-item">
+                                Reste
+                                {% set reste=total-regle %}
+                                <span class="pull-right text-muted small"><em>{{ reste|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {#______________________________________________________bon du livraison_______________________________________________#}
+                        {% if totalTous is defined %}
+                            <a class="list-group-item">
+                                Total
+                                <span class="pull-right text-muted small"><em>{{ totalTous|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if regleTous is defined %}
+                            <a class="list-group-item">
+                                Réglé
+                                <span class="pull-right text-muted small"><em>{{ regleTous|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if regleFacture is defined %}
+                            <a class="list-group-item">
+                                Réglé facturé
+                                <span class="pull-right text-muted small"><em>{{ regleFacture|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if regleNonFacture is defined %}
+                            <a class="list-group-item">
+                                Réglé non facturé
+                                <span class="pull-right text-muted small"><em>{{ regleNonFacture|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if resteNonFacture is defined %}
+                            <a class="list-group-item">
+                                Reste non facturé
+                                <span class="pull-right text-muted small"><em>{{ resteNonFacture|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>   
+        </div>
+    </div>
+</div>  

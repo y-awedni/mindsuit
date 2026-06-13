@@ -1,0 +1,265 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Ajout Article' }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('article_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Ajout d'article
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(form.code) }}
+                                        {{ form_row(form.designation) }}
+                                        {{ form_row(form.unite) }}
+                                        {{ form_row(form.categorie) }}
+                                        {{ form_row(form.famille) }}
+                                        {{ form_row(form.sousfamille) }}
+                                        {{ form_row(form.note) }}
+                                        {{ form_row(form.desactiverPhoto) }}
+                                        {{ form_row(form.media) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Tarifs
+                                            </div>
+                                            <div class="panel-body">
+                                                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                                {{ form_row(form.service,{'attr':{'onchange':'changerType(this)'}}) }}
+                                                {{ form_row(form.prixAchat,{'attr':{'onkeyup':'changePrixAchat(this)'}}) }}
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        {{ form_row(form.marge,{'attr':{'onkeyup':'changeMarge(this)'}}) }}
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="appbundle_article_margeDt">Marge(TND)</label><div class="input-group">
+                                                                <input type="text" id="appbundle_article_margeDt" disabled="disabled" class="form-control" autocomplete="off">            <span class="input-group-addon"> TND</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{ form_row(form.prixVenteHt,{'attr':{'onkeyup':'changePrixVenteHt(this)'}}) }}
+                                                {{ form_row(form.tva) }}
+                                                <div class="form-group">
+                                                    <label class="control-label" for="appbundle_article_prixVenteTtc">Prix de vente TTC</label><div class="input-group">
+                                                        <input type="text" id="appbundle_article_prixVenteTtc" name="appbundle_article[prixVenteTtc]" disabled="disabled" class="form-control" autocomplete="off">            <span class="input-group-addon"> TND</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                Stock
+                                            </div>
+                                            <div class="panel-body">
+                                                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                                {{ form_row(form.stockable,{'attr':{'checked':true, 'onchange':'changeStockable(this)'}}) }}
+                                                <div class="row form-group" id="stockable_row1">
+                                                    <div class="col-sm-6">
+                                                        {{ form_row(form.fournisseur) }}
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        {{ form_row(form.dateAjout) }}
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group" id="stockable_row2">
+                                                    <div class="col-sm-4">
+                                                        {{ form_row(form.qteEnDepart,{'attr':{'onkeyup':'changeQteEnDeaprt(this)','onchange':'changeQteEnDeaprt(this)'}}) }}
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        {{ form_row(form.seuilAlert) }}
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        {{ form_row(form.qteEnStock) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.save) }}
+                        {{ form_row(form.saveAndNew) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).on('change', '#appbundle_article_categorie, #appbundle_article_famille', function () {
+            let $field = jQuery(this);
+            let $categorieField = $('#appbundle_article_categorie');
+            let $form = $field.closest('form');
+            let target = '#' + $field.attr('id').replace('famille', 'sousfamille').replace('categorie', 'famille');
+            // Les données à envoyer en Ajax
+            let data = {};
+            data[$categorieField.attr('name')] = $categorieField.val();
+            data[$field.attr('name')] = $field.val();
+            // On soumet les données
+            jQuery.post($form.attr('action'), data).then(function (data) {
+                // On récupère le nouveau <select>
+                let $input = jQuery(data).find(target);
+                // On remplace notre <select> actuel
+                jQuery(target).closest('.bootstrap-select').replaceWith($input);
+                jQuery('#appbundle_article_sousfamille').closest('.bootstrap-select').replaceWith(jQuery(data).find('#appbundle_article_sousfamille'));
+                jQuery('.selectpicker').selectpicker('refresh');
+            });
+        });
+        
+        function changerTypeFN(type) {
+            if (type === 'service') {
+                //desactiver prix d'achat et metter le valeur à 0
+                document.getElementById('appbundle_article_prixAchat').value = 0;
+                document.getElementById('appbundle_article_prixAchat').setAttribute('readonly', 'true');
+                //desactiver marge et metter le valeur à 100
+                document.getElementById('appbundle_article_marge').value = 100;
+                document.getElementById('appbundle_article_marge').setAttribute('readonly', 'true');
+                document.getElementById('stockable_row1').style.display = 'none';
+                document.getElementById('stockable_row2').style.display = 'none';
+                document.getElementById('appbundle_article_stockable').checked = false;
+                document.getElementById('appbundle_article_stockable').setAttribute('readonly', 'true');
+            } else {
+                //afficher prix d'achat et metter le valeur à vide
+                document.getElementById('appbundle_article_prixAchat').value = '';
+                document.getElementById('appbundle_article_prixAchat').removeAttribute('readonly');
+                //afficher marge et metter le valeur à vide
+                document.getElementById('appbundle_article_marge').value = '';
+                document.getElementById('appbundle_article_marge').removeAttribute('readonly');
+                document.getElementById('stockable_row1').removeAttribute('style');
+                document.getElementById('stockable_row2').removeAttribute('style');
+                document.getElementById('appbundle_article_stockable').checked = true;
+                document.getElementById('appbundle_article_stockable').removeAttribute('readonly');
+            }
+        }
+        function getTypeArticle() {
+            return document.getElementById('appbundle_article_service').checked ? 'service' : 'produit';
+        }
+        changerTypeFN(getTypeArticle());
+        function changerType(type) {
+            type.checked ? changerTypeFN('service') : changerTypeFN('produit');
+        }
+        function changePrixAchat(prixAchat) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                //si prix de vente existe en calcule marge
+                if (document.getElementById('appbundle_article_prixVenteHt').value.length > 0) {
+                    var marge = toNumberWith3Digits(document.getElementById('appbundle_article_marge').value);
+                    var prixAchat = toNumberWith3Digits(prixAchat.value);
+                    document.getElementById('appbundle_article_prixVenteHt').value = toNumberWith3Digits(prixAchat + prixAchat / 100 * marge);
+                    //si marge existe en calcule prix de vente
+                } else if (document.getElementById('appbundle_article_marge').value.length > 0) {
+                    var marge = toNumberWith3Digits(document.getElementById('appbundle_article_marge').value);
+                    var prixAchat = toNumberWith3Digits(prixAchat.value);
+                    document.getElementById('appbundle_article_prixVenteHt').value = toNumberWith3Digits(prixAchat + prixAchat / 100 * marge);
+                }
+            }
+        }
+        function changeMarge(marge) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                //si prix achat existe en calcule prix de vente 
+                if (document.getElementById('appbundle_article_prixAchat').value.length > 0) {
+                    var prixAchat = toNumberWith3Digits(document.getElementById('appbundle_article_prixAchat').value);
+                    var marge = toNumberWith3Digits(marge.value);
+                    document.getElementById('appbundle_article_prixVenteHt').value = toNumberWith3Digits(prixAchat + prixAchat / 100 * marge);
+                    //si prix de vente existe en calcule prix achat
+                } else if (document.getElementById('appbundle_article_prixVenteHt').value.length > 0) {
+                    var prixVenteHt = toNumberWith3Digits(document.getElementById('appbundle_article_prixVenteHt').value);
+                    var marge = toNumberWith3Digits(marge.value);
+                    document.getElementById('appbundle_article_prixAchat').value = toNumberWith3Digits(prixVenteHt - prixVenteHt / 100 * marge);
+                }
+            }
+        }
+        function changePrixVenteHt(prixVenteHt) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                //si prixachat existe en calcule le marge
+                if (document.getElementById('appbundle_article_prixAchat').value.length > 0) {
+                    //Taux de marge commerciale = [ marge commerciale / coût d’achat ] x 100
+                    var prixAchat = toNumberWith3Digits(document.getElementById('appbundle_article_prixAchat').value);
+                    var prixVenteHt = toNumberWith3Digits(prixVenteHt.value);
+                    var margeCommerciale = prixVenteHt - prixAchat;
+                    document.getElementById('appbundle_article_marge').value = toNumberWith3Digits(toNumberWith3Digits(margeCommerciale) / toNumberWith3Digits(prixAchat) * 100);
+                    //si marge existe en calcule le prix d'achat
+                } else if (document.getElementById('appbundle_article_marge').value.length > 0) {
+                    var marge = toNumberWith3Digits(document.getElementById('appbundle_article_marge').value);
+                    var prixVenteHt = toNumberWith3Digits(prixVenteHt.value);
+                    document.getElementById('appbundle_article_prixAchat').value = toNumberWith3Digits(prixVenteHt - prixVenteHt / 100 * marge);
+                }
+            }
+        }
+
+        setInterval(function () {
+            var prixVenteHt = document.getElementById('appbundle_article_prixVenteHt').value;
+            var prixAchat = document.getElementById('appbundle_article_prixAchat').value;
+            var margeDt = toNumberWith3Digits(prixVenteHt) - toNumberWith3Digits(prixAchat);
+            if (isNaN(margeDt)) {
+                document.getElementById('appbundle_article_margeDt').value = '';
+            } else {
+                document.getElementById('appbundle_article_margeDt').value = toNumberWith3Digits(margeDt);
+            }
+            var tva = document.getElementById('appbundle_article_tva').value;
+            if (prixVenteHt.length > 0 && tva.length > 0 && !isNaN(prixVenteHt)) {
+                var mntTva = toNumberWith3Digits(prixVenteHt) / 100 * toNumberWith3Digits(tva);
+                document.getElementById('appbundle_article_prixVenteTtc').value = toNumberWith3Digits(toNumberWith3Digits(prixVenteHt) + toNumberWith3Digits(mntTva));
+            } else {
+                document.getElementById('appbundle_article_prixVenteTtc').value = '';
+            }
+        }
+        , 1);
+
+
+        function changeQteEnDeaprt(qteDepart) {
+            if (qteDepart) {
+                document.getElementById('appbundle_article_qteEnStock').value = qteDepart.value;
+            }
+        }
+
+        function changeStockable(stockable) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                if (stockable.checked === true) {
+                    document.getElementById('stockable_row2').removeAttribute('style');
+                } else {
+                    document.getElementById('stockable_row2').style.display = 'none';
+                }
+            } else {
+                document.getElementById('appbundle_article_stockable').checked = false;
+            }
+        }
+    </script>
+{% endblock %}
+

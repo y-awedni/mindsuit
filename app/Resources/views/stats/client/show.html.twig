@@ -1,0 +1,225 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Statistiques de client' }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a style="cursor: pointer" href="{{ path('clients_stats') }}">
+                                <span class="fa fa-area-chart"></span> Statistiques des clients
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-chevron-down"></span> Filtrage</a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form role="form" action="{{path('client_stats_show',{'id':idClt} )}}" method="GET">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="dateCreation">Date</label>
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="form-control" value="{{ app.request.get('startDateCreation')}}" name="startDateCreation" />
+                                            <span class="input-group-addon">vers</span>
+                                            <input type="text" class="form-control" value="{{ app.request.get('endDateCreation')}}" name="endDateCreation" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden"  value="{{ idClt }}" name="id" />
+                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-filter"></span> Filtrer</button>
+                                <a href="{{path('client_stats_id' )}}?id={{ idClt }}" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span> Reinitialiser</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Les 10 articles les plus vendus en Quantité
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart1" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Pourcentage de vente des catégories en quantité
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart2" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Les 10 articles ayant plus de vente en Total TTC
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart3" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Pourcentage de vente des catégories en Total TTC
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart4" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawChart1);
+        let dixArticlesPlusVendus = [['', 'Quantité vendus']];
+        {% for element in dixArticlesPlusVendus %}
+            dixArticlesPlusVendus.push(['{{element.code}}', {{element.qte}}]);
+        {% endfor %}
+            function drawChart1() {
+                google.charts.load('current', {'packages': ['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+                function drawStuff() {
+                    var data = new google.visualization.arrayToDataTable(dixArticlesPlusVendus);
+                    var options = {
+                        legend: {position: 'none'},
+                        chart: {
+                            bars: 'vertical', // Required for Material Bar Charts.
+                            axes: {
+                                x: {
+                                    0: {side: 'bottom', label: 'Quantité'} // Top x-axis.
+                                }
+                            },
+                            bar: {groupWidth: "90%"}
+                        }
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('chart1'));
+                    chart.draw(data, options);
+                }
+            }
+
+            //__________________________________________________________________
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages': ['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart2);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart2() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                {% for element in categoriesQteVendus %}
+                        data.addRows([
+                    ['{{ element.categorie?element.categorie:'Non catégorisé' }}', {{ element.qte }}]
+                ]);
+                        {% endfor %}
+                
+                var options = {
+                    pieHole: 0.4,
+                    pieSliceText: 'none'
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('chart2'));
+                chart.draw(data, options);
+            }
+            
+            //______________________________________________________________________les 10 articles les plus vendus
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawChart3);
+            let dixArticlesPlusBenefiques = [['', 'TTC']];
+        {% for element in dixArticlesPlusBenefiques %}
+            dixArticlesPlusBenefiques.push(['{{element.code}}', {{element.ttc}}]);
+        {% endfor %}
+            function drawChart3() {
+                google.charts.load('current', {'packages': ['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+                function drawStuff() {
+                    var data = new google.visualization.arrayToDataTable(dixArticlesPlusBenefiques);
+                    var options = {
+                        legend: {position: 'none'},
+                        chart: {
+                            bars: 'vertical', // Required for Material Bar Charts.
+                            axes: {
+                                x: {
+                                    0: {side: 'bottom', label: 'Quantité'} // Top x-axis.
+                                }
+                            },
+                            bar: {groupWidth: "90%"}
+                        }
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('chart3'));
+                    chart.draw(data, options);
+                }
+            }
+            
+            // Load the Visualization API and the corechart package.
+            google.charts.load('current', {'packages': ['corechart']});
+
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.charts.setOnLoadCallback(drawChart4);
+
+            // Callback that creates and populates a data table,
+            // instantiates the pie chart, passes in the data and
+            // draws it.
+            function drawChart4() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Topping');
+                data.addColumn('number', 'Slices');
+                {% for element in categoriesTtcVendus %}
+                        data.addRows([
+                    ['{{ element.categorie?element.categorie:'Non catégorisé' }}', {{ element.ttc }}]
+                ]);
+                        {% endfor %}
+                
+                var options = {
+                    pieHole: 0.4,
+                    pieSliceText: 'none'
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.PieChart(document.getElementById('chart4'));
+                chart.draw(data, options);
+            }
+            
+            
+            //________________________________________________________________________make charts responsive
+            $(window).resize(function () {
+                drawChart1();
+                drawChart2();
+                drawChart3();
+            });
+    </script>
+{% endblock %}

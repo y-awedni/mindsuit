@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lignereglementbonreceptions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Datereglement</th>
+                <th>Montant</th>
+                <th>Modereglement</th>
+                <th>Dateecheancecheque</th>
+                <th>Numcheque</th>
+                <th>Dateecheancetraite</th>
+                <th>Numtraite</th>
+                <th>Type</th>
+                <th>Note</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ligneReglementBonReception in ligneReglementBonReceptions %}
+            <tr>
+                <td><a href="{{ path('lignereglementbonreception_show', { 'id': ligneReglementBonReception.id }) }}">{{ ligneReglementBonReception.id }}</a></td>
+                <td>{% if ligneReglementBonReception.dateReglement %}{{ ligneReglementBonReception.dateReglement|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ ligneReglementBonReception.montant }}</td>
+                <td>{{ ligneReglementBonReception.modeReglement }}</td>
+                <td>{% if ligneReglementBonReception.dateEcheanceCheque %}{{ ligneReglementBonReception.dateEcheanceCheque|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ ligneReglementBonReception.numCheque }}</td>
+                <td>{% if ligneReglementBonReception.dateEcheanceTraite %}{{ ligneReglementBonReception.dateEcheanceTraite|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ ligneReglementBonReception.numTraite }}</td>
+                <td>{{ ligneReglementBonReception.type }}</td>
+                <td>{{ ligneReglementBonReception.note }}</td>
+                <td>{% if ligneReglementBonReception.createdAt %}{{ ligneReglementBonReception.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ligneReglementBonReception.updatedAt %}{{ ligneReglementBonReception.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('lignereglementbonreception_show', { 'id': ligneReglementBonReception.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('lignereglementbonreception_edit', { 'id': ligneReglementBonReception.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('lignereglementbonreception_new') }}">Create a new ligneReglementBonReception</a>
+        </li>
+    </ul>
+{% endblock %}

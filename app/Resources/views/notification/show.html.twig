@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Notification</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ notification.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ notification.description }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ notification.url }}</td>
+            </tr>
+            <tr>
+                <th>Vu</th>
+                <td>{% if notification.vu %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if notification.createdAt %}{{ notification.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{% if notification.updatedAt %}{{ notification.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('notification_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

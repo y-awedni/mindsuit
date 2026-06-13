@@ -1,0 +1,456 @@
+<html>
+    <head>
+        <title>Facture globale</title>
+        <style>
+            .my-table {
+                page-break-before: always;
+                page-break-after: always;
+            }
+            tr.my-table {
+                page-break-inside: avoid;
+            }
+            
+            .print-box .my-table {
+                font-size: 10px;
+                line-height: 8px;
+            }
+
+            .print-box {
+                font-size: 8px;
+                line-height: 18px;
+                font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+                color: #555;
+            }
+            .print-box table tr.information table td{
+                font-size: 14px;
+            }
+            .print-box table {
+                width: 100%;
+                line-height: inherit;
+                text-align: left;
+            }
+            .print-box table td {
+                padding: 3px;
+                vertical-align: top;
+            }
+            .print-box table tr td:nth-child(2) {
+                text-align: right;
+            }
+            .print-box table tr.top table td {
+                padding-bottom: 20px;
+
+            }
+
+            .print-box table tr.top table td.title {
+                font-size: 45px;
+                line-height: 45px;
+                color: #333;
+            }
+            .print-box table tr.top table td.code {
+                width: 60%;
+                text-align: left;
+            }
+            .print-box table tr.information table td {
+                padding-bottom: 40px;
+            }
+            .print-box table tr.information table td.societe {
+                width: 50%;
+            }
+            .print-box table tr.information table td.client {
+                width: 50%;
+                text-align: left;
+            }
+            .print-box table tr.heading td {
+                background: #13b3d9;
+                border-bottom: 1px solid #ddd;
+                font-weight: bold;
+                font-size: 8px;
+            }
+            .print-box table tr.details td {
+                padding-bottom: 20px;
+            }
+            .print-box table tr.item td {
+                border-bottom: 1px solid #eee;
+                font-size: 12px;
+            }
+            .print-box table tr.item:nth-child(odd) {background: #eee;}
+            .print-box table tr.item:nth-child(even) {background: #fff;}
+
+            .print-box table tr.item.last td {
+                border-bottom: none;
+            }
+            .print-box table tr.total td:nth-child(2) {
+                border-top: 2px solid #eee;
+                font-weight: bold;
+            }
+            .center{
+                text-align:center;
+            }
+            .left{
+                text-align: left!important;
+            }
+            .right{
+                text-align: right!important;
+            }
+            .print-box table tr.bottom td table{
+                padding-top: 10px;
+                font-size: 14px;
+            }
+            div.totaux{
+                width: 30%;
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+            div.totaux table{
+                border: 1px solid #ddd;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            div.totaux table th{
+                background: #eee;
+                width: 50%;
+            }
+            div.baseTva{
+                width: 25%;
+                position: absolute;
+                top: 0;
+                right: 240px;
+            }
+
+            div.baseTva table.tableauTVA{
+                width: 100%;
+                float: right;
+                border: 1px solid #ddd;
+                border-collapse: collapse;
+            }
+            div.baseTva table.tableauTVA td{
+                font-size: 16px!important;
+            }
+
+            .font16{
+                font-size: 16px!important;
+            }
+
+            div.baseTva table thead{
+                background: #13b3d9;
+                border-bottom: 1px solid #ddd;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            div.baseTva table tbody tr:nth-child(odd) {background: #eee;}
+            div.baseTva table tbody tr:nth-child(even) {background: #fff;}
+
+            @media only screen and (max-width: 600px) {
+                .print-box table tr.top table td {
+                    width: 100%;
+                    display: block;
+                    text-align: center;
+                }
+                .print-box table tr.information table td {
+                    width: 100%;
+                    display: block;
+                    text-align: center;
+                }
+            }
+
+            body.relative {
+                position: relative;
+            }
+            div.absolute {
+                position: absolute;
+                bottom: 0px;
+                right: 4px;
+                width: 98%;
+                height: 135px;
+                font-size:12px;
+            }
+
+        </style>
+    </head>
+    <body class="relative" onload="window.print();
+            window.close();">
+        <div id="print" >
+            <div class="print-box">
+                <table cellpadding="0" cellspacing="0" >
+                    <tr class="top">
+                        <td colspan="9">
+                            <table>
+                                <tr>
+                                    <td class="title">
+                                        {% if societe.desactiverPhoto==false and societe.media %}
+                                            <img style="width:75px; max-width:200px;" src="{{ asset(societe.media.assetPath) }}">
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="code">
+                                        <strong>Facture globale</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="information">
+                        <td colspan="10">
+                            <table>
+                                <tr>
+                                    <td class="societe">
+                                        <fieldset>
+                                            <legend>
+                                                Societé
+                                            </legend>
+                                            {% if societe.adresse %}
+                                                {{societe.adresse}}<br>
+                                                {{societe.codePostale~' '~societe.ville~' '~societe.pays}}<br>
+                                            {% endif %}
+                                            {% if societe.tel %}
+                                                Tél : {{societe.tel}}<br>
+                                            {% endif %}
+                                            {% if societe.fax %}
+                                                Fax : {{societe.fax}}<br>
+                                            {% endif %}
+                                            {% if societe.mobile %}
+                                                Mobile : {{ societe.mobile }}<br>
+                                            {% endif %}
+                                            {% if societe.email %}
+                                                Email : {{ societe.email }}<br>
+                                            {% endif %}
+                                            {% if societe.mf %}
+                                                M.F : {{ societe.mf }}<br>
+                                            {% endif %}
+                                            {% if societe.rcs %}
+                                                R.Cs : {{ societe.rcs }}
+                                            {% endif %}
+                                            {% if societe.compte %}
+                                                <b>RIB : </b>{{ societe.compte }}
+                                            {% endif %}
+                                        </fieldset>
+                                    </td>
+
+                                    <td class="client">
+                                        <fieldset>
+                                            <legend>
+                                                {{ client or code or startDateCreation or endDateCreation or startDateEcheance or endDateEcheance?'Filtrage':'Pas de filtrage' }}
+                                            </legend>
+                                            {% if client %}
+                                                {{ client }}<br>
+                                            {% endif %}
+                                            {% if code %}
+                                                Code contient : {{ code }}<br>
+                                            {% endif %}
+                                            {% if startDateCreation %}
+                                                Date création début : {{ startDateCreation|date('d-m-Y') }}<br>
+                                            {% endif %}
+                                            {% if endDateCreation %}
+                                                Date création fin  : {{ endDateCreation|date('d-m-Y') }}<br>
+                                            {% endif %}
+                                            {% if startDateEcheance %}
+                                                Date écheance début : {{ startDateEcheance|date('d-m-Y') }}<br>
+                                            {% endif %}
+                                            {% if endDateEcheance %}
+                                                Date écheance fin  : {{ endDateEcheance|date('d-m-Y') }}<br>
+                                            {% endif %}
+                                        </fieldset>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- lignes bonlivraison -->
+                    <tr class="heading">
+                        <th class="left">Bon livraison</th>
+                        <th class="left">Article</th>
+                        <th class="left">UN</th>
+                        <th class="center">PU HT</th>
+                        <th class="center">Remise</th>
+                        <th class="center">TVA</th>
+                        <th class="center">PU TTC</th>
+                        <th class="center">Qte</th>
+                        <th class="center">Total TTC</th>
+                    </tr>
+                    {% set i=0 %}
+                    {% set k=0 %}
+                    {% set totalHt=0 %}
+                    {% set totalRemise=0 %}
+                    {% set totalTva=0 %}
+                    {% set totalTotal=0 %}
+                    {% for bl in factures %}
+                        {% set j=1 %}
+                        {% for ligne in bl.lignesFactures %}
+                            <tr class="my-table"  {% if k is odd %}style="background: #eee;"{% endif %}>
+                                {% if j==1 %}
+                                    <td rowspan="{{ bl.lignesFactures|length }}">
+                                        <b>{{ bl.code }}</b> <br>
+                                        <i>{{ bl.dateCreation|date('d-m-Y') }}</i>
+                                    </td>
+                                {% endif %}
+                                <td style="text-align: left">
+                                    {{ ligne.article.code }}<br>
+                                    {{ ligne.designation }}
+                                </td>
+                                <td style="text-align: left">{{ ligne.article.unite }}</td>
+                                <td id="prixUnitaire_{{i}}" style="text-align: right">{{ ligne.prixUnitaire|number_format(3, '.', '') }}</td>
+                                <td id="remise_{{i}}" style="text-align: right">{{ ligne.remise }}</td>
+                                <td id="tva_{{i}}" style="text-align: right">{{ ligne.tva }}</td>
+                                {% set puTTC=ligne.ttc/ligne.qte %}
+                                <td id="ttc_{{i}}" style="text-align: right">{{ puTTC|number_format(3, '.', '') }}</td>
+                                <td id="qte_{{i}}" style="text-align: right">{{ ligne.qte }}</td>
+                                <td id="total_{{i}}" style="text-align: right">{{ ligne.ttc|number_format(3, '.', '') }}</td>
+                            </tr>
+                            {% set i=i+1 %}
+                            {% set j=j+1 %}
+                        {% endfor %}
+                        {% set totalHt=totalHt+bl.ht %}
+                        {% set totalRemise=totalRemise+bl.remise %}
+                        {% set totalTva=totalTva+bl.tva %}
+                        {% set totalTotal=totalTotal+bl.total %}
+                        {% set k=k+1 %}
+                    {% endfor %}
+                    <div id="ligneBonlivraisonsLength" style="visibility: hidden">{{i}}</div>
+                </table>
+            </div>
+        </div>
+        <div class="absolute">
+            <div class="baseTva" id="tvaTable">
+                <table class="tableauTVA my-table" >
+                    <thead>
+                        <tr>
+                            <th class="center font16">Taux</th>
+                            <th class="center font16">Base</th>
+                            <th class="center font16">TVA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baseTVA">
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="totaux" id='totauxTable'>
+                <table class="font16 my-table">
+                    <tr>
+                        <th class="left">Total HT</th>
+                        <td class="right" >{{ totalHt|number_format(3, '.', '') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="left">Total Remise</th>
+                        <td class="right">{{ totalRemise|number_format(3, '.', '') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="left">Total TVA</th>
+                        <td class="right">{{ totalTva|number_format(3, '.', '') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="left">Total TTC</th>
+                        <td class="right">{{ totalTotal|number_format(3, '.', '') }}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </body>
+    <script type="text/javascript">
+        var h = document.getElementById('print').clientHeight;
+        
+        if (h > 778) {
+            document.getElementById('print').style.height = "2202px";
+        }
+        if (h > 4090) {
+            document.getElementById('print').style.height = "5400px";
+        }
+        if (h > 4090) {
+            document.getElementById('print').style.height = "5400px";
+        }
+        if (h > 6414) {
+            document.getElementById('print').style.height = "7600px";
+        }
+        var ligneBonlivraisonsLength = document.getElementById('ligneBonlivraisonsLength').innerHTML;
+        Array.prototype.inArray = function (value)
+        {
+            // Returns true if the passed value is found in the
+            // array. Returns false if it is not.
+            var i;
+            for (i = 0; i < this.length; i++)
+            {
+                if (this[i] === value)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var ttc = 0;        //total TTC
+        var ht = 0;         //total HT
+        var remise = 0;     //total REMISE
+        var tva = 0;        //total TVA
+        var perCentTva = [];//taux TVA[]
+        var baseTva = [];   //base TVA[]
+        var ttTva = [];     //total TVA[]
+        var _tvaa = '';     //tr TVA[]
+        if (ligneBonlivraisonsLength > 0) {
+            for (var i = 0; i < ligneBonlivraisonsLength; i++) {
+                //calcule ttc pu remise tva_____________________________
+                //incrementation du ttc
+                ttc += Number(parseFloat(document.getElementById('total_' + i).innerHTML).toFixed(3));
+                //recuperation des input________________________________
+                //input prix unitaire
+                var pu = Number(parseFloat(document.getElementById('prixUnitaire_' + i).innerHTML).toFixed(3));
+                //input qte
+                var qte = Number(parseFloat(document.getElementById('qte_' + i).innerHTML).toFixed(3));
+                //input remise
+                var _remise = Number(parseFloat(document.getElementById('remise_' + i).innerHTML).toFixed(3));
+                //input tva
+                var _tva = Number(parseFloat(document.getElementById('tva_' + i).innerHTML).toFixed(3));
+                //  calcule de cette ligne _____________________________
+                //prix hors taxe avant remise de cette ligne
+                var __htAvantRemise = pu * qte;
+                //remise de cette ligne d'un seul article
+                var __remise = (__htAvantRemise / 100 * _remise);
+                //prix hors taxe apres remise de cette ligne
+                var __htApresRemise = __htAvantRemise - __remise;
+                //tva de cette ligne
+                var __tva = __htApresRemise / 100 * _tva;
+                // incrementation des variables totaux
+                // prix ht
+                ht += __htAvantRemise;
+                //remise
+                remise += __remise;
+                //tva
+                tva += __tva;
+
+                //calcule du tableau tva
+                if (!perCentTva.inArray(_tva)) {
+
+                    perCentTva.push(_tva);
+                    var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                    baseTva.push(__baseTva);
+                    ttTva.push(__baseTva / 100 * _tva);
+                } else {
+
+                    var index = perCentTva.indexOf(_tva);
+                    var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                    var _baseTva = Number(parseFloat(baseTva[index]).toFixed(3));
+                    baseTva[index] = _baseTva + __baseTva;
+                    var __ttTva = __baseTva / 100 * _tva;
+                    var _ttTva = Number(parseFloat(ttTva[index]).toFixed(3));
+                    ttTva[index] = _ttTva + __ttTva;
+                }
+
+            }
+        }
+        for (var i = 0; i < perCentTva.length; i++) {
+            _tvaa += "<tr><td class='right font16'>" + perCentTva[i] + "%</td><td class='right font16'>" + baseTva[i].toFixed(3) + "</td><td class='right font16'>" + ttTva[i].toFixed(3) + "</td></tr>";
+        }
+        document.getElementById('baseTVA').innerHTML = _tvaa;
+
+        var myVar = setInterval(myTimer, 1);
+        function myTimer() {
+            var x = document.readyState;
+            if (x === 'complete') {
+                window.location.href = "{{ path('facture_index') }}";
+                clearInterval(myVar);
+            }
+        }
+    </script>
+</html>

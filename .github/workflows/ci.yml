@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: PHP syntax lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: composer.json is valid
+        run: docker run --rm -v "$PWD:/app" -w /app composer:2.2 composer validate --no-check-publish --no-check-lock
+      - name: php -l on all sources
+        run: |
+          docker run --rm -v "$PWD:/app" -w /app php:7.2-cli \
+            sh -c 'find src app web bin -name "*.php" -print0 | xargs -0 -n1 -P4 php -l > /dev/null'
+
+  build:
+    name: Build dev image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build PHP-FPM image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/php/Dockerfile
+          push: false
+          load: true
+          tags: mindsuit-php:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  smoke:
+    name: Boot + smoke test
+    runs-on: ubuntu-latest
+    # The stack boot depends on legacy dependencies resolving via composer.
+    # Until the dev-master deps are pinned (see docs/UPGRADE.md, Phase 2 step 1),
+    # this job is allowed to fail without blocking the pipeline.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare env
+        run: cp docker/.env.example docker/.env
+      - name: Start stack
+        run: docker compose up -d --build
+      - name: Wait for database
+        run: |
+          for i in $(seq 1 30); do
+            if docker compose exec -T database healthcheck.sh --connect --innodb_initialized; then exit 0; fi
+            sleep 5
+          done
+          echo "database did not become healthy" && docker compose logs database && exit 1
+      - name: Install dependencies
+        run: docker compose exec -T php composer install --no-interaction --prefer-dist
+      - name: Smoke test (login page responds)
+        run: |
+          for i in $(seq 1 20); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/login || true)
+            echo "HTTP $code"
+            case "$code" in 200|301|302) exit 0;; esac
+            sleep 3
+          done
+          echo "login page did not respond" && docker compose logs --tail=100 php nginx && exit 1
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

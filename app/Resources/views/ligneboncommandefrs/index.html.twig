@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Ligneboncommandefrs list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Designation</th>
+                <th>Qte</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ligneBonCommandeFr in ligneBonCommandeFrs %}
+            <tr>
+                <td><a href="{{ path('ligneboncommandefrs_show', { 'id': ligneBonCommandeFr.id }) }}">{{ ligneBonCommandeFr.id }}</a></td>
+                <td>{{ ligneBonCommandeFr.designation }}</td>
+                <td>{{ ligneBonCommandeFr.qte }}</td>
+                <td>{% if ligneBonCommandeFr.createdAt %}{{ ligneBonCommandeFr.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ligneBonCommandeFr.updatedAt %}{{ ligneBonCommandeFr.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ligneboncommandefrs_show', { 'id': ligneBonCommandeFr.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ligneboncommandefrs_edit', { 'id': ligneBonCommandeFr.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ligneboncommandefrs_new') }}">Create a new ligneBonCommandeFr</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Client:'~client }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('client_edit',{'id':client.id})}}"><span class="glyphicon glyphicon-edit"></span> Modifier</a></li>
+                        <li>
+                            <a href="{{ path('fiche_client_vente_document',{'id':client.id}) }}"><span class="glyphicon glyphicon-info-sign"></span> Etat client</a>
+                        </li>
+                        <li><a href="{{path('client_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                        
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Client {{ client }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="list-group">
+                                            <a class="list-group-item article">
+                                                Code
+                                                <span class="pull-right text-muted small"><em class="em">{{client.code}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Status
+                                                <span class="pull-right text-muted small"><em class="em">{{client.status}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Civilite
+                                                <span class="pull-right text-muted small"><em class="em">{{client.civilite}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Raison sociale
+                                                <span class="pull-right text-muted small"><em class="em">{{client.rs}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Matricule fiscale
+                                                <span class="pull-right text-muted small"><em class="em">{{client.mf}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Nom Prénom
+                                                <span class="pull-right text-muted small"><em class="em">{{client.nom~' '~client.prenom}}</em>
+                                                </span>
+                                            </a>
+
+                                            <a class="list-group-item article">
+                                                Adresse 1
+                                                <span class="pull-right text-muted small"><em class="em">{{client.adresse1}}</em>
+                                                </span>
+                                            </a>
+
+                                            <a class="list-group-item article">
+                                                Adresse 2 
+                                                <span class="pull-right text-muted small"><em class="em">{{client.adresse2}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Adresse 3
+                                                <span class="pull-right text-muted small"><em class="em">{{client.adresse3}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item  article">
+                                                Pays
+                                                <span class="pull-right text-muted small"><em class="em">{{client.pays}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Ville
+                                                <span class="pull-right text-muted small"><em class="em">{{client.ville}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Code Postal
+                                                <span class="pull-right text-muted small"><em class="em">{{client.codePostal}}</em>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Contact
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="list-group">
+                                                    <a class="list-group-item article">
+                                                        Activité
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.activite}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Site Web
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.siteWeb}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Email
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.email}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Fax
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.fax}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Mobile
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.mobile}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Tel
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.tel}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Note
+                                                        <span class="pull-right text-muted small"><em class="em">{{client.note}}</em>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if not client.passager %}
+                        <div class="panel-footer">
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal{{client.id}}">
+                                <span class="glyphicon glyphicon-remove"></span> Supprimer
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal{{client.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">{{ client }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Voulez-vous supprimer ce client
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                            <a href="{{ path('client_delete', { 'id': client.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer</a>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

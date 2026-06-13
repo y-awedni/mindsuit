@@ -1,0 +1,137 @@
+Taux: Taux
+Libelle: Libellé
+Famille: Famille
+Nom: Nom
+Adresse: Adresse
+Code: Réf
+RefDoc: Référence document
+Designation: Désignation
+Unite: Unité
+Prix achat: Prix d'achat HT
+Marge: Marge
+Prix vente ht: Prix de vente HT
+Prix vente ttc: Prix de vente TTC
+Tva: Taux Tva
+Categorie: Catégorie
+Famille: Famille
+Sousfamille: Sous famille
+Note: Note
+Photo: Photo
+Rs: Raison social
+Adresse1: Adresse1
+Adresse2: Adresse2
+Adresse3: Adresse3
+Code postal: Code postal
+Ville: Ville
+Pays: Pays
+Tel: Tel
+Mobile: Mobile
+Fax: Fax
+Email: Email
+Siteweb: Siteweb
+#flash messages :)
+'%name% entityRemoved': %name% supprimé(e) avec succées
+'%name% entityAdded': %name% ajouté(e) avec succées
+'%name% entityEdited': %name% modifié(e) avec succées 
+Qte en stock de "%article%" est "%qteEnStock%": Quantité en stock de %article% est %qteEnStock%
+Status : Status
+Client : Client
+Prospect : Prospect
+Civilite : Civilite
+Auto-entrepreneur : Auto-entrepreneur
+Micro-entrepreneur : Micro-entrepreneur
+M. : M.
+empty : ' ' 
+Mme : Mme
+Mlle : Mlle
+SA : SA
+SAS : SAS
+EURL : EURL
+EARL : EARL
+SARL : SARL
+SPRL : SPRL
+SCI : SCI
+EI : EI
+EIRL : EIRL
+Association : Association
+Prenom : Prénom
+Site web : Site web
+Activite : Activité
+Lignes devis: ' '
+Lignes factures: ' '
+Ligne bon livraisons: ' '
+__name__label__: __name__label__
+Qte: Qte
+Prix unitaire: Prix unitaire
+Remise: Remise
+Ttc: TTC
+Article: Article
+0: 0
+Mf: Matricule Fiscale
+Rcs: Registre de commerce
+Code postale: Code postale
+Logo: Logo
+Date creation: Date création
+Date validite: Date validité
+Date echeance: Date échéance
+Save: " Enregistrer"
+Save and Print: " Enregistrer et imprimer"
+Save and add a new: " Enregistrer et ajouter un(e) autre"
+Termine: "Terminé"
+Montant: Montant
+Mode reglement: Mode de réglement
+Rub: RIB
+Banque: Banque
+Date echeance cheque: Date écheance chéque
+Num cheque: Num chéque
+Date echeance traite: Date écheance traite
+Num traite: Num traite
+Compte:	Compte bancaire recevant
+Espéce: Espéce
+Chéque: Chéque
+Traite: Traite
+Virement: Virement
+Date reglement: Date réglement
+Desactiver photo: Désactiver photo
+Media: ''
+Image: Image
+Date livraison: Date livraison
+Fournisseur: Fournisseur
+Date reception: Date réception
+Ligne bon receptions: ' '
+Qte en depart: Qte en départ
+Qte en stock: Qte en stock
+Seuil alert: Seuil d'alert
+Date ajout: Date d'ajout
+Can't delete entity: Impossible de supprimé cette entité
+Chercher et sélectionner: Chercher et sélectionner
+Stockable ?: Stockable ?
+Type doc: Type document
+Bon de reception: Bon de reception
+Bon de livraison: Bon de livraison
+Facture: Facture
+Reçu: Reçu
+Tier: Tier
+Date debut: Date début
+Date fin: Date fin
+Exporter les dépenses en csv: Exporter les dépenses en csv
+Exporter les revenus en csv: Exporter les revenus en csv
+Terminer et Régler: Terminer et Régler
+Terminer la facture et régler: Terminer la facture et régler
+Terminer la facture et imprimer: Terminer la facture et imprimer
+Terminer la bon de livraison et régler: Terminer la bon de livraison et régler
+Terminer la bon de livraison et imprimer: Terminer la bon de livraison et imprimer
+Terminer la bon de livraison et converter: Terminer la bon de livraison et converter
+Passager: Passager ?
+Il faut ajouter au moins une ligne: Il faut ajouter au moins une ligne
+Date commande: Date commande
+Ligne bon commande frss: ''
+Ligne facture avoirs: ''
+CompteEmetteur: Compte émetteur
+Bon commande: Réf bon de commande
+Cin: Cin
+Service ?: Service ?
+Rc: Registre de commerce
+Tel2: Tel2
+Retenu à la source: Retenu à la source
+Total retenu: Total retenu

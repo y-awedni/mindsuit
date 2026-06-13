@@ -1,0 +1,24 @@
+# Normalize line endings to LF in the repository.
+* text=auto eol=lf
+
+# Scripts and configs that MUST be LF (run in Linux containers / on the VPS).
+*.sh        text eol=lf
+*.php       text eol=lf
+Makefile    text eol=lf
+Dockerfile* text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+
+# Treat known binaries as binary (no EOL conversion, no diff noise).
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.svg  binary
+*.eot  binary
+*.ttf  binary
+*.woff  binary
+*.woff2 binary
+*.otf  binary
+*.psd  binary

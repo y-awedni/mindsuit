@@ -1,0 +1,487 @@
+<html>
+    <head>
+        <title>{{ devis.code }}</title>
+        <style>
+            .print-box {
+                font-size: 8px;
+                line-height: 2px;
+                font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+                color: #555;
+            }
+            /* this affects the ste and client information properties */
+            .print-box table tr.information table td{
+                font-size: 14px;
+            }
+            /* this affects the ste and client and main table properties */
+            .print-box table {
+                width: 100%;
+                line-height:1.5;
+                text-align: left;
+            }
+            /* this affects the ste and client and main table lines properties */
+            .print-box table td {
+                padding: 3px;
+                vertical-align: top;
+
+            }
+            /* this will affect as following, if nth-child :
+            (3) affects only the main table
+            (2) affects main table and client info
+            (1) affects main table and client and ste info */
+            .print-box table tr td:nth-child(2) {
+                text-align: right;
+            }
+            /* this affects  the space between (logo and doc title) and the rest of the doc  */
+            .print-box table tr.top table td {
+                padding-bottom: 5px;
+            }
+            /* this affects NOTHING AS FOR MY TESTING */
+            .print-box table tr.top table td.title {
+                font-size: 45px;
+                line-height: 45px;
+                color: #333;
+            }
+            /* this affects THE DOC TITLE (name and code) */
+            .print-box table tr.top table td.code {
+                width: 60%;
+                text-align: left;
+            }
+            /* this affects THE spacing between the ste/client info and the rest of the doc */
+            .print-box table tr.information table td {
+                padding-bottom: 15px;
+            }
+            /* this affects the ste info section */
+            .print-box table tr.information table td.societe {
+                width: 40%;
+            }
+            /* this affects the client info section */
+            .print-box table tr.information table td.client {
+                width: 30%;
+                text-align: left;
+            }
+            /* this affects the header of the main table */
+            .print-box table tr.heading td {
+                background: #13b3d9;
+                border-bottom: 1px solid #ddd;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            /* this affects NOTHING AS FAR AS MY TESTING */
+            .print-box table tr.details td {
+                padding-bottom: 20px;
+            }
+            /* this affects the LINES of the main table */
+            .print-box table tr.item td {
+                border-bottom: 1px solid #eee;
+                font-size: 12px;
+                width: 2%;
+
+            }
+
+            .print-box table tr.item:nth-child(odd) {background: #eee;}
+            .print-box table tr.item:nth-child(even) {background: #fff;}
+
+            /* this affects nothing as far as for my testing */
+            .print-box table tr.item.last td {
+                border-bottom: none;
+            }
+            /* this affects nothing as far as for my testing */
+            .print-box table tr.total td:nth-child(2) {
+                border-top: 2px solid #eee;
+                font-weight: bold;
+            }
+
+            .center{
+                text-align:center;
+            }
+            .left{
+                text-align: left!important;
+            }
+            .right{
+                text-align: right!important;
+            }
+             /* this affects nothing as far as for my testing */
+            .print-box table tr.bottom td table{
+                padding-top: 10px;
+                font-size: 14px;
+            }
+            div.totaux{
+                width: 30%;
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+            div.totaux table{
+                border: 1px solid #ddd;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            div.totaux table th{
+                background: #eee;
+                width: 50%;
+            }
+            div.baseTva{
+                width: 30%;
+                position: absolute;
+                top: 0;
+                right: 240px;
+            }
+
+            div.baseTva table.tableauTVA{
+                width: 100%;
+                float: right;
+                border: 1px solid #ddd;
+                border-collapse: collapse;
+            }
+            div.baseTva table.tableauTVA td{
+                font-size: 16px!important;
+            }
+
+            .font16{
+                font-size: 16px!important;
+            }
+
+            div.baseTva table thead{
+                background: #13b3d9;
+                border-bottom: 1px solid #ddd;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            div.baseTva table tbody tr:nth-child(odd) {background: #eee;}
+            div.baseTva table tbody tr:nth-child(even) {background: #fff;}
+
+            @media only screen and (max-width: 600px) {
+                .print-box table tr.top table td {
+                    width: 100%;
+                    display: block;
+                    text-align: center;
+                }
+                .print-box table tr.information table td {
+                    width: 100%;
+                    display: block;
+                    text-align: center;
+                }
+            }
+
+            body.relative {
+                position: relative;
+            }
+            div.absolute {
+                position: absolute;
+                bottom: 15px;
+                right: 1%;
+                width: 98%;
+                height: 180px;
+                font-size:12px;
+            }
+
+        </style>
+    </head>
+    <body class="relative" onload="window.print();
+            window.close();">
+        <div id="print" >
+            <div class="print-box">
+                <table cellpadding="0" cellspacing="0" >
+                    <tr class="top">
+                        <td colspan="9">
+                            <table>
+                                <tr>
+                                    <td class="title" style="width: 20%">
+                                       {% if societe.desactiverPhoto==false and societe.media %}
+                                            <img style="width:100px; max-width:100px;" src="{{ asset(societe.media.assetPath) }}">
+                                        {% endif %}
+                                    </td>
+                                    <td class="code" style="width: 60%;text-align: center">
+                                        <h2><strong>Devis </strong>: {{ devis.code }}</h2>
+                                    </td>
+                                    <td class="date" style="width: 20%;text-align: right">
+                                        Date : {{ devis.dateCreation|date("d/m/Y")}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="information">
+                        <td colspan="9">
+                            <table>
+                                <tr>
+                                    <td class="societe">
+                                        {% if societe.adresse %}
+                                            {{societe.adresse}}<br>
+                                            {{societe.codePostale~' '~societe.ville~' '~societe.pays}}<br>
+                                        {% endif %}
+
+                                        {% if societe.tel %}
+                                            <b>Tél: </b>{{societe.tel}}<br>
+                                        {% endif %}
+                                        {% if societe.fax %}
+                                            <b>Tél-Fax : </b>{{societe.fax}}<br>
+                                        {% endif %}
+                                        {% if societe.mobile %}
+                                            <b>Mobile : </b>{{ societe.mobile }}<br>
+                                        {% endif %}
+
+                                        {% if societe.mf %}
+                                            <b>M.F : </b>{{ societe.mf }}<br>
+                                        {% endif %}
+                                        {% if societe.rcs %}
+                                            <b>R.Cs : </b>{{ societe.rcs }}<br>
+                                        {% endif %}<br>
+                                        {% if societe.compte %}
+                                            <b>RIB : </b>{{ societe.compte }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="client">
+                                        <fieldset>
+                                            <legend><b>Code client : </b>{{ devis.client.code }}</legend>
+                                            {% if devis.client.rs %}
+                                                <b>Client : </b>{{devis.client.rs}}<br>
+                                            {% endif %}
+                                            {% if devis.client.email %}
+                                                <b>Email : </b>{{ devis.client.email }}<br>
+                                            {% endif %}
+                                            {% if devis.client.ville %}
+                                                <b>Ville : </b>{{ devis.client.ville }}<br>
+                                            {% endif %}
+                                            {% if devis.client.mf %}
+                                                <b>M.F : </b>{{ devis.client.mf }}<br>
+                                            {% endif %}
+                                            {% if devis.client.note %}
+                                                <b>Note : </b>{{ devis.client.note }}<br>
+                                            {% endif %}
+                                        </fieldset>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- lignes devis -->
+                    <tr class="heading">
+                        <td class="left" style="width: 9%" >Réf</td>
+                        <td class="left" style="width: 30%" >Désignation</td>
+                        <td class="center" style="width: 3%" >Unité</td>
+                        <td class="center" style="width: 8%" >PU HT</td>
+                        {% if devis.remise != 0.000 %}
+                        <td class="center" >Remise</td>
+                        {% endif %}
+                        <td class="center">TVA</td>
+                        <td class="center" style="width: 8%" >PU TTC</td>
+                        <td class="center">Qte</td>
+                        <td class="center" style="width: 8%" >Total TTC</td>
+                    </tr>
+                    {% set i=0 %}
+                    {% for ligne in devis.lignesDevis %}
+                        <tr class="item">
+                            <td class="left" style=" font-size: 12px" >{{ligne.article.code}}</td>
+                            <td class="left" style=" font-size: 12px" >{{ligne.designation}}</td>
+                            <td class="center">{{ligne.article.unite}}</td>
+                            <td class="center" id="prixUnitaire_{{i}}">{{ligne.prixUnitaire}}</td>
+                            {% if devis.remise != 0.000 %}
+                            {% if ligne.remise == 0.000 %}
+                            <td class="center" id="remise_{{i}}">0 %</td>
+                            {% else %}
+                            <td class="center" id="remise_{{i}}">{{ligne.remise|number_format(0, '.', '')}} %</td>
+                            {% endif %}  
+                            {% endif %}
+                            <td class="center" id="tva_{{i}}">{{ligne.tva }} %</td>
+                            {% set puTTC=ligne.ttc/ligne.qte %}
+                            <td class="center" id="ttc_{{i}}">{{ puTTC|number_format(3, '.', '') }}</td>
+                            <td class="center" id="qte_{{i}}">{{ligne.qte|number_format(0, '.', '')}}</td>
+                            <td class="center" id="total_{{i}}">{{ligne.ttc }}</td>
+                        </tr>
+                            {% if devis.remise == 0.000 %}
+                                <div class="center" style="visibility: hidden" id="remise_{{i}}">{{ligne.remise}} %</div>
+                            {% endif %}
+                        {% set i=i+1 %}
+                    {% endfor %}
+                    <div id="lignesDevisLength" style="visibility: hidden">{{i}}</div>
+                </table>
+            </div>
+        </div>
+        <div class="absolute">
+            <div style="width: 35% ; position: relative;">
+                Arreté le présent devis à la somme de:<br>
+                {{ totalDinarsEnTtLettres|upper }} DINARS<br>
+                {% if totalMillimesEnTtLettres %}
+                    {{ totalMillimesEnTtLettres }} MILLIMES
+                {% endif %}
+            </div>
+
+            <div class="baseTva" id="tvaTable">
+                <table class="tableauTVA">
+                    <thead>
+                        <tr>
+                            <th class="center font16">Taux</th>
+                            <th class="center font16">Base</th>
+                            <th class="center font16">TVA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baseTVA">
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="totaux" id='totauxTable'>
+                <table class="font16">
+                    <tr>
+                        <th class="left">Total HT</th>
+                        <td class="right" >{{ devis.ht|number_format(3, '.', ' ') }}</td>
+                    </tr>
+                    <tr>{% if devis.remise == 0.000 %}
+                        
+                        <tr></tr>
+                        {% else %}
+                        <th class="left">Total Remise</th>
+
+                        <td class="right">{{ devis.remise|number_format(3, '.', ' ') }}</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <th class="left">Total TVA</th>
+                        <td class="right">{{ devis.tva|number_format(3, '.', ' ') }}</td>
+                    </tr>
+                    <tr>
+                        <th class="left">Total TTC</th>
+                        <td class="right">{{ devis.total|number_format(3, '.', ' ') }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="signatures" style="width: 100%;position: absolute;bottom: 0px; left: 1.5%">
+                <fieldset style="height:60px;width:29%;display:block;float:left;" >
+                    <legend>Note</legend>
+                </fieldset>
+                <fieldset style="height:60px;width:29%;display:block;float:left;">
+                    <legend>Signature Client</legend>
+                </fieldset>
+                <fieldset style="height:60px;width:29%;display:block;float:left;">
+                    <legend>Signature Societé</legend>
+                </fieldset>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        var h = document.getElementById('print').clientHeight;
+        if (h > 778) {
+            document.getElementById('print').style.height = "2202px";
+        }
+        var lignesDevisLength = document.getElementById('lignesDevisLength').innerHTML;
+        Array.prototype.inArray = function (value)
+        {
+            // Returns true if the passed value is found in the
+            // array. Returns false if it is not.
+            var i;
+            for (i = 0; i < this.length; i++)
+            {
+                if (this[i] === value)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var ttc = 0;        //total TTC
+        var ht = 0;         //total HT
+        var remise = 0;     //total REMISE
+        var tva = 0;        //total TVA
+        var perCentTva = [];//taux TVA[]
+        var baseTva = [];   //base TVA[]
+        var ttTva = [];     //total TVA[]
+        var _tvaa = '';     //tr TVA[]
+        if (lignesDevisLength > 0) {
+            for (var i = 0; i < lignesDevisLength; i++) {
+                //calcule ttc pu remise tva_____________________________
+                //incrementation du ttc
+                ttc += Number(parseFloat(document.getElementById('total_' + i).innerHTML).toFixed(3));
+                //recuperation des input________________________________
+                //input prix unitaire
+                var pu = Number(parseFloat(document.getElementById('prixUnitaire_' + i).innerHTML).toFixed(3));
+                //input qte
+                var qte = Number(parseFloat(document.getElementById('qte_' + i).innerHTML).toFixed(3));
+                //input remise
+                var _remise = Number(parseFloat(document.getElementById('remise_' + i).innerHTML).toFixed(3));
+                //input tva
+                var _tva = Number(parseFloat(document.getElementById('tva_' + i).innerHTML).toFixed(3));
+                //  calcule de cette ligne _____________________________
+                //prix hors taxe avant remise de cette ligne
+                var __htAvantRemise = pu * qte;
+                //remise de cette ligne d'un seul article
+                var __remise = (__htAvantRemise / 100 * _remise);
+                //prix hors taxe apres remise de cette ligne
+                var __htApresRemise = __htAvantRemise - __remise;
+                //tva de cette ligne
+                var __tva = __htApresRemise / 100 * _tva;
+                // incrementation des variables totaux
+                // prix ht
+                ht += __htAvantRemise;
+                //remise
+                remise += __remise;
+                //tva
+                tva += __tva;
+
+                //calcule du tableau tva
+                if (!perCentTva.inArray(_tva)) {
+                    perCentTva.push(_tva);
+                    var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                    baseTva.push(__baseTva);
+                    ttTva.push(__baseTva / 100 * _tva);
+                } else {
+                    var index = perCentTva.indexOf(_tva);
+                    var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                    var _baseTva = Number(parseFloat(baseTva[index]).toFixed(3));
+                    baseTva[index] = _baseTva + __baseTva;
+
+                    var __ttTva = __baseTva / 100 * _tva;
+                    var _ttTva = Number(parseFloat(ttTva[index]).toFixed(3));
+                    ttTva[index] = _ttTva + __ttTva;
+                }
+
+            }
+        }
+        function number_format(number, decimals, decPoint, thousandsSep) {
+            if (number==='0.000'){
+                return '0.000';
+            }
+            decimals = decimals || 0;
+            number = parseFloat(number);
+
+            if (!decPoint || !thousandsSep) {
+                decPoint = '.';
+                thousandsSep = ',';
+            }
+
+            var roundedNumber = Math.round(Math.abs(number) * ('1e' + decimals)) + '';
+            var numbersString = decimals ? roundedNumber.slice(0, decimals * -1) : roundedNumber;
+            var decimalsString = decimals ? roundedNumber.slice(decimals * -1) : '';
+            var formattedNumber = "";
+
+            while (numbersString.length > 3) {
+                formattedNumber += thousandsSep + numbersString.slice(-3)
+                numbersString = numbersString.slice(0, -3);
+            }
+
+            return (number < 0 ? '-' : '') + numbersString + formattedNumber + (decimalsString ? (decPoint + decimalsString) : '');
+        }
+        for (var i = 0; i < lignesDevisLength; i++) {
+            document.getElementById('total_' + i).innerHTML=number_format( document.getElementById('total_' + i).innerHTML, 3, '.', ' ' );
+            document.getElementById('prixUnitaire_' + i).innerHTML=number_format( document.getElementById('prixUnitaire_' + i).innerHTML, 3, '.', ' ' );
+            document.getElementById('ttc_' + i).innerHTML=number_format( document.getElementById('ttc_' + i).innerHTML, 3, '.', ' ' );
+        }
+        for (var i = 0; i < perCentTva.length; i++) {
+           // _tvaa += "<tr><td class='right font16'>" + perCentTva[i] + "%</td><td class='right font16'>" + baseTva[i].toFixed(3) + "</td><td class='right font16'>" + ttTva[i].toFixed(3) + "</td></tr>";
+            _tvaa += "<tr><td class='right font16' style='border-right: #ddd solid 1px;'>" + perCentTva[i] + "%</td><td class='right font16' style='border-right: #ddd solid 1px;'>" +  number_format( baseTva[i].toFixed(3), 3, '.', ' ' ) + "</td><td class='right font16'>" + number_format( ttTva[i].toFixed(3) , 3, '.', ' ' ) + "</td></tr>";
+        }
+        document.getElementById('baseTVA').innerHTML = _tvaa;
+
+        var myVar = setInterval(myTimer, 0.0000000000000000000000000000000000000000000000001);
+        function myTimer() {
+            var x = document.readyState;
+            if (x === 'complete') {
+                window.location.href = "{{ path('devis_show',{'id':devis.id}) }}";
+                clearInterval(myVar);
+            }
+        }
+    </script>
+</html>

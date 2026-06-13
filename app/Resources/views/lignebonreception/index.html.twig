@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lignebonreceptions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Designation</th>
+                <th>Qte</th>
+                <th>Prixunitaire</th>
+                <th>Remise</th>
+                <th>Ttc</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ligneBonReception in ligneBonReceptions %}
+            <tr>
+                <td><a href="{{ path('lignebonreception_show', { 'id': ligneBonReception.id }) }}">{{ ligneBonReception.id }}</a></td>
+                <td>{{ ligneBonReception.designation }}</td>
+                <td>{{ ligneBonReception.qte }}</td>
+                <td>{{ ligneBonReception.prixUnitaire }}</td>
+                <td>{{ ligneBonReception.remise }}</td>
+                <td>{{ ligneBonReception.ttc }}</td>
+                <td>{% if ligneBonReception.createdAt %}{{ ligneBonReception.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ligneBonReception.updatedAt %}{{ ligneBonReception.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('lignebonreception_show', { 'id': ligneBonReception.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('lignebonreception_edit', { 'id': ligneBonReception.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('lignebonreception_new') }}">Create a new ligneBonReception</a>
+        </li>
+    </ul>
+{% endblock %}

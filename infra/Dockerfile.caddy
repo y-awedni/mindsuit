@@ -1,0 +1,7 @@
+# Caddy with the Cloudflare DNS plugin baked in, for wildcard (DNS-01) TLS.
+# Swap the plugin if you use a different DNS provider.
+FROM caddy:2-builder AS builder
+RUN xcaddy build --with github.com/caddy-dns/cloudflare
+
+FROM caddy:2
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy

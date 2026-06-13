@@ -1,0 +1,29 @@
+<section class="content-header">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav navbar-left">
+                {% set route=app.request.attributes.get('_route') %}
+                <li {% if route=='fiche_client_vente_document' %} class="active" {% endif %}>
+                    <a {% if route!='fiche_client_vente_document' %} href="{{ path('fiche_client_vente_document',{'id':client.id}) }}" {% endif %}>
+                        <span class="fa fa-eye"></span> Etat de vente par document
+                    </a>
+                </li>
+                <li {% if route=='fiche_client_vente_article' %} class="active" {% endif %}>
+                    <a {% if route!='fiche_client_vente_article' %} style="color: black" href="{{ path('fiche_client_vente_article',{'id':client.id}) }}" {% endif %}>
+                        <span class="fa fa-eye"></span> Etat de vente par article
+                    </a>
+                </li>
+                <li {% if route=='fiche_client_avoirs' %} class="active" {% endif %}>
+                    <a {% if route!='fiche_client_avoirs' %} style="color: black" href="{{ path('fiche_client_avoirs',{'id':client.id}) }}" {% endif %}>
+                        <span class="fa fa-eye"></span> Avoirs
+                    </a>
+                </li>
+                <li {% if route=='fiche_client_reglements' %} class="active" {% endif %}>
+                    <a {% if route!='fiche_client_reglements' %} style="color: black" href="{{ path('fiche_client_reglements',{'id':client.id}) }}" {% endif %}>
+                        <span class="fa fa-eye"></span> Réglements
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>

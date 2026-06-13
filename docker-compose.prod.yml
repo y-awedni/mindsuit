@@ -1,0 +1,54 @@
+# Production stack (single VPS, Docker Compose).
+# Activated after Phase 2 (framework upgrade). See docs/DEPLOYMENT.md.
+#
+# Secrets come from a server-side .env (NOT committed):
+#   APP_IMAGE, ACME_EMAIL, CF_API_TOKEN, MARIADB_*, APP_SECRET, DATABASE_URL...
+
+services:
+  php:
+    image: ${APP_IMAGE:-ghcr.io/OWNER/mindsuit:latest}
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - uploads:/app/public/uploads
+    depends_on:
+      database:
+        condition: service_healthy
+
+  caddy:
+    build:
+      context: ./infra
+      dockerfile: Dockerfile.caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - uploads:/app/public/uploads:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - php
+
+  database:
+    image: mariadb:10.6
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db_data:
+  uploads:
+  caddy_data:
+  caddy_config:

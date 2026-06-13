@@ -1,0 +1,208 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Régelements:'~facture }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('facture_index')}}"><span class="glyphicon glyphicon-align-justify"></span> Liste</a></li>
+                        <li><a href="{{ path('facture_show', { 'id': facture.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Afficher</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                <span class="fa fa-money"></span> Liste des règlements du facture : {{ facture.code }} de client {{ facture.client }}
+                            </a>
+                        </h4>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+
+                            {% if facture.reste==0 %}
+                                <div class="alert alert-success">
+                                    Cette facture est déja reglé.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-danger">
+                                    {% if facture.dateEcheance %}
+                                        Cette facture doit étre reglée avant le : <a class="alert-link">{{ facture.dateEcheance|date('d-m-Y') }}</a>
+                                    {% else %}
+                                        Cette facture n'a pas de <a class="alert-link">date d'echéance</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            <table width="100%" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Montant</th>
+                                        <th>Mode règlement</th>
+                                        <th>Détails</th>
+                                        <th>Note</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ligneReglement in ligneReglements %}
+                                        <tr>
+                                            <td>{{ ligneReglement.montant }}</td>
+                                            <td>{{ ligneReglement.modeReglement }}</td>
+                                            <td>{{ ligneReglement.details }}</td>
+                                            <td>{{ ligneReglement.note }}</td>
+                                            <td>{{ ligneReglement.dateReglement|date('d-m-Y') }}</td>
+                                            <td>
+                                                {% if 'Retenu à la source' != ligneReglement.modeReglement %}
+                                                    <a class="btn btn-danger btn-xs" href="{{ path('facture_reglement_delete', { 'id': facture.id,'idLigneReglement':ligneReglement.id }) }}"><span class="glyphicon glyphicon-remove"></span>  Supprimer</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseAdd"><span class="glyphicon glyphicon-plus"></span> Ajouter un réglement</a>
+                        </h4>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div id="collapseAdd" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if facture.reste>0 %}
+                                        {{ form_start(form) }}
+                                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                        <div class="alert alert-info">
+                                            Total des avoirs de client : {{ facture.client }} : <a class="alert-link">{{ facture.client.totalAvoirNonRembourse }} TND</a>
+                                        </div>
+                                        {{ form_row(form.dateReglement) }}
+                                        {{ form_row(form.montant,{'attr':{'onkeyup':'changeMontant(this)','onchange':'changeMontant(this)', 'value':facture.reste|number_format(3, '.', '')}}) }}
+                                        <div class="form-group">
+                                            <label class="control-label required" for="appbundle_lignereglement_montant">Reste</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">TND </span>
+                                                <input type="text" id="reste" value="0.000" disabled="disabled" class="form-control">
+                                            </div>
+                                        </div>
+                                        <input type="hidden" disabled="disabled" value="{{ facture.total }}" id="total">
+                                        <input type="hidden" disabled="disabled" value="{{ facture.reste }}" id="restefacture">
+                                        {{ form_row(form.modeReglement,{'attr':{'onchange':'changeModeReglement(this)' }}) }}
+                                        <div class="row">
+                                            <div class="col-sm-6">{{ form_row(form.dateEcheanceCheque) }}</div>
+                                            <div class="col-sm-6">{{ form_row(form.numCheque) }}</div>
+                                            <div class="col-sm-6">{{ form_row(form.dateEcheanceTraite) }}</div>
+                                            <div class="col-sm-6">{{ form_row(form.numTraite) }}</div>
+                                            <div class="col-sm-6">{{ form_row(form.compte) }}</div>
+                                        </div>
+                                        {{ form_row(form.note) }}
+                                        <button id="save" type="submit" class="btn btn-success"><i class="fa fa-save"></i> Enregistrer</button>
+                                        {{ form_end(form) }}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 col-md-offset-2">
+                                    <div class="list-group">
+                                        <a class="list-group-item">
+                                            Total TTC
+                                            <span class="pull-right text-muted small"><em id="totalHT">{{ facture.total|number_format(3, '.', '') }}</em>
+                                            </span>
+                                        </a>
+                                        <a class="list-group-item">
+                                            Déja réglé
+                                            <span class="pull-right text-muted small"><em id="totalREMISE">{{ facture.regle|number_format(3, '.', '') }}</em>
+                                            </span>
+                                        </a>
+                                        <a class="list-group-item">
+                                            Total avoir remboursé
+                                            <span class="pull-right text-muted small"><em id="totalAVOIR">{{ facture.totalAvoirRembourse|number_format(3,'.','') }}</em>
+                                            </span>
+                                        </a>
+                                        <a class="list-group-item">
+                                            Total avoir non remboursé
+                                            <span class="pull-right text-muted small"><em id="totalAVOIR">{{ facture.totalAvoirNonRembourse|number_format(3,'.','') }}</em>
+                                            </span>
+                                        </a>
+                                        <a class="list-group-item">
+                                            Reste à régler
+                                            <span class="pull-right text-muted small"><em id="totalTVA">{{ facture.reste>=0?facture.reste|number_format(3, '.', ''):'0.000' }}</em>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        document.getElementById('appbundle_lignereglement_dateEcheanceCheque').parentNode.style.display = 'none';
+        document.getElementById('appbundle_lignereglement_numCheque').parentNode.style.display = 'none';
+        document.getElementById('appbundle_lignereglement_dateEcheanceTraite').parentNode.style.display = 'none';
+        document.getElementById('appbundle_lignereglement_numTraite').parentNode.style.display = 'none';
+        document.getElementById('appbundle_lignereglement_compte').parentNode.style.display = 'inherit';
+        function changeMontant(mnt) {
+            if (Number(mnt.value) > Number(document.getElementById('restefacture').value)) {
+                mnt.value = toNumberWith3Digits(document.getElementById('restefacture').value);
+                document.getElementById('reste').value = '0.000';
+                return;
+            }
+            if ((mnt.value.length > 0) && (!isNaN(mnt.value)) && (mnt.value > -1) && (Number(mnt.value) <= Number(document.getElementById('restefacture').value))) {
+                var res = toNumberWith3Digits(toNumberWith3Digits(document.getElementById('restefacture').value) - toNumberWith3Digits(mnt.value));
+                document.getElementById('reste').value = toNumberWith3Digits(res);
+            } else {
+                mnt.value = '';
+                document.getElementById('reste').value = toNumberWith3Digits(document.getElementById('restefacture').value);
+            }
+        }
+        function changeModeReglement(select) {
+            var selectedOption = select.options[select.selectedIndex].value;
+            switch (selectedOption) {
+                case 'Espéce':
+                    document.getElementById('appbundle_lignereglement_dateEcheanceCheque').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_numCheque').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_dateEcheanceTraite').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_numTraite').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_compte').parentNode.style.display = 'inherit';
+                    break;
+                case 'Chéque':
+                    document.getElementById('appbundle_lignereglement_dateEcheanceCheque').parentNode.style.display = 'inherit';
+                    document.getElementById('appbundle_lignereglement_numCheque').parentNode.style.display = 'inherit';
+                    document.getElementById('appbundle_lignereglement_dateEcheanceTraite').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_numTraite').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_compte').parentNode.style.display = 'inherit';
+                    break;
+                case 'Traite':
+                    document.getElementById('appbundle_lignereglement_dateEcheanceCheque').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_numCheque').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_dateEcheanceTraite').parentNode.style.display = 'inherit';
+                    document.getElementById('appbundle_lignereglement_numTraite').parentNode.style.display = 'inherit';
+                    document.getElementById('appbundle_lignereglement_compte').parentNode.style.display = 'inherit';
+                    break;
+                case 'Virement':
+                    document.getElementById('appbundle_lignereglement_dateEcheanceCheque').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_numCheque').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_dateEcheanceTraite').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_numTraite').parentNode.style.display = 'none';
+                    document.getElementById('appbundle_lignereglement_compte').parentNode.style.display = 'inherit';
+                    break;
+            }
+
+        }
+    </script>
+{% endblock %}

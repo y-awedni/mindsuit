@@ -1,0 +1,63 @@
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTotaux">
+                <span class="glyphicon glyphicon-credit-card"></span> 
+                Totaux
+            </a>
+        </h4>
+    </div>
+    <div id="collapseTotaux" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-8">
+                    <div class="list-group">
+                        {% if totalEspece is defined %}
+                            <a class="list-group-item">
+                                Total Espece
+                                <span class="pull-right text-muted small"><em>{{ totalEspece|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if totalCheque is defined %}
+                            <a class="list-group-item">
+                                Total Cheque
+                                <span class="pull-right text-muted small"><em>{{ totalCheque|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if totalBanque is defined %}
+                            <a class="list-group-item">
+                                Total Banque
+                                <span class="pull-right text-muted small"><em>{{ totalBanque|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if totalTraite is defined %}
+                            <a class="list-group-item">
+                                totalTraite
+                                <span class="pull-right text-muted small"><em>{{ totalTraite|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        {% if totalAvoir is defined %}
+                            <a class="list-group-item">
+                                Total Avoir
+                                <span class="pull-right text-muted small"><em>{{ totalAvoir|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                        
+                        {% if total is defined %}
+                            <a class="list-group-item">
+                                Total
+                                <span class="pull-right text-muted small"><em>{{ total|number_format('3','.',' ') }}</em>
+                                </span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>   
+        </div>
+    </div>
+</div>  

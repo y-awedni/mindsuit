@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lignebonreception</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ligneBonReception.id }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ ligneBonReception.designation }}</td>
+            </tr>
+            <tr>
+                <th>Qte</th>
+                <td>{{ ligneBonReception.qte }}</td>
+            </tr>
+            <tr>
+                <th>Prixunitaire</th>
+                <td>{{ ligneBonReception.prixUnitaire }}</td>
+            </tr>
+            <tr>
+                <th>Remise</th>
+                <td>{{ ligneBonReception.remise }}</td>
+            </tr>
+            <tr>
+                <th>Ttc</th>
+                <td>{{ ligneBonReception.ttc }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if ligneBonReception.createdAt %}{{ ligneBonReception.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{% if ligneBonReception.updatedAt %}{{ ligneBonReception.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('lignebonreception_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('lignebonreception_edit', { 'id': ligneBonReception.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

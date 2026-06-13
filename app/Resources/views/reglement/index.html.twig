@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Reglements list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Total</th>
+                <th>Reste</th>
+                <th>Note</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reglement in reglements %}
+            <tr>
+                <td><a href="{{ path('reglement_show', { 'id': reglement.id }) }}">{{ reglement.id }}</a></td>
+                <td>{{ reglement.total }}</td>
+                <td>{{ reglement.reste }}</td>
+                <td>{{ reglement.note }}</td>
+                <td>{% if reglement.createdAt %}{{ reglement.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if reglement.updatedAt %}{{ reglement.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('reglement_show', { 'id': reglement.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('reglement_edit', { 'id': reglement.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('reglement_new') }}">Create a new reglement</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Client:'~client }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('client_show',{'id':client.id})}}"><span class="glyphicon glyphicon-eye-open"></span> Afficher</a></li>
+                        <li>
+                            <a href="{{ path('fiche_client_vente_document',{'id':client.id}) }}"><span class="glyphicon glyphicon-info-sign"></span> Etat client</a>
+                        </li>
+                        <li><a href="{{path('client_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Client {{ client }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(edit_form) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(edit_form.code) }}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ form_row(edit_form.civilite) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form_row(edit_form.status) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {{ form_row(edit_form.rs) }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ form_row(edit_form.mf) }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ form_row(edit_form.rc) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ form_row(edit_form.nom) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form_row(edit_form.prenom) }}
+                                            </div>
+                                        </div>
+                                        {{ form_row(edit_form.adresse1) }}
+                                        {{ form_row(edit_form.adresse2) }}
+                                        {{ form_row(edit_form.adresse3) }}
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {{ form_row(edit_form.codePostal) }}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                {{ form_row(edit_form.ville) }}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                {{ form_row(edit_form.pays) }}
+                                            </div>
+                                        </div>
+                                        {{ form_row(edit_form.remise) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        Contact
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(edit_form.tel) }}
+                                        {{ form_row(edit_form.mobile) }}
+                                        {{ form_row(edit_form.fax) }}
+                                        {{ form_row(edit_form.email) }}
+                                        {{ form_row(edit_form.siteWeb) }}
+                                        {{ form_row(edit_form.activite) }}
+                                        {{ form_row(edit_form.note) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_widget(edit_form) }}
+                        {{ form_end(edit_form) }}
+                    </div>
+                    {% if not client.passager %}
+                        <div class="panel-footer">
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal{{client.id}}">
+                                <span class="glyphicon glyphicon-remove"></span> Supprimer
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal{{client.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">{{ client }}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Voulez-vous supprimer ce client
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                            <a href="{{ path('client_delete', { 'id': client.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer</a>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

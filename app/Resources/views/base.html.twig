@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Mind-suit{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('bundles/app/vendor/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('bundles/app/vendor/metisMenu/metisMenu.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('bundles/app/dist/css/sb-admin-2.css')}}">
+    <link rel="stylesheet" href="{{ asset('bundles/app/vendor/font-awesome/css/font-awesome.min.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap-select-1.12.2/dist/css/bootstrap-select.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}} ">
+    <link rel="icon" href="{{ asset('bundles/app/favicon.png')}} " type="image/gif" sizes="16x16">
+</head>
+<body>
+    <img id="loader" src="{{asset('loader.svg')}}" style="display: none;"/>
+    {% if  app.user is not null and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('homepage')}}">
+                        <img style="width: 123px;" src="{{ asset('bundles/app/logo.png')}} " alt="Mind-suit">
+                    </a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vente<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('devis_index')}}">Devis</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('bonlivraison_index')}}">Bons de livraison</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('facture_index')}}">Factures Vente</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('factureavoir_index')}}">Avoirs</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Achat <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('bonreception_index')}}">Bons de reception</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('boncommandefrs_index')}}">Bons de commande fournisseur</a>
+                                </li>
+                            </ul>
+                        </li>
+        
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Mouvements <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                            <li>
+                            <a href="{{path('stock_index')}}">Mouvements des Produits</a>
+                            </li>
+                            <li>
+                            <a href="{{path('services_index')}}">Mouvements des Services</a>
+                            </li>
+                               
+                            </ul>
+                        </li>
+        
+
+                       
+                        <li>
+                            <a href="{{path('services_index')}}">Services</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Mouvements financiérs <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('mouvement_index')}}">Tout les Mouvements </a>
+                                </li>
+                                <li>
+                                    <a href="{{path('mouvement_cheque_index')}}">Caisse des chéques</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('mouvement_traite_index')}}">Caisse des traites</a>
+                                <li>
+                                    <a href="{{path('comptabilite_index')}}">Comptabilité</a>
+                                </li>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Statistiques <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('articles_stats')}}">Articles </a>
+                                </li>
+                                <li>
+                                    <a href="{{path('clients_stats')}}">Clients</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('fournisseurs_stats')}}">Fournisseurs</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{{path('article_index')}}">Articles</a>
+                        </li>
+                        <li>
+                            <a href="{{path('fournisseur_index')}}">Fournisseurs</a>
+                        </li>
+                        <li>
+                            <a href="{{path('client_index')}}">Clients</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Paramétres<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('unite_index')}}">Unités article</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('categorie_index')}}">Catégories article</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('famille_index')}}">Familles article</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('sousfamille_index')}}">Sous Familles article</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('magasin_index')}}">Magasins</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('tva_index')}}">Tva</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('retenu_index')}}">Retenu à la source</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('societe_index')}}">Societé</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('banque_index')}}">Banques</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('compte_index')}}">Comptes</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {{ render(controller('AppBundle:Notification:news')) }}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ path('fos_user_profile_show')}}"><i class="fa fa-user fa-fw"></i> Afficher Profil</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('fos_user_profile_edit')}}"><i class="fa fa-gear fa-fw"></i> Modifier profil</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out fa-fw"></i> {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+                                </li>
+                            </ul>
+                            <!-- /.dropdown-user -->
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    {% endif %}
+    {% set id=1 %}
+    {% for flash_message in app.session.flashBag.get('notice') %}
+        <div id="flash_notice_{{id}}" class="flash-notice" style="display: none">
+            {{ flash_message }}
+        </div>
+        {% set id=id+1 %}
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('error') %}
+        <div class="flash-error" style="display: none">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('info') %}
+        <div class="flash-info" style="display: none">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+{% block body %}{% endblock %}
+
+
+<script src="{{ asset('bundles/app/vendor/jquery/jquery.min.js')}}"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script src="{{ asset('bundles/app/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{ asset('bundles/app/vendor/metisMenu/metisMenu.min.js')}}"></script>
+<script src="{{ asset('bundles/app/dist/js/sb-admin-2.js')}}"></script>
+<script src="{{ asset('bundles/app/bootstrap-growl/jquery.bootstrap-growl.js')}}"></script>
+<script src="{{ asset('bundles/app/bootstrap-select-1.12.2/dist/js/bootstrap-select.js') }}"></script>
+<script src="{{ asset('bundles/app/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('bundles/app/bootstrap-datepicker/locales/bootstrap-datepicker.'~app.request.locale~'.min.js')}}"></script>
+<script>
+    jQuery("input").each(function ( ) {
+        jQuery(this).val(jQuery(this).val().replace(",", "."));
+    });
+    function toNumberWith3Digits(value) {
+        return Number(parseFloat(value).toFixed(3));
+    }
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayBtn: "linked",
+            clearBtn: true,
+            todayHighlight: true,
+            toggleActive: true,
+            language: "{{ app.request.locale }}"
+        });
+        $('.input-daterange').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayBtn: "linked",
+            clearBtn: true,
+            todayHighlight: true,
+            toggleActive: true,
+            language: "{{ app.request.locale }}"
+        });
+        $(window).bind('beforeunload', function () {
+            document.getElementById('loader').removeAttribute('style');
+            $('.container-fluid').css("filter", "blur(2px)");
+            $('.container-fluid').css("opacity", "0.5");
+        });
+
+        $('.form-control').attr('autocomplete', 'off');
+
+        for (var i = 1; i < "{{ id }}"; i++) {
+            if ($('#flash_notice_' + i)) {
+                var text = $('#flash_notice_' + i).html();
+                if (text) {
+                    $.bootstrapGrowl(text, {
+                        type: 'info',
+                        align: 'center',
+                        width: 'auto'
+                    });
+                }
+            }
+        }
+        if ($('.flash-error')) {
+            var text = $('.flash-error').html();
+            if (text) {
+                $.bootstrapGrowl(text, {
+                    type: 'danger',
+                    align: 'center',
+                    width: 'auto'
+                });
+            }
+        }
+        if ($('.flash-info')) {
+            var text = $('.flash-info').html();
+            if (text) {
+                $.bootstrapGrowl(text, {
+                    type: 'warning',
+                    align: 'center',
+                    width: 'auto'
+                });
+            }
+        }
+    });
+
+</script>
+
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

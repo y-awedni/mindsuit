@@ -1,0 +1,752 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\LigneBonLivraison;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+/**
+ * BonLivraison
+ *
+ * @ORM\Table(name="bon_livraison", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})}, indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"}), @ORM\Index(name="client_id", columns={"client_id"})})
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BonLivraisonRepository")
+ * @UniqueEntity("code")
+ * @ORM\HasLifecycleCallbacks()
+ */
+class BonLivraison {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255, nullable=false)
+     */
+    private $code;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ht", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $ht;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remise", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $remise;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tva", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $tva;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $total;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="taux_retenu", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $tauxRetenu = 0;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_retenu", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $totalRetenu = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="regle", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $regle = '0.000';
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reste", type="decimal", precision=10, scale=3, nullable=false)
+     */
+    private $reste;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", length=65535, nullable=true)
+     */
+    private $note;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="termine", type="boolean", nullable=false)
+     */
+    private $termine;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="converted", type="boolean", nullable=false)
+     */
+    private $converted;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_creation", type="date", nullable=true)
+     * @Assert\Date()
+     * @Assert\NotBlank()
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_livraison", type="date", nullable=true)
+     * @Assert\NotBlank()
+     */
+    private $dateLivraison;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="updated_user_id", referencedColumnName="id")
+     * })
+     */
+    private $updatedUser;
+
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="created_user_id", referencedColumnName="id")
+     * })
+     */
+    private $createdUser;
+
+    /**
+     * @var \Client
+     *
+     * @ORM\ManyToOne(targetEntity="Client")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     * })
+     * @Assert\NotBlank()
+     */
+    private $client;
+
+    /**
+     * @ORM\OneToMany(targetEntity="LigneBonLivraison", mappedBy="bonLivraison",cascade={"all"})
+     * @Assert\Valid()
+     */
+    protected $ligneBonLivraisons;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return BonLivraison
+     */
+    public function setCode($code) {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode() {
+        return $this->code;
+    }
+
+    /**
+     * Set ht
+     *
+     * @param string $ht
+     *
+     * @return BonLivraison
+     */
+    public function setHt($ht) {
+        $this->ht = $ht;
+
+        return $this;
+    }
+
+    /**
+     * Get ht
+     *
+     * @return string
+     */
+    public function getHt() {
+        return $this->ht;
+    }
+
+    /**
+     * Set remise
+     *
+     * @param string $remise
+     *
+     * @return BonLivraison
+     */
+    public function setRemise($remise) {
+        $this->remise = $remise;
+
+        return $this;
+    }
+
+    /**
+     * Get remise
+     *
+     * @return string
+     */
+    public function getRemise() {
+        return $this->remise;
+    }
+
+    /**
+     * Set tva
+     *
+     * @param string $tva
+     *
+     * @return BonLivraison
+     */
+    public function setTva($tva) {
+        $this->tva = $tva;
+
+        return $this;
+    }
+
+    /**
+     * Get tva
+     *
+     * @return string
+     */
+    public function getTva() {
+        return $this->tva;
+    }
+
+    /**
+     * Set total
+     *
+     * @param string $total
+     *
+     * @return BonLivraison
+     */
+    public function setTotal($total) {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return string
+     */
+    public function getTotal() {
+        return $this->total;
+    }
+    
+    /**
+     * Set tauxRetenu
+     *
+     * @param string $tauxRetenu
+     *
+     * @return BonLivraison
+     */
+    public function setTauxRetenu($tauxRetenu) {
+        $this->tauxRetenu = $tauxRetenu;
+
+        return $this;
+    }
+
+    /**
+     * Get tauxRetenu
+     *
+     * @return string
+     */
+    public function getTauxRetenu() {
+        return $this->tauxRetenu;
+    }
+    
+    /**
+     * Set totalRetenu
+     *
+     * @param string $totalRetenu
+     *
+     * @return BonLivraison
+     */
+    public function setTotalRetenu($totalRetenu) {
+        $this->totalRetenu = $totalRetenu;
+
+        return $this;
+    }
+
+    /**
+     * Get totalRetenu
+     *
+     * @return string
+     */
+    public function getTotalRetenu() {
+        return $this->totalRetenu;
+    }
+    
+
+    /**
+     * Set regle
+     *
+     * @param string $regle
+     *
+     * @return BonLivraison
+     */
+    public function setRegle($regle) {
+        $this->regle = $regle;
+
+        return $this;
+    }
+
+    /**
+     * Get regle
+     *
+     * @return string
+     */
+    public function getRegle() {
+        return $this->regle;
+    }
+    
+    /**
+     * Set reste
+     *
+     * @param string $reste
+     *
+     * @return BonLivraison
+     */
+    public function setReste($reste) {
+        $this->reste = $reste;
+
+        return $this;
+    }
+
+    
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return BonLivraison
+     */
+    public function setNote($note) {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote() {
+        return $this->note;
+    }
+
+    /**
+     * Set termine
+     *
+     * @param boolean $termine
+     *
+     * @return BonLivraison
+     */
+    public function setTermine($termine) {
+        $this->termine = $termine;
+
+        return $this;
+    }
+
+    /**
+     * Get termine
+     *
+     * @return boolean
+     */
+    public function getTermine() {
+        return $this->termine;
+    }
+
+    /**
+     * Set converted
+     *
+     * @param boolean $converted
+     *
+     * @return BonLivraison
+     */
+    public function setConverted($converted) {
+        $this->converted = $converted;
+
+        return $this;
+    }
+
+    /**
+     * Get converted
+     *
+     * @return boolean
+     */
+    public function getConverted() {
+        return $this->converted;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return BonLivraison
+     */
+    public function setDateCreation($dateCreation) {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation() {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set dateLivraison
+     *
+     * @param \DateTime $dateLivraison
+     *
+     * @return BonLivraison
+     */
+    public function setDateLivraison($dateLivraison) {
+        $this->dateLivraison = $dateLivraison;
+
+        return $this;
+    }
+
+    /**
+     * Get dateLivraison
+     *
+     * @return \DateTime
+     */
+    public function getDateLivraison() {
+        return $this->dateLivraison;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return BonLivraison
+     */
+    public function setCreatedAt($createdAt) {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt() {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return BonLivraison
+     */
+    public function setUpdatedAt($updatedAt) {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt() {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set updatedUser
+     *
+     * @param \AppBundle\Entity\User $updatedUser
+     *
+     * @return BonLivraison
+     */
+    public function setUpdatedUser(\AppBundle\Entity\User $updatedUser = null) {
+        $this->updatedUser = $updatedUser;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedUser
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUpdatedUser() {
+        return $this->updatedUser;
+    }
+
+    /**
+     * Set createdUser
+     *
+     * @param \AppBundle\Entity\User $createdUser
+     *
+     * @return BonLivraison
+     */
+    public function setCreatedUser(\AppBundle\Entity\User $createdUser = null) {
+        $this->createdUser = $createdUser;
+
+        return $this;
+    }
+
+    /**
+     * Get createdUser
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getCreatedUser() {
+        return $this->createdUser;
+    }
+
+    /**
+     * Set client
+     *
+     * @param \AppBundle\Entity\Client $client
+     *
+     * @return BonLivraison
+     */
+    public function setClient(\AppBundle\Entity\Client $client = null) {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client
+     *
+     * @return \AppBundle\Entity\Client
+     */
+    public function getClient() {
+        return $this->client;
+    }
+
+    public function __toString() {
+        return "" . $this->code;
+    }
+
+    public function __construct() {
+        $this->ligneBonLivraisons = new ArrayCollection();
+        $this->dateCreation = new \DateTime();
+        $this->dateLivraison = new \DateTime();
+    }
+
+    /**
+     * Get ligneBonLivraisons
+     *
+     * @return \AppBundle\Entity\LigneBonLivraison
+     */
+    public function getLigneBonLivraisons() {
+        return $this->ligneBonLivraisons;
+    }
+
+    public function addLigneBonLivraison(LigneBonLivraison $l) {
+        $l->setBonLivraison($this);
+        $this->ligneBonLivraisons->add($l);
+    }
+
+    public function removeLigneBonLivraison(LigneBonLivraison $l) {
+        $this->ligneBonLivraisons->removeElement($l);
+    }
+
+    public function getReste() {
+        return $this->reste;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context) {
+        $verif = true;
+        $tableVerif = [];
+        $article = '';
+        $qteEnStock = 0;
+        foreach ($this->ligneBonLivraisons as $ligneI) {
+            if ($ligneI->getArticle()->getStockable()) {
+                if ($ligneI->getQte() > $ligneI->getArticle()->getQteEnStock()) {
+                    $verif = false;
+                    $article = $ligneI->getArticle()->getCode();
+                    $qteEnStock = $ligneI->getArticle()->getQteEnStock();
+                    break;
+                } else {
+                    if (!in_array($ligneI->getId(), $tableVerif)) {
+                        array_push($tableVerif, $ligneI->getId());
+                        $qteEnStock = $ligneI->getArticle()->getQteEnStock();
+                        $qte = 0;
+                        foreach ($this->ligneBonLivraisons as $ligneJ) {
+                            if ($ligneI->getArticle()->getId() === $ligneJ->getArticle()->getId()) {
+                                $qte += $ligneJ->getQte();
+                            }
+                        }
+                        if ($qteEnStock < $qte) {
+                            $article = $ligneI->getArticle()->getCode();
+                            $qteEnStock = $ligneI->getArticle()->getQteEnStock();
+                            $verif = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (!$verif) {
+            $context->buildViolation('Qte en stock de %article% est %qteEnStock%')
+                    ->setParameter('%article%', $article)
+                    ->setParameter('%qteEnStock%', $qteEnStock)
+                    ->atPath('ligneBonLivraisons')
+                    ->addViolation();
+        }
+    }
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
+     */
+    private $nom;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cin", type="string", length=255, nullable=true)
+     */
+    private $cin;
+    
+    
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     *
+     * @return BonLivraison
+     */
+    public function setNom($nom) {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom() {
+        return $this->nom;
+    }
+    
+    /**
+     * Set cin
+     *
+     * @param string $cin
+     *
+     * @return BonLivraison
+     */
+    public function setCin($cin) {
+        $this->cin = $cin;
+
+        return $this;
+    }
+
+    /**
+     * Get cin
+     *
+     * @return string
+     */
+    public function getCin() {
+        return $this->cin;
+    }
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function setResteValue() {
+        $this->reste = $this->total;
+    }
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setResteValueOnUpdate() {
+        $this->reste = ($this->total-$this->getRegle())<0?($this->total-$this->getRegle()):0;
+    }
+
+}

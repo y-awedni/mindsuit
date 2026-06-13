@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Comptablité' }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Export-comptabilité
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(form) }}
+                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                        <div class="row">
+                            <div class="col-sm-3">
+                                {{ form_row(form.DateDebut) }}
+                            </div>
+                            <div class="col-sm-3">
+                                {{ form_row(form.DateFin) }}
+                            </div>
+                        </div>
+                        {{ form_row(form.saveDepences) }}
+                        {{ form_row(form.saveRevenus) }}
+                        {{ form_end(form) }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var myVar = setInterval(myTimer, 2000);
+        function myTimer() {
+            var x = document.readyState;
+            if (x === 'complete') {
+                document.getElementById('loader').style.display = 'none';
+                $('.container-fluid').removeAttr("style");
+            }
+        }
+    </script>
+{% endblock %}

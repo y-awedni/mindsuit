@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Ligneboncommandefr</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ligneBonCommandeFr.id }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ ligneBonCommandeFr.designation }}</td>
+            </tr>
+            <tr>
+                <th>Qte</th>
+                <td>{{ ligneBonCommandeFr.qte }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if ligneBonCommandeFr.createdAt %}{{ ligneBonCommandeFr.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{% if ligneBonCommandeFr.updatedAt %}{{ ligneBonCommandeFr.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ligneboncommandefrs_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('ligneboncommandefrs_edit', { 'id': ligneBonCommandeFr.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

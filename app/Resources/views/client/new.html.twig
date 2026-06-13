@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Ajout Client' }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('client_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Ajout du client
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(form.code) }}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ form_row(form.civilite) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form_row(form.status) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {{ form_row(form.rs) }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ form_row(form.mf) }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{ form_row(form.rc) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ form_row(form.nom) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form_row(form.prenom) }}
+                                            </div>
+                                        </div>
+                                        {{ form_row(form.adresse1) }}
+                                        {{ form_row(form.adresse2) }}
+                                        {{ form_row(form.adresse3) }}
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {{ form_row(form.codePostal) }}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                {{ form_row(form.ville) }}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                {{ form_row(form.pays) }}
+                                            </div>
+                                        </div>
+                                        {{ form_row(form.remise) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        Contact
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(form.tel) }}
+                                        {{ form_row(form.mobile) }}
+                                        {{ form_row(form.fax) }}
+                                        {{ form_row(form.email) }}
+                                        {{ form_row(form.siteWeb) }}
+                                        {{ form_row(form.activite) }}
+                                        {{ form_row(form.note) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(form.save) }}
+                        {{ form_row(form.saveAndNew) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

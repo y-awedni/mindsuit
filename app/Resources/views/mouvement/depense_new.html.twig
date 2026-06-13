@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Ajout Dépense ' }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('mouvement_index')}}"><span class="glyphicon glyphicon-transfer"></span> Liste des mouvements</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Ajout du dépense
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                        {{ form_start(form) }}
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(form.designation) }}
+                                        {{ form_row(form.typeDoc) }}
+                                        {{ form_row(form.tier) }}
+                                        {{ form_row(form.note) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                                                {{ form_row(form.ttc) }}
+                                                {{ form_row(form.modeReglement) }}
+                                                {{ form_row(form.dateEcheance) }}
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="retenu">retenue à la source</label>
+                                                            <select name="retenu" id="retenu" class="form-control selectpicker">
+                                                                <option value="0">0</option>
+                                                                {% for retenu in retenus %}
+                                                                    <option value="{{ retenu.taux }}">
+                                                                        {{ retenu.taux ~"% si le total >= "~retenu.montant }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        {{ form_row(form.totalRetenu) }}
+                                                    </div>
+                                                </div>
+                                                {{ form_row(form.dateCreation) }}
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        document.getElementById('appbundle_mouvement_dateEcheance').parentNode.style.display = 'none';
+        $(document).ready(function () {
+            $("#appbundle_mouvement_modeReglement").change(function () {
+                var selectedOption = $(this).val();
+                switch (selectedOption) {
+                    case 'Chéque':
+                        document.getElementById('appbundle_mouvement_dateEcheance').parentNode.removeAttribute('style');
+                        break;
+                    case 'Traite':
+                        document.getElementById('appbundle_mouvement_dateEcheance').parentNode.removeAttribute('style');
+                        break;
+                    default:
+                        document.getElementById('appbundle_mouvement_dateEcheance').parentNode.style.display = 'none';
+                }
+            });
+        });
+
+        var myVar = setInterval(myTimer, 1);
+        function myTimer() {
+            let $retenu = jQuery('#retenu');
+            let $ttc = jQuery('#appbundle_mouvement_ttc');
+            let $totalRetenu = jQuery('#appbundle_mouvement_totalRetenu');
+            $totalRetenu.val(toNumberWith3Digits($ttc.val() / 100 * $retenu.val()));
+        }
+    </script>
+{% endblock %}

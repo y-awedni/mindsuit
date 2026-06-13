@@ -1,0 +1,53 @@
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-bell fa-fw"></i>
+        {% if countAlerts>0 %}
+            <span class="label label-danger">{{ countAlerts }}</span>
+        {% endif %}
+        <i class="fa fa-caret-down"></i>
+    </a>
+
+    <ul class="dropdown-menu dropdown-messages">
+        {% for notification in notifications %}
+            <li>
+                <a onclick="changeNotificationVu({{ notification.id }})" href="{{ path(notification.url,{'id':notification.valueId}) }}">
+                    <div>
+                        <strong>
+                            {% if notification.vu %}
+                                <em class="label label-success"><span class="glyphicon glyphicon-eye-open"></span></em>
+                            {% else %}
+                                <em class="label label-danger"><span class="glyphicon glyphicon-eye-close"></span></em>
+                            {% endif %}
+                        </strong>
+                        <span class="pull-right text-muted">
+                            <em>{{ notification.createdAt|ago }}</em>
+                        </span>
+                    </div>
+                    <div>{{ notification.description }}</div>
+                </a>
+            </li>
+            <li class="divider"></li>
+            {% endfor %}
+        <li>
+            <a class="text-center" href="{{ path('notification_index') }}">
+                <strong>Voir tous</strong>
+            </a>
+        </li>
+    </ul>
+    <!-- /.dropdown-alerts -->
+</li>
+<script type="text/javascript">
+    function changeNotificationVu(id) {
+        jQuery.ajax({
+            method: "POST",
+            url: "{{ path('changeNotificationVu') }}",
+            data: {
+                id: id
+            }
+        }).done(function (data) {
+            if (!data.success) {
+                event.preventDefault();
+            }
+        });
+    }
+</script>

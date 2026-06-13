@@ -1,0 +1,62 @@
+{{ form_start(form,{'attr':{'id':'articleForm','class':'articleForm','action':path('article_custom_new')} } ) }}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Détails
+            </div>
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_row(form.code) }}
+                {{ form_row(form.designation) }}
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Tarifs
+            </div>
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_row(form.service,{'attr':{'disabled':true} } ) }}
+                {{ form_row(form.prixAchat) }}
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Stock
+            </div>
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_row(form.stockable,{'attr':{'disabled':true,'checked':true, 'onchange':'changeStockable(this)'}}) }}
+                <div class="row form-group" id="stockable_row1">
+                    <div class="col-sm-6">
+                        {{ form_row(form.fournisseur) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.dateAjout) }}
+                    </div>
+                </div>
+                <div class="row form-group" id="stockable_row2">
+                    <div class="col-sm-4">
+                        {{ form_row(form.qteEnDepart,{'attr':{'onkeyup':'changeQteEnDeaprt(this)','onchange':'changeQteEnDeaprt(this)'}}) }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form_row(form.seuilAlert) }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form_row(form.qteEnStock) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+<script>
+    function changeQteEnDeaprt(qteDepart) {
+        if (qteDepart) {
+            document.getElementById('appbundle_article_qteEnStock').value = qteDepart.value;
+        }
+    }
+</script>

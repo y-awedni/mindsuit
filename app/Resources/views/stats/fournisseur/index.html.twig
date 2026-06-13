@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Statistiques sur les fournisseurs' }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModal">
+                                <span class="fa fa-bar-chart"></span> Statistique par fournisseur
+                            </a>
+                        </li>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Statistique par fournisseur</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form role="form" action="{{path('fournisseur_stats_id')}}" method="GET">
+                                            <div class="form-group row">
+                                                <div class="col-sm-6" id="factures">
+                                                    <label for="fournisseur">Sélectionner fournisseur</label>
+                                                    <select name='id' class="form-control selectpicker" data-live-search="true" title="Fournisseurs">
+                                                        {% for fournisseur in fournisseurs %}
+                                                            <option value="{{ fournisseur.id }}">{{ fournisseur }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-info">Statistique de fournisseur</button>    
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-chevron-down"></span> Filtrage</a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form role="form" action="{{path('fournisseurs_stats')}}" method="GET">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="dateCreation">Date</label>
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="form-control" value="{{ app.request.get('startDateCreation')}}" name="startDateCreation" />
+                                            <span class="input-group-addon">vers</span>
+                                            <input type="text" class="form-control" value="{{ app.request.get('endDateCreation')}}" name="endDateCreation" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-filter"></span> Filtrer</button>
+                                <a href="{{path('fournisseurs_stats')}}" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span> Reinitialiser</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Les 10 fournisseurs qui nous achetons d'eux plus que d'autres en terme de quantité
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart1" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Les 10 fournisseurs qui nous achetons d'eux plus que d'autres en terme de revenus
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="chart3" class="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        //______________________________________________________________________les 10 articles les plus vendus
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawChart1);
+        let dixFournisseursPlusVendus = [['', 'Quantité vendus']];
+        {% for element in dixFournisseursPlusVendus %}
+            dixFournisseursPlusVendus.push(['{{element.code}}', {{element.qte}}]);
+        {% endfor %}
+            function drawChart1() {
+                google.charts.load('current', {'packages': ['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+                function drawStuff() {
+                    var data = new google.visualization.arrayToDataTable(dixFournisseursPlusVendus);
+                    var options = {
+                        legend: {position: 'none'},
+                        chart: {
+                            bars: 'vertical', // Required for Material Bar Charts.
+                            axes: {
+                                x: {
+                                    0: {side: 'bottom', label: 'Quantité'} // Top x-axis.
+                                }
+                            },
+                            bar: {groupWidth: "90%"}
+                        }
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('chart1'));
+                    chart.draw(data, options);
+                }
+            }
+
+
+            //______________________________________________________________________les 10 articles les plus vendus
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawChart3);
+            let dixFournisseursPlusBenefiques = [['', 'TTC']];
+        {% for element in dixFournisseursPlusBenefiques %}
+            dixFournisseursPlusBenefiques.push(['{{element.code}}', {{element.ttc}}]);
+        {% endfor %}
+            function drawChart3() {
+                google.charts.load('current', {'packages': ['bar']});
+                google.charts.setOnLoadCallback(drawStuff);
+                function drawStuff() {
+                    var data = new google.visualization.arrayToDataTable(dixFournisseursPlusBenefiques);
+                    var options = {
+                        legend: {position: 'none'},
+                        chart: {
+                            bars: 'vertical', // Required for Material Bar Charts.
+                            axes: {
+                                x: {
+                                    0: {side: 'bottom', label: 'Quantité'} // Top x-axis.
+                                }
+                            },
+                            bar: {groupWidth: "90%"}
+                        }
+                    };
+                    var chart = new google.charts.Bar(document.getElementById('chart3'));
+                    chart.draw(data, options);
+                }
+            }
+            //________________________________________________________________________make charts responsive
+            $(window).resize(function () {
+                drawChart1();
+                drawChart3();
+            });
+    </script>
+{% endblock %}

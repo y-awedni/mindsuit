@@ -1,0 +1,63 @@
+# Mindsuit - developer shortcuts.
+# Requires Docker. On Windows without `make`, run the docker compose commands directly
+# (see docs/DEVELOPMENT.md).
+
+DC = docker compose
+PHP = $(DC) exec -T php
+
+.DEFAULT_GOAL := help
+
+.PHONY: help
+help: ## Show this help
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: init
+init: ## First-time setup: create docker/.env from the example
+	@test -f docker/.env || cp docker/.env.example docker/.env
+	@echo "docker/.env ready. Now run: make up && make install"
+
+.PHONY: up
+up: ## Build and start the stack
+	$(DC) up -d --build
+
+.PHONY: down
+down: ## Stop the stack
+	$(DC) down
+
+.PHONY: install
+install: ## Install PHP dependencies and install assets
+	$(PHP) composer install --no-interaction --prefer-dist
+	$(PHP) php bin/console assets:install web --symlink --relative || $(PHP) php bin/console assets:install web
+
+.PHONY: assets
+assets: ## Re-install front-end assets into web/bundles
+	$(PHP) php bin/console assets:install web
+
+.PHONY: cache
+cache: ## Clear and warm the Symfony cache (dev)
+	$(PHP) php bin/console cache:clear --env=dev
+
+.PHONY: console
+console: ## Run a Symfony console command, e.g. make console c="doctrine:schema:validate"
+	$(PHP) php bin/console $(c)
+
+.PHONY: sh
+sh: ## Open a shell in the PHP container
+	$(DC) exec php bash
+
+.PHONY: logs
+logs: ## Tail container logs
+	$(DC) logs -f
+
+.PHONY: db-reset
+db-reset: ## Drop the database volume and re-seed from docker/mysql/init dumps
+	$(DC) down -v
+	$(DC) up -d database
+
+.PHONY: db-import
+db-import: ## Import a dump: make db-import f=path/to/dump.sql
+	$(PHP) sh -c 'mysql -h database -u$$MARIADB_USER -p$$MARIADB_PASSWORD $$MARIADB_DATABASE' < $(f)
+
+.PHONY: test
+test: ## Run the PHPUnit test suite
+	$(PHP) php bin/phpunit || $(PHP) ./vendor/bin/phpunit

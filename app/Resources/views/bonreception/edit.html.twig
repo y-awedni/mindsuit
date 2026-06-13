@@ -1,0 +1,623 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Bon de réception:'~bonReception }}{% endblock %}
+
+{% block body %}
+    <script type="text/javascript">
+        var $arrayOfIndexes = [];
+        var $cmp = 0;
+    </script>
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('bonreception_index')}}"><span class="glyphicon glyphicon-align-justify"></span> Liste</a></li>
+                        <li><a href="{{ path('bonreception_show', { 'id': bonReception.id }) }}"><span class="glyphicon glyphicon-eye-open"></span> Afficher</a></li>
+                        <li><a href="{{ path('bonreception_reglements', { 'id': bonReception.id }) }}"><span class="fa fa-money"></span> Réglements</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Modification du bon de réception
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <!-- Modal Custom fournisseur -->
+                        {% include 'modal/fournisseur.html.twig' %}
+                        <!-- Modal Custom Article -->
+                        {% include 'modal/article.html.twig' %}
+                        {{ form_start(edit_form) }}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-align-justify"></span> Détails du bon de réception</a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-3">
+                                            {{ form_row(edit_form.code) }}
+                                        </div>
+                                        <div class="col-md-6 col-lg-3">
+                                            {{ form_row(edit_form.bonCommande,{'attr':{'disabled':true} } ) }}
+                                        </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            {{ form_row(edit_form.fournisseur) }}
+                                        </div>
+                                        <div class="col-md-6 col-lg-2">
+                                            <label class="control-label" title='Ajouter un fournisseur rapidement'>Nouveau fournisseur ?</label>
+                                            <a style="width: 100%" title='Ajouter un fournisseur rapidement' class='btn btn-success' data-toggle='modal' data-target='#fournisseurCustomNew'>
+                                                <span class='fa fa-plus'></span> Ajouter fournisseur
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            {{ form_row(edit_form.note) }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            {{ form_row(edit_form.dateReception) }}
+                                        </div>
+                                        
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="retenu">retenue à la source</label>
+                                                <select name="retenu" id="retenu" class="form-control selectpicker">
+                                                    <option value="0">0</option>
+                                                    {% for retenu in retenus %}
+                                                        <option {{ bonReception.tauxRetenu==retenu.taux?'selected':''}} value="{{ retenu.taux }}">
+                                                            {{ retenu.taux ~"% si le total >= "~retenu.montant }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{ form_row(edit_form.code) }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            {{ form_row(edit_form.bonCommande,{'attr':{'disabled':true} } ) }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            {{ form_row(edit_form.fournisseur) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-align-justify"></span> Lignes du bon de réception</a>
+                                </h4>
+                            </div>
+                            {% macro prototype_lignes(ligne) %}
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        <div class="col-xs-10"> 
+                                            {{ form_row(ligne.article,{'label':false,'required':false,'attr':{'onchange':'changeArticle(this)' }} ) }}
+                                        </div>
+                                        <div class="col-xs-1"> 
+                                            <a onclick="articleCustomNewFn(this);" title='Ajouter un article rapidement' class='btn btn-success' data-toggle='modal' data-target='#articleCustomNew'>
+                                                <span class='fa fa-plus'></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">{{ form_row(ligne.designation,{'label':false,'required':false,'attr':{'style': 'height:34px!important'} } ) }}</div>
+                                <div class="col-md-1">{{ form_row(ligne.qte,{'label':false,'required':false,'attr':{'autocomplete':'off','value':'1','onkeyup':'changeTTC(this)' }} ) }}</div>
+                                <div class="col-md-2">{{ form_row(ligne.prixUnitaire,{'label':false,'required':false, 'attr': {'autocomplete':'off','onkeyup':'changeTTC(this)' }} ) }}</div>
+                                <div class="col-md-1">{{ form_row(ligne.remise,{'label':false,'required':false,'attr':{'value':'0','onkeyup':'changeTTC(this)' }} ) }}</div>
+                                <div class="col-md-1">{{ form_row(ligne.tva,{'label':false,'required':false,'attr':{'onchange':'changeTTCbyTVA(this)' }} ) }}</div>
+                                <div class="col-md-2">{{ form_row(ligne.ttc, {'label':false,'required':false, 'attr': {'autocomplete':'off','readonly':true }} ) }}</div>
+                            {% endmacro %}
+                            <div id="collapseTwo" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label">Article</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label required">Désignation</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">Qte</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label required">Prix unitaire</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">Remise</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label class="control-label required">
+                                                    Taux Tva
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label">TTC</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ligneBonReceptions" data-prototype="{{ _self.prototype_lignes(edit_form.ligneBonReceptions.vars.prototype)|e }}">
+                                        {# iterate over each existing tag and render its only field: name #}
+                                        {% for ligne in edit_form.ligneBonReceptions %}
+                                            <script type="text/javascript">
+                                                $arrayOfIndexes.push($cmp);
+                                                $cmp++;
+                                            </script>
+                                            <div class="row ligne">
+                                                <div class="col-md-2">
+                                                    <div class="row">
+                                                        <div class="col-xs-10"> 
+                                                            {{ form_row(ligne.article,{'label':false,'required':false,'attr':{'autocomplete':'off','onchange':'changeArticle(this)'}}) }}
+                                                        </div>
+                                                        <div class="col-xs-1"> 
+                                                            <a onclick="articleCustomNewFn(this);" title='Ajouter un article rapidement' class='btn btn-success' data-toggle='modal' data-target='#articleCustomNew'>
+                                                                <span class='fa fa-plus'></span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">{{ form_row(ligne.designation,{'label':false,'required':false,'attr':{'style': 'height:34px!important'} }) }}</div>
+                                                <div class="col-md-1">{{ form_row(ligne.qte,{'label':false,'required':false,'attr':{'autocomplete':'off','onkeyup':'changeTTC(this)'}}) }}</div>
+                                                <div class="col-md-2">
+                                                    {% if ligne.vars.data.article.prixVenteTtc==null or ligne.vars.data.article.prixVenteTtc==0 %}
+                                                        {{ form_row(ligne.prixUnitaire,{'label':false,'required':false,'attr': {'autocomplete':'off','onkeyup':'changeTTC(this)'}}) }}
+                                                    {% else %}
+                                                        {{ form_row(ligne.prixUnitaire,{'label':false,'required':false,'attr': {'autocomplete':'off','onkeyup':'changeTTC(this)'}}) }}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-1">{{ form_row(ligne.remise,{'label':false,'required':false,'attr':{'autocomplete':'off','onkeyup':'changeTTC(this)'}}) }}</div>
+                                                <div class="col-md-1">{{ form_row(ligne.tva,{'label':false,'required':false,'attr':{'onchange':'changeTTC(this)'}}) }}</div>
+                                                <div class="col-md-2">{{ form_row(ligne.ttc, {'label':false,'required':false, 'attr': {'autocomplete':'off','readonly':true}} ) }}</div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- totaux -->
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTotaux"><span class="glyphicon glyphicon-credit-card"></span> Totaux du bon de réception</a>
+                                </h4>
+                            </div>
+                            <div id="collapseTotaux" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-md-offset-2">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>% TVA</th>
+                                                        <th>Base</th>
+                                                        <th>TVA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="baseTVA">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4 col-md-offset-2">
+                                            <div class="list-group">
+                                                <a class="list-group-item">
+                                                    Total HT
+                                                    <span class="pull-right text-muted small"><em id="totalHT">0.000</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total REMISE
+                                                    <span class="pull-right text-muted small"><em id="totalREMISE">0 %</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total TVA
+                                                    <span class="pull-right text-muted small"><em id="totalTVA">0.000</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total TTC
+                                                    <span class="pull-right text-muted small"><em id="totalTTC">0.000</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Retenu à la source
+                                                    <span class="pull-right text-muted small"><em id="totalRETENU">{{ bonReception.totalRetenu }}</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-danger">Pour faire une modification au stock, imprimer le document ou faire un réglement, cocher terminé</p>
+                        {{ form_row(edit_form.termine) }}
+                        {% if bonReception.regle==0 %}
+                            {{ form_row(edit_form.save) }}
+                            {{ form_row(edit_form.saveAndPrint) }}
+                        {% else %}
+                            <a class="btn btn-success" href="{{ path('bonreception_print',{'id':bonReception.id}) }}" ><span class="glyphicon glyphicon-print"></span> Imprimer</a>
+                        {% endif %}
+                        {{ form_end(edit_form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        let articleCustomNew = null;
+        let idArticleCustomNew = null;
+        let arrayOfArticle = [];
+        function articleCustomNewFn(btnArticleCustomNew) {
+            let colMd2 = btnArticleCustomNew.closest('.col-md-2');
+            articleCustomNew = jQuery(colMd2).find('select').prop('id');
+            idArticleCustomNew = articleCustomNew.substring(33, articleCustomNew.lastIndexOf('_'));
+        }
+        //on submit article form
+        //add article to this select
+        // add article to all select
+        jQuery('body').on('submit', '.articleForm', function (e) {
+            e.preventDefault();
+            jQuery.ajax({
+                type: jQuery(this).attr('method'),
+                url: jQuery(this).attr('action'),
+                data: jQuery(this).serialize()
+            }).done(function (data) {
+                if (data.success) {
+                    jQuery("#articleCustomNew .close").click();
+                    jQuery("#articleForm")[0].reset();
+                    //add article to this select
+                    jQuery('#' + articleCustomNew).append('<option selected value=' + data.articleId + '>' + data.code + '</option>');
+                    jQuery('#' + articleCustomNew).selectpicker('refresh');
+                    arrayOfArticle.push(data.articleId);
+                    arrayOfArticle.push(data.code);
+                    jQuery('#appbundle_bonreception_ligneBonReceptions_' + idArticleCustomNew + '_designation').text(data.designation);
+                    // add article to all select
+                    for (var i = 0; i < $arrayOfIndexes.length; i++) {
+                        if (jQuery('#appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_article')) {
+                            jQuery('#appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_article').append('<option value=' + data.articleId + '>' + data.code + '</option>');
+                            jQuery('#appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_article').selectpicker('refresh');
+                        }
+                    }
+                } else {
+                    jQuery('.articleForm').replaceWith(jQuery(data));
+                }
+            });
+        });
+        //on submit fournisseur form
+        //add fournisseur to bonreception
+        jQuery('body').on('submit', '.fournisseurForm', function (e) {
+            e.preventDefault();
+            jQuery.ajax({
+                type: jQuery(this).attr('method'),
+                url: jQuery(this).attr('action'),
+                data: jQuery(this).serialize()
+            }).done(function (data) {
+                if (data.success) {
+                    jQuery("#fournisseurForm")[0].reset();
+                    jQuery('#appbundle_bonreception_fournisseur').append('<option selected value=' + data.fournisseurId + '>' + data.toString + '</option>');
+                    jQuery('#appbundle_bonreception_fournisseur').selectpicker('refresh');
+                    jQuery("#fournisseurCustomNew .close").click();
+                } else {
+                    jQuery('.fournisseurForm').replaceWith(jQuery(data));
+                }
+            });
+        });
+        function addLigneFormDeleteLink($ligneFormLi, index) {
+            var $removeFormA = $('');
+        {% if bonReception.regle==0 %}
+                var $removeFormA = $('<div class="col-sm-1"><div class="form-group"><button type="button" id="delete_link" href="#" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span></button></div></div>');
+        {% endif %}
+                $ligneFormLi.append($removeFormA);
+                $removeFormA.on('click', function (e) {
+                    var i = Number(index) - 1;
+                    $arrayOfIndexes.splice($arrayOfIndexes.indexOf(i), 1);
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // remove the li for the tag form
+                    $ligneFormLi.remove();
+                });
+            }
+            function addLigneForm($collectionHolder, $newLinkLi) {
+                if ($collectionHolder) {
+                    // Get the data-prototype explained earlier
+                    var prototype = $collectionHolder.data('prototype');
+
+                    // get the new index
+                    var index = $collectionHolder.data('index');
+                    $arrayOfIndexes.push(index);
+                    // Replace '__name__' in the prototype's HTML to
+                    // instead be a number based on how many items we have
+                    var newForm = prototype.replace(/__name__/g, index);
+                    // increase the index with one for the next item
+                    $collectionHolder.data('index', index + 1);
+                    // Display the form in the page in an li, before the "Add a tag" link li
+                    var $newFormLi = $('<div class="row"></div>').append(newForm);
+                    $newLinkLi.before($newFormLi);
+                    addLigneFormDeleteLink($newFormLi, $collectionHolder.data('index'));
+                    for (var i = 0; i < arrayOfArticle.length; i += 2) {
+                        jQuery('#appbundle_bonreception_ligneBonReceptions_' + index + '_article').append('<option value=' + arrayOfArticle[i] + '>' + arrayOfArticle[i + 1] + '</option>');
+                    }
+                    jQuery('#appbundle_bonreception_ligneBonReceptions_' + index + '_article').selectpicker('refresh');
+                }
+            }
+            var $collectionHolder;
+// setup an "add a tag" link
+            var $addLigneLink = $('');
+            var $newLinkLi = $('<div></div>').append($addLigneLink);
+            $(document).ready(function () {
+                // Get the ul that holds the collection of tags
+                $collectionHolder = $('div.ligneBonReceptions');
+
+                // add a delete link to all of the existing tag form li elements
+                $collectionHolder.find('div.row.ligne').each(function () {
+                    addLigneFormDeleteLink($(this), $collectionHolder.data('index'));
+                });
+
+                // add the "add a tag" anchor and li to the tags ul
+                $collectionHolder.append($newLinkLi);
+
+                // count the current form inputs we have (e.g. 2), use that as the new
+                // index when inserting a new item (e.g. 2)
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+                $addLigneLink.on('click', function (e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // add a new tag form (see next code block)
+                    addLigneForm($collectionHolder, $newLinkLi);
+                });
+            });
+
+            function changeArticleFN(selectedOption, index) {
+                jQuery.ajax({
+                    method: "GET",
+                    url: "{{ path('article') }}",
+                    data: {
+                        id: selectedOption
+                    }
+                }).done(function (data) {
+                    var obj = jQuery.parseJSON(JSON.stringify(data));
+                    if (obj.success === true) {
+                        if (obj.article) {
+                            var article = jQuery.parseJSON(obj.article);
+                            if (article.prixAchat && article.prixAchat > 0) {
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_prixUnitaire').value = article.prixAchat;
+                            } else {
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_prixUnitaire').value = 0.000;
+                            }
+                            if (article.designation) {
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_designation').value = article.designation;
+                            } else {
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_designation').value = article.code;
+                            }
+                            if (article.tva) {
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_tva').value = article.tva.taux;
+                            }
+                            if (article.prixVenteTtc === null) {
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_ttc').value = 0.000;
+                            } else {
+                                var ttc = toNumberWith3Digits(article.prixAchat) + (toNumberWith3Digits(article.prixAchat) / 100 * toNumberWith3Digits(article.tva.taux));
+                                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_ttc').value = toNumberWith3Digits(ttc);
+                            }
+                        }
+                    }
+                });
+            }
+            function changeArticle(select) {
+                var selectedOption = select.options[select.selectedIndex].value;
+                var index = select.id.substring(42, select.id.lastIndexOf('_'));
+                changeArticleFN(selectedOption, index);
+            }
+            function changeArticleFirst(index) {
+                var select = document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_article');
+                var selectedOption = select.options[select.selectedIndex].value;
+                changeArticleFN(selectedOption, index);
+            }
+
+            function changeTTCfn(index) {
+                var remise = toNumberWith3Digits(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_remise').value);
+                if (remise > 100) {
+                    remise = 100;
+                } else if (remise < 0) {
+                    remise = 0;
+                }
+                var qte = toNumberWith3Digits(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_qte').value);
+                var pu = toNumberWith3Digits(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_prixUnitaire').value);
+                var tauxRemise = pu / 100 * remise;
+                var puHT = toNumberWith3Digits(pu) - toNumberWith3Digits(tauxRemise);
+                var taux = pu / 100 * document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_tva').value;
+                var tauxTva = puHT / 100 * toNumberWith3Digits(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_tva').value);
+                var ttc = toNumberWith3Digits(puHT) + toNumberWith3Digits(tauxTva);
+                document.getElementById('appbundle_bonreception_ligneBonReceptions_' + index + '_ttc').value = toNumberWith3Digits(ttc * qte);
+            }
+            function changeTTC(input) {
+                var index = input.id.substring(42, input.id.lastIndexOf('_'));
+                changeTTCfn(index);
+            }
+            function changeTTCbyTVA(select) {
+                var index = select.id.substring(42, select.id.lastIndexOf('_'));
+                changeTTCfn(index);
+            }
+
+            Array.prototype.inArray = function (value) {
+                // Returns true if the passed value is found in the
+                // array. Returns false if it is not.
+                var i;
+                for (i = 0; i < this.length; i++)
+                {
+                    if (this[i] === value)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            var montantRetenu = 0;
+            var $retenu = jQuery('#retenu');
+            $retenu.change(function () {
+                changerRetenuMontant($retenu.val());
+            });
+            function changerRetenuMontant(taux) {
+                jQuery.ajax({
+                    method: "GET",
+                    url: "{{ path('retenu_montant') }}",
+                    data: {
+                        taux: taux
+                    }
+                }).done(function (data) {
+                    montantRetenu = data.montant;
+                });
+            }
+            changerRetenuMontant({{ bonReception.tauxRetenu }});
+
+            setInterval(function () {
+                var occTtcZero = 0;
+                var ttc = 0;        //total TTC
+                var ht = 0;         //total HT
+                var remise = 0;     //total REMISE
+                var tva = 0;        //total TVA
+                var perCentTva = [];//taux TVA[]
+                var baseTva = [];   //base TVA[]
+                var ttTva = [];     //total TVA[]
+                var _tvaa = '';     //tr TVA[]
+                if ($arrayOfIndexes.length > 0) {
+                    for (var i = 0; i < $arrayOfIndexes.length; i++) {
+                        if (document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_ttc') && document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_prixUnitaire').value !== '') {
+                            //calcule ttc pu remise tva_____________________________
+                            //incrementation du ttc
+                            var __ttc = Number(parseFloat(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_ttc').value).toFixed(3));
+                            ttc += __ttc;
+                            if (__ttc === 0 || __ttc === '' || __ttc.length === 0) {
+                                occTtcZero++;
+                            }
+                            //recuperation des input________________________________
+                            //input prix unitaire
+                            var pu = Number(parseFloat(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_prixUnitaire').value).toFixed(3));
+                            //input qte
+                            var qte = Number(parseFloat(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_qte').value).toFixed(3));
+                            //input remise
+                            var _remise = Number(parseFloat(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_remise').value).toFixed(3));
+                            //input tva
+                            var _tva = Number(parseFloat(document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[i] + '_tva').value).toFixed(3));
+                            //  calcule de cette ligne _____________________________
+                            //prix hors taxe avant remise de cette ligne
+                            var __htAvantRemise = pu * qte;
+                            //remise de cette ligne d'un seul article
+                            var __remise = (__htAvantRemise / 100 * _remise);
+                            //prix hors taxe apres remise de cette ligne
+                            var __htApresRemise = __htAvantRemise - __remise;
+                            //tva de cette ligne
+                            var __tva = __htApresRemise / 100 * _tva;
+                            // incrementation des variables totaux
+                            // prix ht
+                            ht += __htAvantRemise;
+                            //remise
+                            remise += __remise;
+                            //tva
+                            tva += __tva;
+
+                            //calcule du tableau tva
+                            if (!perCentTva.inArray(_tva)) {
+                                perCentTva.push(_tva);
+                                var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                                baseTva.push(__baseTva);
+                                ttTva.push(__baseTva / 100 * _tva);
+                            } else {
+                                var index = perCentTva.indexOf(_tva);
+                                var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                                var _baseTva = Number(parseFloat(baseTva[index]).toFixed(3));
+                                baseTva[index] = _baseTva + __baseTva;
+
+                                var __ttTva = __baseTva / 100 * _tva;
+                                var _ttTva = Number(parseFloat(ttTva[index]).toFixed(3));
+                                ttTva[index] = _ttTva + __ttTva;
+                            }
+                        }
+                    }
+                }
+
+                if ($arrayOfIndexes && $arrayOfIndexes.length > 0) {
+                    var lastArticle = document.getElementById('appbundle_bonreception_ligneBonReceptions_' + $arrayOfIndexes[$arrayOfIndexes.length - 1] + '_article').value;
+                    if (lastArticle !== '') {
+                        addLigneForm($collectionHolder, $newLinkLi);
+                    }
+                } else {
+                    addLigneForm($collectionHolder, $newLinkLi);
+                }
+
+                for (var i = 0; i < perCentTva.length; i++) {
+                    _tvaa += "<tr><td>" + perCentTva[i] + "</td><td>" + baseTva[i].toFixed(3) + "</td><td>" + ttTva[i].toFixed(3) + "</td></tr>";
+                }
+                document.getElementById('baseTVA').innerHTML = _tvaa;
+
+                if (document.getElementById("appbundle_bonreception_save") && document.getElementById("appbundle_bonreception_saveAndPrint")) {
+                    if (ttc === 0 || occTtcZero > 0) {
+                        document.getElementById("appbundle_bonreception_save").setAttribute("disabled", "true");
+                        document.getElementById("appbundle_bonreception_save").setAttribute("title", "Pour enregistrer cette bon du réception, le Total TTC doit étre supérieur à 0");
+                        document.getElementById("appbundle_bonreception_saveAndPrint").setAttribute("disabled", "true");
+                        document.getElementById("appbundle_bonreception_saveAndPrint").setAttribute("title", "Pour enregistrer cette bon du réception, le Total TTC doit étre supérieur à 0");
+                    } else {
+                        document.getElementById("appbundle_bonreception_save").removeAttribute("disabled");
+                        document.getElementById("appbundle_bonreception_save").removeAttribute("title");
+                        document.getElementById("appbundle_bonreception_saveAndPrint").removeAttribute("disabled");
+                        document.getElementById("appbundle_bonreception_saveAndPrint").removeAttribute("title");
+                    }
+                }
+                document.getElementById('totalHT').innerHTML = parseFloat(ht).toFixed(3);
+                document.getElementById('totalREMISE').innerHTML = parseFloat(remise).toFixed(3);
+                document.getElementById('totalTVA').innerHTML = parseFloat(tva).toFixed(3);
+                document.getElementById('totalTTC').innerHTML = parseFloat(ttc).toFixed(3);
+
+                if (montantRetenu >= 0 && ttc >= montantRetenu) {
+                    var tauxRetenu = jQuery('#retenu').val();
+                    var mntTauxRetenu = (ttc / 100 * tauxRetenu);
+                    jQuery('#totalRETENU').html(parseFloat(mntTauxRetenu).toFixed(3));
+                    jQuery('#appbundle_bonreception_tauxRetenu').val(parseFloat(jQuery('#retenu').val()).toFixed(3));
+                    jQuery('#appbundle_bonreception_totalRetenu').val(mntTauxRetenu);
+                } else {
+                    var tauxRetenu = jQuery('#retenu').val();
+                    var mntTauxRetenu = (ttc / 100 * tauxRetenu);
+                    jQuery('#totalRETENU').html(parseFloat(0).toFixed(3));
+                    jQuery('#appbundle_bonreception_tauxRetenu').val(0);
+                    jQuery('#appbundle_bonreception_totalRetenu').val(0);
+                }
+
+                document.getElementById('appbundle_bonreception_ht').value = parseFloat(ht).toFixed(3);
+                document.getElementById('appbundle_bonreception_remise').value = parseFloat(remise).toFixed(3);
+                document.getElementById('appbundle_bonreception_tva').value = parseFloat(tva).toFixed(3);
+                document.getElementById('appbundle_bonreception_total').value = parseFloat(ttc).toFixed(3);
+            }, 1);
+    </script>
+{% endblock %}

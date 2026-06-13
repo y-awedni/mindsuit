@@ -1,0 +1,367 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-file fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{countDevis}}</div>
+                                <div>Devis</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('devis_index') }}">
+                        <div class="panel-footer">
+                            <span class="pull-left">Voir tout</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-file fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ countFactures }}</div>
+                                <div>Factures</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('facture_index') }}">
+                        <div class="panel-footer">
+                            <span class="pull-left">Voir tout</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-file fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ countBls }}</div>
+                                <div>Bons de livraison</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('bonlivraison_index') }}">
+                        <div class="panel-footer">
+                            <span class="pull-left">Voir tout</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-file fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ countBrs }}</div>
+                                <div>Bons de réception</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('bonreception_index') }}">
+                        <div class="panel-footer">
+                            <span class="pull-left">Voir tout</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="glyphicon glyphicon-transfer"></i> Stock
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="list-group">
+                            {% for stock in stocks %}
+                                <a class="list-group-item">
+                                    <i class="glyphicon glyphicon-arrow-{{ stock.mouvement?'right':'left'}}"></i> {{ stock.article.code }}
+                                    <span class="pull-right text-muted">
+                                        <em class="label label-{{ stock.mouvement?'success':'danger'}}">
+                                            {{ stock.mouvement?'+':'-'}}{{ stock.qte }}
+                                        </em>
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <!-- /.list-group -->
+                        <a href="{{path('stock_index')}}" class="btn btn-default btn-block">Voir tout</a>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel .chat-panel -->
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="glyphicon glyphicon-transfer"></i> Mouvements
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="list-group">
+                            {% for mouvement in mouvements %}
+                                <a class="list-group-item">
+                                    <i class="glyphicon glyphicon-arrow-{{ mouvement.mouvement=='revenu'?'right':'left'}}"></i> {{ mouvement.designation }}
+                                    <span class="pull-right text-muted">
+                                        <em class="label label-{{ mouvement.mouvement=='revenu'?'success':'danger'}}">
+                                            {{ mouvement.mouvement=='revenu'?'+':'-'}}{{ mouvement.ttc|number_format('3','.',' ') }}
+                                        </em>
+                                    </span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <!-- /.list-group -->
+                        <a href="{{ path('mouvement_index') }}" class="btn btn-default btn-block">Voir tout</a>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel .chat-panel -->
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-alert"></span> Notifications
+                    </div>
+                    <div class="panel-body">
+                        <p class="text{{ countAlertStock==0?'-success':'-danger'}}">
+                            <a class="text{{ countAlertStock==0?'-success':'-danger'}}" href="{{ path('article_index',{'limit':'100','alertStock':'on'}) }}">
+                                {{ countAlertStock~' article(s) en alerte de stock'}}
+                            </a>
+                        </p>
+                        <p class="text{{ countRuptureStock==0?'-success':'-danger'}}">
+                            <a class="text{{ countRuptureStock==0?'-success':'-danger'}}" href="{{ path('article_index',{'limit':'100','ruptureStock':'on'}) }}">
+                                {{ countRuptureStock~' article(s) en rupture de stock'}}
+                            </a>
+                        </p>
+                        
+                        <div class="panel-group" id="accordion">
+                            {# cheques entrant(s) #}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed">
+                                            Chéques entrant(s) ({{ countChequeEntreeEcheances0+countChequeEntreeEcheances1+countChequeEntreeEcheances3 }})
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        {# cheque entres #}
+                                        <p class="text{{ countChequeEntreeEcheances0==0?'-success':'-danger'}}">
+                                            {% set date1="now"|date_modify("-1 day")|date("d/m/Y") %}
+                                            {% set date0="" %}
+                                            <a class="text{{ countChequeEntreeEcheances0==0?'-success':'-danger'}}" href="{{ path('mouvement_cheque_index',{'limit':'100','mouvement':'revenu', 'modeReglement':'Chéque','etat[0]':'En cours','etat[1]':'Impayé', 'startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countChequeEntreeEcheances0~" chéque(s) entrant(s) à dépassé l'écheance"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countChequeEntreeEcheances1==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+0 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+0 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countChequeEntreeEcheances1==0?'-success':'-danger'}}" href="{{ path('mouvement_cheque_index',{'limit':'100','mouvement':'revenu','modeReglement':'Chéque','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countChequeEntreeEcheances1~" chéque(s) entrant(s) arrivant à échéance aujourd'hui"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countChequeEntreeEcheances3==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+1 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+7 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countChequeEntreeEcheances3==0?'-success':'-danger'}}" href="{{ path('mouvement_cheque_index',{'limit':'100','mouvement':'revenu','modeReglement':'Chéque','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countChequeEntreeEcheances3~" chéque(s) entrant(s) arrivant à échéance dans une semaine"}}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                                            
+                            {# cheque sortant #}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseChequeSortie" aria-expanded="false" class="collapsed">
+                                            Chéques sortant(s) ({{ countChequeSortieEcheances0+countChequeSortieEcheances1+countChequeSortieEcheances3 }})
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseChequeSortie" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        {# cheque entres #}
+                                        <p class="text{{ countChequeSortieEcheances0==0?'-success':'-danger'}}">
+                                            {% set date1="now"|date_modify("-1 day")|date("d/m/Y") %}
+                                            {% set date0="" %}
+                                            <a class="text{{ countChequeSortieEcheances0==0?'-success':'-danger'}}" href="{{ path('mouvement_cheque_index',{'limit':'100','mouvement':'depense', 'modeReglement':'Chéque','etat[0]':'En cours','etat[1]':'Impayé', 'startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countChequeSortieEcheances0~" chéque(s) sortant(s) à dépassé l'écheance"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countChequeSortieEcheances1==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+0 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+0 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countChequeSortieEcheances1==0?'-success':'-danger'}}" href="{{ path('mouvement_cheque_index',{'limit':'100','mouvement':'depense','modeReglement':'Chéque','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countChequeSortieEcheances1~" chéque(s) sortant(s) arrivant à échéance aujourd'hui"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countChequeSortieEcheances3==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+1 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+7 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countChequeSortieEcheances3==0?'-success':'-danger'}}" href="{{ path('mouvement_cheque_index',{'limit':'100','mouvement':'depense','modeReglement':'Chéque','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countChequeSortieEcheances3~" chéque(s) sortant(s) arrivant à échéance dans une semaine"}}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            {# traites entrants#}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTraiteEntre" aria-expanded="false" class="collapsed">
+                                            Traites entrante(s) ({{ countTraiteEntreeEcheances0+countTraiteEntreeEcheances1+countTraiteEntreeEcheances3 }})
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseTraiteEntre" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        {# cheque entres #}
+                                        <p class="text{{ countTraiteEntreeEcheances0==0?'-success':'-danger'}}">
+                                            {% set date1="now"|date_modify("-1 day")|date("d/m/Y") %}
+                                            {% set date0="" %}
+                                            <a class="text{{ countTraiteEntreeEcheances0==0?'-success':'-danger'}}" href="{{ path('mouvement_traite_index',{'limit':'100','mouvement':'revenu', 'modeReglement':'Traite','etat[0]':'En cours','etat[1]':'Impayé', 'startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countTraiteEntreeEcheances0~" traite(s) entrant(s) à dépassé l'écheance"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countTraiteEntreeEcheances1==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+0 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+0 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countTraiteEntreeEcheances1==0?'-success':'-danger'}}" href="{{ path('mouvement_traite_index',{'limit':'100','mouvement':'revenu','modeReglement':'Traite','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countTraiteEntreeEcheances1~" traite(s) entrant(s) arrivant à échéance aujourd'hui"}}
+                                                
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countTraiteEntreeEcheances3==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+1 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+7 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countTraiteEntreeEcheances3==0?'-success':'-danger'}}" href="{{ path('mouvement_traite_index',{'limit':'100','mouvement':'revenu','modeReglement':'Traite','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countTraiteEntreeEcheances3~" traite(s) entrant(s) arrivant à échéance dans une semaine"}}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            {# traites sortants#}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTraiteSortie" aria-expanded="false" class="collapsed">
+                                            Traites sortante(s) ({{ countTraiteSortieEcheances0+countTraiteSortieEcheances1+countTraiteSortieEcheances3 }})
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseTraiteSortie" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        {# traite sortant #}
+                                        <p class="text{{ countTraiteSortieEcheances0==0?'-success':'-danger'}}">
+                                            {% set date1="now"|date_modify("-1 day")|date("d/m/Y") %}
+                                            {% set date0="" %}
+                                            <a class="text{{ countTraiteSortieEcheances0==0?'-success':'-danger'}}" href="{{ path('mouvement_traite_index',{'limit':'100','mouvement':'depense', 'modeReglement':'Traite','etat[0]':'En cours','etat[1]':'Impayé', 'startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countTraiteSortieEcheances0~" traite(s) sortant(s) à dépassé l'écheance"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countTraiteSortieEcheances1==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+0 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+0 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countTraiteSortieEcheances1==0?'-success':'-danger'}}" href="{{ path('mouvement_traite_index',{'limit':'100','mouvement':'depense','modeReglement':'Traite','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countTraiteSortieEcheances1~" traite(s) sortant(s) arrivant à échéance aujourd'hui"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countTraiteSortieEcheances3==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date_modify("+1 day")|date("d/m/Y") %}
+                                            {% set date1="now"|date_modify("+7 day")|date("d/m/Y")  %}
+                                            <a class="text{{ countTraiteSortieEcheances3==0?'-success':'-danger'}}" href="{{ path('mouvement_traite_index',{'limit':'100','mouvement':'depense','modeReglement':'Traite','etat[0]':'En cours','etat[1]':'Impayé','startDateEcheance':date0,'endDateEcheance':date1}) }}">
+                                                {{ countTraiteSortieEcheances3~" traite(s) sortant(s) arrivant à échéance dans une semaine"}}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed" aria-expanded="false">Factures écheancés</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                    <div class="panel-body">
+                                        <p class="text{{ countFacturesEcheances0==0?'-success':'-danger'}}">
+                                            {% set date0="now"|date("d/m/Y") %}
+                                            <a class="text{{ countFacturesEcheances0==0?'-success':'-danger'}}" href="{{ path('facture_index',{'limit':'100','startDateEcheance':date0,'endDateEcheance':date0}) }}">
+                                                {{ countFacturesEcheances0~" facture(s) à échéance aujourd'hui"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countFacturesEcheances1==0?'-success':'-danger'}}">
+                                            {% set date1="now"|date_modify("+1 day")|date("d/m/Y") %}
+                                            <a class="text{{ countFacturesEcheances1==0?'-success':'-danger'}}" href="{{ path('facture_index',{'limit':'100','startDateEcheance':date1,'endDateEcheance':date1}) }}">
+                                                {{ countFacturesEcheances1~" facture(s) à 1 jour de l'échéance"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countFacturesEcheances2==0?'-success':'-danger'}}">
+                                            {% set date2="now"|date_modify("+2 day")|date("d/m/Y") %}
+                                            <a class="text{{ countFacturesEcheances2==0?'-success':'-danger'}}" href="{{ path('facture_index',{'limit':'100','startDateEcheance':date2,'endDateEcheance':date2}) }}">
+                                                {{ countFacturesEcheances2~" facture(s) à 2 jours de l'échéance"}}
+                                            </a>
+                                        </p>
+                                        <p class="text{{ countFacturesEcheances3==0?'-success':'-danger'}}">
+                                            {% set date3="now"|date_modify("+3 day")|date("d/m/Y") %}
+                                            <a class="text{{ countFacturesEcheances3==0?'-success':'-danger'}}" href="{{ path('facture_index',{'limit':'100','startDateEcheance':date3,'endDateEcheance':date3}) }}">
+                                                {{ countFacturesEcheances3~" facture(s) à 3 jours de l'échéance"}}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker12').datepicker({
+                inline: true,
+                sideBySide: true,
+                language: "{{ app.request.locale }}",
+                todayHighlight: true
+            });
+        });
+    </script>
+{% endblock %}

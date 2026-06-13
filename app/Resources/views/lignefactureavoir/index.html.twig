@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lignefactureavoirs list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Designation</th>
+                <th>Qte</th>
+                <th>Prixunitaire</th>
+                <th>Remise</th>
+                <th>Ttc</th>
+                <th>Benifice</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ligneFactureAvoir in ligneFactureAvoirs %}
+            <tr>
+                <td><a href="{{ path('lignefactureavoir_show', { 'id': ligneFactureAvoir.id }) }}">{{ ligneFactureAvoir.id }}</a></td>
+                <td>{{ ligneFactureAvoir.designation }}</td>
+                <td>{{ ligneFactureAvoir.qte }}</td>
+                <td>{{ ligneFactureAvoir.prixUnitaire }}</td>
+                <td>{{ ligneFactureAvoir.remise }}</td>
+                <td>{{ ligneFactureAvoir.ttc }}</td>
+                <td>{{ ligneFactureAvoir.benifice }}</td>
+                <td>{% if ligneFactureAvoir.createdAt %}{{ ligneFactureAvoir.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ligneFactureAvoir.updatedAt %}{{ ligneFactureAvoir.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('lignefactureavoir_show', { 'id': ligneFactureAvoir.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('lignefactureavoir_edit', { 'id': ligneFactureAvoir.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('lignefactureavoir_new') }}">Create a new ligneFactureAvoir</a>
+        </li>
+    </ul>
+{% endblock %}

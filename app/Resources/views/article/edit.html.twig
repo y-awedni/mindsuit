@@ -1,0 +1,284 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Article:'~article }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('article_show',{'id':article.id})}}"><span class="glyphicon glyphicon-eye-open"></span> Afficher</a></li>
+                        <li><a href="{{path('article_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Article {{ article }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(edit_form) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(edit_form.code) }}
+                                        {{ form_row(edit_form.designation) }}
+                                        {{ form_row(edit_form.unite) }}
+                                        {{ form_row(edit_form.categorie) }}
+                                        {{ form_row(edit_form.famille) }}
+                                        {{ form_row(edit_form.sousfamille) }}
+                                        {{ form_row(edit_form.note) }}
+                                        {{ form_row(edit_form.desactiverPhoto) }}
+                                        {{ form_row(edit_form.media) }}
+                                        {% if article.desactiverPhoto==false and article.media %}
+                                            {% if article.media.path %}
+                                                <img width="200px" heigh="150px" src="{{ asset(article.media.assetPath) }}">
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Tarifs
+                                            </div>
+                                            <div class="panel-body">
+                                                {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                                <div class="form-group">
+                                                    <label class="control-label" for="appbundle_article_type">
+                                                        {{ article.service?'Service':'Produit' }}
+                                                    </label>
+                                                </div>
+                                                {% if(article.prixAchat==0 and article.marge==100) %}
+                                                    {{ form_row(edit_form.prixAchat,{'attr':{'readonly':true, 'onkeyup':'changePrixAchat(this)'}}) }}
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            {{ form_row(edit_form.marge,{'attr':{'readonly':true, 'onkeyup':'changeMarge(this)'}}) }}
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label" for="appbundle_article_margeDt">Marge(TND)</label><div class="input-group">
+                                                                    <input type="text" value="{{ article.prixVenteHt -article.prixAchat }}" id="appbundle_article_margeDt" disabled="disabled" class="form-control" autocomplete="off">            <span class="input-group-addon"> TND</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    {{ form_row(edit_form.prixAchat,{'attr':{'onkeyup':'changePrixAchat(this)'}}) }}
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            {{ form_row(edit_form.marge,{'attr':{'onkeyup':'changeMarge(this)'}}) }}
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label" for="appbundle_article_margeDt">Marge(TND)</label><div class="input-group">
+                                                                    <input type="text" id="appbundle_article_margeDt" disabled="disabled" class="form-control" autocomplete="off">            <span class="input-group-addon"> TND</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {{ form_row(edit_form.prixVenteHt,{'attr':{'onkeyup':'changePrixVenteHt(this)'}}) }}
+                                                {{ form_row(edit_form.tva) }}
+                                                <div class="form-group">
+                                                    <label class="control-label" for="appbundle_article_prixVenteTtc">Prix de vente TTC</label><div class="input-group">
+                                                        <input class="form-control" type="text" disabled="true" value="{{article.prixVenteTtc}}" id="appbundle_article_prixVenteTtc">
+                                                        <span class="input-group-addon"> TND</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-success">
+                                            <div class="panel-heading">
+                                                Stock
+                                            </div>
+                                            <div class="panel-body">
+                                                {% if(article.service) %}
+                                                    Cet article est un service
+                                                {% else %}
+                                                    {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Fournisseur</label>
+                                                            <select class="form-control" disabled="true">
+                                                                {% if article.fournisseur %}
+                                                                    <option>{{ article.fournisseur.code }}</option>
+                                                                {% endif %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label class="control-label">Date d'ajout</label>
+                                                            <input class="form-control" type="text" value="{{ article.dateAjout|date('d-m-Y') }}" disabled="true">
+                                                        </div>
+                                                    </div>
+                                                    {% if article.stockable %}
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-4">
+                                                                <label class="control-label">Qte en départ</label>
+                                                                <input class="form-control" type="text" value="{{ article.qteEnDepart }}" disabled="true">
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                {{ form_row(edit_form.seuilAlert) }}
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label class="control-label">Qte en stock</label>
+                                                                <input class="form-control" type="text" value="{{ article.qteEnStock }}" disabled="true">
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_row(edit_form.save) }}
+
+                        {{ form_end(edit_form) }}
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#myModal{{article.id}}">
+                            <span class="glyphicon glyphicon-remove"></span> Supprimer
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal{{article.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">{{ article }}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous supprimer cette article
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('article_delete', { 'id': article.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer</a>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery(document).on('change', '#appbundle_article_categorie, #appbundle_article_famille', function () {
+            let $field = jQuery(this);
+            let $categorieField = $('#appbundle_article_categorie');
+            let $form = $field.closest('form');
+            let target = '#' + $field.attr('id').replace('famille', 'sousfamille').replace('categorie', 'famille');
+            // Les données à envoyer en Ajax
+            let data = {};
+            data[$categorieField.attr('name')] = $categorieField.val();
+            data[$field.attr('name')] = $field.val();
+            // On soumet les données
+            jQuery.post($form.attr('action'), data).then(function (data) {
+                // On récupère le nouveau <select>
+                let $input = jQuery(data).find(target);
+                // On remplace notre <select> actuel
+                jQuery(target).closest('.bootstrap-select').replaceWith($input);
+                jQuery('#appbundle_article_sousfamille').closest('.bootstrap-select').replaceWith(jQuery(data).find('#appbundle_article_sousfamille'));
+                jQuery('.selectpicker').selectpicker('refresh');
+            });
+        });
+        function getTypeArticle() {
+            var prixAchat = document.getElementById('appbundle_article_prixAchat').value;
+            var marge = document.getElementById('appbundle_article_marge').value;
+            var type = (toNumberWith3Digits(prixAchat)) === 0 && toNumberWith3Digits(marge) === 100;
+            return type ? 'service' : 'produit';
+        }
+        function changePrixAchat(prixAchat) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                //si prix de vente existe en calcule marge
+                if (document.getElementById('appbundle_article_prixVenteHt').value.length > 0) {
+                    var marge = toNumberWith3Digits(document.getElementById('appbundle_article_marge').value);
+                    var prixAchat = toNumberWith3Digits(prixAchat.value);
+                    document.getElementById('appbundle_article_prixVenteHt').value = toNumberWith3Digits(prixAchat + prixAchat / 100 * marge);
+
+                    //si marge existe en calcule prix de vente
+                } else if (document.getElementById('appbundle_article_marge').value.length > 0) {
+                    var marge = toNumberWith3Digits(document.getElementById('appbundle_article_marge').value);
+                    var prixAchat = toNumberWith3Digits(prixAchat.value);
+                    document.getElementById('appbundle_article_prixVenteHt').value = toNumberWith3Digits(prixAchat + prixAchat / 100 * marge);
+                }
+            }
+
+        }
+        function changeMarge(marge) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                //si prix achat existe en calcule prix de vente 
+                if (document.getElementById('appbundle_article_prixAchat').value.length > 0) {
+                    var prixAchat = toNumberWith3Digits(document.getElementById('appbundle_article_prixAchat').value);
+                    var marge = toNumberWith3Digits(marge.value);
+                    document.getElementById('appbundle_article_prixVenteHt').value = toNumberWith3Digits(prixAchat + prixAchat / 100 * marge);
+                    //si prix de vente existe en calcule prix achat
+                } else if (document.getElementById('appbundle_article_prixVenteHt').value.length > 0) {
+                    var prixVenteHt = toNumberWith3Digits(document.getElementById('appbundle_article_prixVenteHt').value);
+                    var marge = toNumberWith3Digits(marge.value);
+                    document.getElementById('appbundle_article_prixAchat').value = toNumberWith3Digits(prixVenteHt - prixVenteHt / 100 * marge);
+                }
+            }
+        }
+        function changePrixVenteHt(prixVenteHt) {
+            var typeArticle = getTypeArticle();
+            if (typeArticle === 'produit') {
+                //si prixachat existe en calcule le marge
+                if (document.getElementById('appbundle_article_prixAchat').value.length > 0) {
+                    //Taux de marge commerciale = [ marge commerciale / coût d’achat ] x 100
+                    var prixAchat = toNumberWith3Digits(document.getElementById('appbundle_article_prixAchat').value);
+                    var prixVenteHt = toNumberWith3Digits(prixVenteHt.value);
+                    var margeCommerciale = prixVenteHt - prixAchat;
+                    document.getElementById('appbundle_article_marge').value = toNumberWith3Digits(toNumberWith3Digits(margeCommerciale) / toNumberWith3Digits(prixAchat) * 100);
+                    //si marge existe en calcule le prix d'achat
+                } else if (document.getElementById('appbundle_article_marge').value.length > 0) {
+                    var marge = toNumberWith3Digits(document.getElementById('appbundle_article_marge').value);
+                    var prixVenteHt = toNumberWith3Digits(prixVenteHt.value);
+                    document.getElementById('appbundle_article_prixAchat').value = toNumberWith3Digits(prixVenteHt - prixVenteHt / 100 * marge);
+                }
+            }
+        }
+
+        setInterval(function () {
+            var prixVenteHt = toNumberWith3Digits(document.getElementById('appbundle_article_prixVenteHt').value);
+            var prixAchat = toNumberWith3Digits(document.getElementById('appbundle_article_prixAchat').value);
+            var margeDt = toNumberWith3Digits(prixVenteHt) - toNumberWith3Digits(prixAchat);
+            if (isNaN(margeDt)) {
+                document.getElementById('appbundle_article_margeDt').value = '';
+            } else {
+                document.getElementById('appbundle_article_margeDt').value = toNumberWith3Digits(margeDt);
+            }
+            var tva = document.getElementById('appbundle_article_tva').value;
+            if (tva.length > 0 && !isNaN(prixVenteHt)) {
+                var mntTva = toNumberWith3Digits(prixVenteHt) / 100 * toNumberWith3Digits(tva);
+                document.getElementById('appbundle_article_prixVenteTtc').value = toNumberWith3Digits(toNumberWith3Digits(prixVenteHt) + toNumberWith3Digits(mntTva));
+            } else {
+                document.getElementById('appbundle_article_prixVenteTtc').value = '';
+            }
+        }
+        , 1);
+    </script>
+{% endblock %}

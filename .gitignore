@@ -1,0 +1,67 @@
+# === Dependencies (reinstalled via composer) ===
+/vendor/
+/composer.phar
+
+# === Secrets & environment ===
+/app/config/parameters.yml
+/app/config/parameters.ini
+/.env
+/.env.local
+/.env.*.local
+/docker/.env
+*.pem
+
+# === Database dumps (never commit customer data) ===
+/docker/mysql/init/*
+!/docker/mysql/init/.gitkeep
+*.sql
+*.sql.gz
+*.dump
+
+# === Symfony runtime (cache, logs, sessions) ===
+/var/*
+!/var/cache/
+/var/cache/*
+!/var/cache/.gitkeep
+!/var/logs/
+/var/logs/*
+!/var/logs/.gitkeep
+!/var/sessions/
+/var/sessions/*
+!/var/sessions/.gitkeep
+!/var/SymfonyRequirements.php
+/app/bootstrap.php.cache
+/var/bootstrap.php.cache
+/app/spool/*
+
+# === Built / installed assets and user uploads ===
+/web/bundles/
+/web/uploads/*
+!/web/uploads/.gitkeep
+/public/bundles/
+
+# === Binaries managed by composer ===
+/bin/*
+!/bin/console
+!/bin/symfony_requirements
+
+# === Build / test artifacts ===
+/build/
+/phpunit.xml
+/app/phpunit.xml
+/.phpunit.result.cache
+/web/.web-server-pid
+.phpstan-baseline.neon.tmp
+
+# === Host / IDE / OS junk ===
+/.idea/
+/.vscode/
+/.cursor/
+*.db
+.DS_Store
+Thumbs.db
+error_log
+*.log
+
+# === Doctrine generated backups ===
+**/Entity/*~

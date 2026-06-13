@@ -1,0 +1,100 @@
+{{ form_start(form,{'attr':{'id':'articleForm','class':'articleForm','action':path('article_custom_new')} } ) }}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Détails
+            </div>
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_row(form.code) }}
+                {{ form_row(form.designation) }}
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Tarifs
+            </div>
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_row(form.service,{'attr':{'onchange':'changerType(this)'}}) }}
+                {{ form_row(form.prixAchat,{'attr':{'onkeyup':'changePrixAchat(this)'}}) }}
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Stock
+            </div>
+            <div class="panel-body">
+                {% form_theme form 'bootstrap_3_layout.html.twig' %}
+                {{ form_row(form.stockable,{'attr':{'checked':true, 'onchange':'changeStockable(this)'}}) }}
+                <div class="row form-group" id="stockable_row1">
+                    <div class="col-sm-6">
+                        {{ form_row(form.fournisseur) }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.dateAjout) }}
+                    </div>
+                </div>
+                <div class="row form-group" id="stockable_row2">
+                    <div class="col-sm-4">
+                        {{ form_row(form.qteEnDepart,{'attr':{'onkeyup':'changeQteEnDeaprt(this)','onchange':'changeQteEnDeaprt(this)'}}) }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form_row(form.seuilAlert) }}
+                    </div>
+                    <div class="col-sm-4">
+                        {{ form_row(form.qteEnStock) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+<script>
+    function changerTypeFN(type) {
+        if (type === 'service') {
+            //desactiver prix d'achat et metter le valeur à 0
+            document.getElementById('appbundle_article_prixAchat').value = 0;
+            document.getElementById('appbundle_article_prixAchat').setAttribute('readonly', 'true');
+            document.getElementById('stockable_row1').style.display = 'none';
+            document.getElementById('stockable_row2').style.display = 'none';
+            document.getElementById('appbundle_article_stockable').checked = false;
+            document.getElementById('appbundle_article_stockable').setAttribute('readonly', 'true');
+        } else {
+            //afficher prix d'achat et metter le valeur à vide
+            document.getElementById('appbundle_article_prixAchat').value = '';
+            document.getElementById('appbundle_article_prixAchat').removeAttribute('readonly');
+            document.getElementById('stockable_row1').removeAttribute('style');
+            document.getElementById('stockable_row2').removeAttribute('style');
+            document.getElementById('appbundle_article_stockable').checked = true;
+            document.getElementById('appbundle_article_stockable').removeAttribute('readonly');
+        }
+    }
+    function getTypeArticle() {
+        return document.getElementById('appbundle_article_service').checked ? 'service' : 'produit';
+    }
+    function changerType(type) {
+        type.checked ? changerTypeFN('service') : changerTypeFN('produit');
+    }
+    changerTypeFN(getTypeArticle());
+    function changeQteEnDeaprt(qteDepart) {
+        if (qteDepart) {
+            document.getElementById('appbundle_article_qteEnStock').value = qteDepart.value;
+        }
+    }
+    function changeStockable(stockable) {
+        var typeArticle = getTypeArticle();
+        if (typeArticle === 'produit') {
+            if (stockable.checked === true) {
+                document.getElementById('stockable_row2').removeAttribute('style');
+            } else {
+                document.getElementById('stockable_row2').style.display = 'none';
+            }
+        } else {
+            document.getElementById('appbundle_article_stockable').checked = false;
+        }
+    }
+</script>

@@ -1,0 +1,38 @@
+# Caddy reverse proxy with automatic TLS.
+#
+# Wildcard cert (*.minduos.com) is required so each SaaS tenant gets
+# https://<tenant>.minduos.com (Phase 4). Wildcard certs need DNS-01, which
+# needs a DNS-provider plugin baked into Caddy - see infra/Dockerfile.caddy.
+#
+# Provide CF_API_TOKEN (or your provider's token) and ACME_EMAIL via the
+# server-side .env consumed by docker-compose.prod.yml.
+
+{
+	email {$ACME_EMAIL}
+}
+
+# Apex + marketing/control-plane site.
+minduos.com, www.minduos.com {
+	root * /app/public
+	encode zstd gzip
+	php_fastcgi php:9000
+	file_server
+	log {
+		output stdout
+	}
+}
+
+# All tenant subdomains share one app deployment; the app resolves the
+# tenant from the Host header (Phase 4 TenantResolver).
+*.minduos.com {
+	tls {
+		dns cloudflare {$CF_API_TOKEN}
+	}
+	root * /app/public
+	encode zstd gzip
+	php_fastcgi php:9000
+	file_server
+	log {
+		output stdout
+	}
+}

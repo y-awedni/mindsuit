@@ -1,0 +1,367 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Bon de livraison:'~bonlivraison }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('bonlivraison_index')}}"><span class="glyphicon glyphicon-align-justify"></span> Liste</a></li>
+                        <li><a href="{{ path('bonlivraison_edit', { 'id': bonlivraison.id }) }}"><span class="glyphicon glyphicon-edit"></span> Modifier</a></li>
+                        <li style="cursor: pointer">
+                            {% if bonlivraison.termine %}
+                                <a href="{{ path('bonlivraison_reglements', { 'id': bonlivraison.id }) }}"><span class="fa fa-money"></span> Réglements</a>
+                            {% else %}
+                                <a data-toggle="modal" data-target="#myModal1"><span class="fa fa-money"></span> Réglements</a>
+                                <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="myModalLabel">Réglements du bon de livraison : {{ bonlivraison.code }}</h4>
+                                            </div>
+                                            <div class="modal-body" id='message'>
+                                                {% form_theme form_regler 'bootstrap_3_layout.html.twig' %}
+                                                {{ form_start(form_regler) }}
+                                                <p class="text-primary">Il faut terminer la bon de livraison pour regler.</p>
+                                                {{ form_widget(form_regler) }}
+                                                {{ form_end(form_regler) }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Bon de livraison {{ bonlivraison.code }}
+                        {% if bonlivraison.termine %}
+                            <span class="text-success"> (Terminé) </span>
+                        {% else %}
+                            <span class="text-danger"> (Non Terminé) </span>
+                        {% endif %}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-align-justify"></span> Détails du bon de liraison</a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a class="list-group-item">
+                                                    Code
+                                                    <span class="pull-right text-muted small"><em>{{bonlivraison.code}}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Note
+                                                    <span class="pull-right text-muted small"><em>{{bonlivraison.note}}</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a href="{{ path('client_show',{'id':bonlivraison.client.id}) }}" class="list-group-item">
+                                                    Client
+                                                    <span class="pull-right text-muted small"><em>{{bonlivraison.client}}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Date création
+                                                    <span class="pull-right text-muted small"><em>{{ bonlivraison.dateCreation|date("d/m/Y")}}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Date de livraison
+                                                    <span class="pull-right text-muted small"><em>{{ bonlivraison.dateLivraison|date("d/m/Y")}}</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-align-justify"></span> Lignes du bon de livraison</a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Réf</th>
+                                                    <th>Désignation</th>
+                                                    <th >Unité</th>
+                                                    <th >PU HT</th>
+                                                    <th >Remise</th>
+                                                    <th >TVA</th>
+                                                    <th >PU TTC</th>
+                                                    <th >Qte</th>
+                                                    <th >Total TTC</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% set i=0 %}
+                                                {% for ligne in bonlivraison.ligneBonLivraisons %}
+                                                    <tr class="item">
+                                                        <td class="left">{{ligne.article.code}}</td>
+                                                        <td class="left">{{ligne.designation}}</td>
+                                                        <td class="left">{{ligne.article.unite}}</td>
+                                                        <td class="center" id="prixUnitaire_{{i}}">{{ligne.prixUnitaire}}</td>
+                                                        <td class="center" id="remise_{{i}}">{{ligne.remise}} %</td>
+                                                        <td class="center" id="tva_{{i}}">{{ligne.tva }} %</td>
+                                                        {% set puTTC=ligne.ttc/ligne.qte %}
+                                                        <td class="center" id="ttc_{{i}}">{{ puTTC|number_format(3, '.', '') }}</td>
+                                                        <td class="center" id="qte_{{i}}">{{ligne.qte}}</td>
+                                                        <td class="center" id="total_{{i}}">{{ligne.ttc }}</td>
+                                                    </tr>
+                                                    {% set i=i+1 %}
+                                                {% endfor %}
+                                            <div id="ligneBonLivraisonsLength" style="visibility: hidden">{{i}}</div>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- totaux -->
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTotaux"><span class="glyphicon glyphicon-credit-card"></span> Totaux du bon de livraison</a>
+                                </h4>
+                            </div>
+                            <div id="collapseTotaux" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-4 col-md-offset-2">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>% TVA</th>
+                                                        <th>Base</th>
+                                                        <th>TVA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="baseTVA">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4 col-md-offset-2">
+                                            <div class="list-group">
+                                                <a class="list-group-item">
+                                                    Total HT
+                                                    <span class="pull-right text-muted small"><em id="totalHT">{{ bonlivraison.ht }}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total REMISE
+                                                    <span class="pull-right text-muted small"><em id="totalREMISE">{{ bonlivraison.remise }}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total TVA
+                                                    <span class="pull-right text-muted small"><em id="totalTVA">{{ bonlivraison.tva }}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Total TTC
+                                                    <span class="pull-right text-muted small"><em id="totalTTC">{{ bonlivraison.total }}</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                        {% if bonlivraison.termine %}
+                            <a class="btn btn-success" href="{{ path('bonlivraison_print',{'id':bonlivraison.id}) }}" ><span class="glyphicon glyphicon-print"></span> Imprimer</a>
+                            <a class="btn btn-warning" href="{{ path('bonlivraison_to_facture',{'id':bonlivraison.id} ) }}">Convertir en facture</a>
+
+                        {% else %}
+                            <a class="btn btn-success" href="{{ path('bonlivraison_print',{'id':bonlivraison.id}) }}" ><span class="glyphicon glyphicon-print"></span> Imprimer</a>
+                            <a data-toggle="modal" data-target="#myModal3" class="btn btn-warning" >Convertir en facture</a>
+                            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Impression du bon de livraison : {{ bonlivraison.code }}</h4>
+                                        </div>
+                                        <div class="modal-body" id='message'>
+                                            {% form_theme form_imprimer 'bootstrap_3_layout.html.twig' %}
+                                            {{ form_start(form_imprimer) }}
+                                            <p class="text-primary">Il faut terminer la bon de livraison pour imprimer.</p>
+                                            {{ form_widget(form_imprimer) }}
+                                            {{ form_end(form_imprimer) }}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Convetion du bon de livraison : {{ bonlivraison.code }} en facture</h4>
+                                        </div>
+                                        <div class="modal-body" id='message'>
+                                            {% form_theme form_converter 'bootstrap_3_layout.html.twig' %}
+                                            {{ form_start(form_converter) }}
+                                            <p class="text-primary">Il faut terminer la bon de livraison pour converter.</p>
+                                            {{ form_widget(form_converter) }}
+                                            {{ form_end(form_converter) }}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                        {% endif %}
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#myModal{{bonlivraison.id}}">
+                            <span class="glyphicon glyphicon-remove"></span> Supprimer
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal{{bonlivraison.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">{{ bonlivraison }}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h1 style="color: red">Attention !</h1>
+                                        Si vous supprimez ce bon de livraison<br>
+                                        -Leurs mouvements de stocks et leurs réglements seront supprimé.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('bonlivraison_delete', { 'id': bonlivraison.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer</a>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var ligneBonLivraisonsLength = document.getElementById('ligneBonLivraisonsLength').innerHTML;
+        Array.prototype.inArray = function (value)
+        {
+            // Returns true if the passed value is found in the
+            // array. Returns false if it is not.
+            var i;
+            for (i = 0; i < this.length; i++)
+            {
+                if (this[i] === value)
+                {
+                    return true;
+                }
+            }
+            return false;
+        };
+        var ttc = 0;        //total TTC
+        var ht = 0;         //total HT
+        var remise = 0;     //total REMISE
+        var tva = 0;        //total TVA
+        var perCentTva = [];//taux TVA[]
+        var baseTva = [];   //base TVA[]
+        var ttTva = [];     //total TVA[]
+        var _tvaa = '';     //tr TVA[]
+        if (ligneBonLivraisonsLength > 0) {
+            for (var i = 0; i < ligneBonLivraisonsLength; i++) {
+                //calcule ttc pu remise tva_____________________________
+                //incrementation du ttc
+                ttc += Number(parseFloat(document.getElementById('total_' + i).innerHTML).toFixed(3));
+                //recuperation des input________________________________
+                //input prix unitaire
+                var pu = Number(parseFloat(document.getElementById('prixUnitaire_' + i).innerHTML).toFixed(3));
+                //input qte
+                var qte = Number(parseFloat(document.getElementById('qte_' + i).innerHTML).toFixed(3));
+                //input remise
+                var _remise = Number(parseFloat(document.getElementById('remise_' + i).innerHTML).toFixed(3));
+                //input tva
+                var _tva = Number(parseFloat(document.getElementById('tva_' + i).innerHTML).toFixed(3));
+                //  calcule de cette ligne _____________________________
+                //prix hors taxe avant remise de cette ligne
+                var __htAvantRemise = pu * qte;
+                //remise de cette ligne d'un seul article
+                var __remise = (__htAvantRemise / 100 * _remise);
+                //prix hors taxe apres remise de cette ligne
+                var __htApresRemise = __htAvantRemise - __remise;
+                //tva de cette ligne
+                var __tva = __htApresRemise / 100 * _tva;
+                // incrementation des variables totaux
+                // prix ht
+                ht += __htAvantRemise;
+                //remise
+                remise += __remise;
+                //tva
+                tva += __tva;
+
+                //calcule du tableau tva
+                if (!perCentTva.inArray(_tva)) {
+                    perCentTva.push(_tva);
+                    var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                    baseTva.push(__baseTva);
+                    ttTva.push(__baseTva / 100 * _tva);
+                } else {
+                    var index = perCentTva.indexOf(_tva);
+                    var __baseTva = (__htAvantRemise) - ((__htAvantRemise) / 100 * _remise);
+                    var _baseTva = Number(parseFloat(baseTva[index]).toFixed(3));
+                    baseTva[index] = _baseTva + __baseTva;
+
+                    var __ttTva = __baseTva / 100 * _tva;
+                    var _ttTva = Number(parseFloat(ttTva[index]).toFixed(3));
+                    ttTva[index] = _ttTva + __ttTva;
+                }
+
+            }
+        }
+        for (var i = 0; i < perCentTva.length; i++) {
+            _tvaa += "<tr><td class='right font16'>" + perCentTva[i] + "%</td><td class='right font16'>" + baseTva[i].toFixed(3) + "</td><td class='right font16'>" + ttTva[i].toFixed(3) + "</td></tr>";
+        }
+        document.getElementById('baseTVA').innerHTML = _tvaa;
+    </script>
+{% endblock %}

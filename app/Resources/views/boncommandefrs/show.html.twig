@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Bon de commande fournisseur:'~bonCommandeFrs }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('boncommandefrs_index')}}"><span class="glyphicon glyphicon-align-justify"></span> Liste</a></li>
+                        <li><a href="{{ path('boncommandefrs_edit', { 'id': bonCommandeFrs.id }) }}"><span class="glyphicon glyphicon-edit"></span> Modifier</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Bon de commande fournisseur : {{ bonCommandeFrs }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-align-justify"></span> Détails du bon de commande fournisseur</a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a class="list-group-item">
+                                                    Code
+                                                    <span class="pull-right text-muted small"><em>{{bonCommandeFrs.code}}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Note
+                                                    <span class="pull-right text-muted small"><em>{{bonCommandeFrs.note}}</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="list-group">
+                                                <a href="{{ path('fournisseur_show',{'id':bonCommandeFrs.fournisseur.id}) }}" class="list-group-item">
+                                                    Fournisseur
+                                                    <span class="pull-right text-muted small"><em>{{bonCommandeFrs.fournisseur}}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Date de création
+                                                    <span class="pull-right text-muted small"><em>{{bonCommandeFrs.dateCreation|date('d-m-Y') }}</em>
+                                                    </span>
+                                                </a>
+                                                <a class="list-group-item">
+                                                    Date de commande
+                                                    <span class="pull-right text-muted small"><em>{{bonCommandeFrs.dateCommande|date('d-m-Y') }}</em>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-align-justify"></span> Lignes du bon de commande fournisseur</a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Réf</th>
+                                                    <th>Désignation</th>
+                                                    <th >Qte</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for ligne in bonCommandeFrs.ligneBonCommandeFrss %}
+                                                    <tr class="item">
+                                                        <td class="left">{{ligne.article.code}}</td>
+                                                        <td class="left">{{ligne.designation}}</td>
+                                                        <td class="center">{{ligne.qte}}</td>
+                                                    </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-success" href="{{ path('boncommandefrs_print',{'id':bonCommandeFrs.id}) }}" >
+                            <span class="glyphicon glyphicon-print"></span> Imprimer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

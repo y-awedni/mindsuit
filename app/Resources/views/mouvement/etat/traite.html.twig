@@ -1,0 +1,318 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent()~' - Mouvements ' }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('mouvement_index')}}"><span class="glyphicon glyphicon-transfer"></span> Tous les mouvements</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="count">
+                            {{ pagination.getTotalItemCount }} Traite(s)
+                        </div> 
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-chevron-down"></span> Filtrage</a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form role="form" action="{{path('mouvement_traite_index')}}" method="GET">
+                                        <div class="row">
+                                            <div class="col-sm-6 ">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6">
+                                                        <label for="designation">{{ 'RefDoc'|trans }}</label>
+                                                        <input class="form-control" name="designation" id="designation" value="{{ app.request.get('designation')}}">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label for="typeDoc">Type document</label>
+                                                        <select class="form-control selectpicker" data-live-search="true" name='typeDoc'>
+                                                            <option value="">tous</option>
+                                                            <option {% if app.request.get('typeDoc')=='br' %}selected{% endif %} value="br">Bon de reception</option>
+                                                            <option {% if app.request.get('typeDoc')=='bl' %}selected{% endif %} value="br">Bon de livraison</option>
+                                                            <option {% if app.request.get('typeDoc')=='facture' %}selected{% endif %} value="facture">Facture</option>
+                                                            <option {% if app.request.get('typeDoc')=='recu' %}selected{% endif %} value="recu">Reçu</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6">
+                                                        <label for="mouvement">Mouvement (R/D)</label>
+                                                        <select name='mouvement' class="form-control selectpicker" data-live-search="true" id="mouvement" onchange="changeMouvement(this)">
+                                                            <option {% if app.request.get('mouvement')=='tous' %}selected{% endif %} value="tous">Tous</option>
+                                                            <option {% if app.request.get('mouvement')=='revenu' %}selected{% endif %} value="revenu">Revenu</option>
+                                                            <option {% if app.request.get('mouvement')=='depense' %}selected{% endif %} value="depense">Dépense</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6" id="fournisseurs">
+                                                        <label for="fournisseur">Fournisseur</label>
+                                                        <select name='fournisseur' class="form-control selectpicker" data-live-search="true" title="tous">
+                                                            <option value="">tous</option>
+                                                            {% for fournisseur in fournisseurs %}
+                                                                <option {% if app.request.get('fournisseur')==fournisseur.id %}selected{% endif %} value="{{ fournisseur.id }}">{{ fournisseur.code }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-6" id="clients">
+                                                        <label for="client">Client</label>
+                                                        <select name='client' class="form-control selectpicker" data-live-search="true" title="tous">
+                                                            <option value="">tous</option>
+                                                            {% for client in clients %}
+                                                                <option {% if app.request.get('client')==client.id %}selected{% endif %} value="{{ client.id }}">{{ client.code }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6">
+                                                        <label for="date">Date</label>
+                                                        <div class="input-daterange input-group" id="datepicker">
+                                                            <input type="text" class="form-control" value="{{ app.request.get('startDateCreation')}}" name="startDateCreation" />
+                                                            <span class="input-group-addon">vers</span>
+                                                            <input type="text" class="form-control" value="{{ app.request.get('endDateCreation')}}" name="endDateCreation" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6" id='dateEcheance'>
+                                                        <label for="dateEcheance">Date d'echéance</label>
+                                                        <div class="input-daterange input-group" id="datepicker">
+                                                            <input type="text" class="form-control" value="{{ app.request.get('startDateEcheance')}}" name="startDateEcheance" />
+                                                            <span class="input-group-addon">vers</span>
+                                                            <input type="text" class="form-control" value="{{ app.request.get('endDateEcheance')}}" name="endDateEcheance" />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="limit">Nombre d'éléments par page </label>
+                                                    <select name='limit' class="form-control selectpicker" data-live-search="true">
+                                                        <option {% if app.request.get('limit')=='10' %}selected{% endif %} value="10">10 éléments par page</option>
+                                                        <option {% if app.request.get('limit')=='25' %}selected{% endif %} value="25">25 éléments par page</option>
+                                                        <option {% if app.request.get('limit')=='50' %}selected{% endif %} value="50">50 éléments par page</option>
+                                                        <option {% if app.request.get('limit')=='100' %}selected{% endif %} value="100">100 éléments par page</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Etat</label>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input {{ 'En cours' in app.request.get('etat')?'checked':'' }} type="checkbox" value="En cours" name="etat[]">
+                                                            <em class="label label-warning">
+                                                                En cours
+                                                            </em>
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input {{ 'Impayé' in app.request.get('etat')?'checked':'' }} type="checkbox" value="Impayé" name="etat[]">
+                                                            <em class="label label-danger">
+                                                                Impayé
+                                                            </em>
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input {{ 'Encaissé' in app.request.get('etat')?'checked':'' }} type="checkbox" value="Encaissé" name="etat[]">
+                                                            <em class="label label-success">
+                                                                Encaissé
+                                                            </em>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-filter"></span> Filtrer</button>
+                                        <a href="{{path('mouvement_traite_index')}}" class="btn btn-default"><span class="glyphicon glyphicon-filter"></span> Reinitialiser</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <table width="100%" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>{{ knp_pagination_sortable(pagination, 'RefDoc'|trans, 'a.designation') }}</th>
+                                    <th style="width: 125px;">{{ knp_pagination_sortable(pagination, 'Type document', 'a.typeDoc') }}</th>
+                                    <th style="width: 125px;">{{ knp_pagination_sortable(pagination, 'Mouvement', 'a.mouvement') }}</th>
+                                    <th>Tier</th>
+                                    <th style="width: 125px;">{{ knp_pagination_sortable(pagination, 'Montant', 'a.ttc') }}</th>
+                                    <th>{{ knp_pagination_sortable(pagination, "Date d'echéance", 'a.dateEcheance') }}</th>
+                                    <th style="width: 160px;">{{ knp_pagination_sortable(pagination, 'Date de création', 'a.dateCreation') }}</th>
+                                    <th>{{ knp_pagination_sortable(pagination, 'Numéro traite', 'a.numDoc') }}</th>
+                                    <th>{{ knp_pagination_sortable(pagination, 'Etat', 'a.etat') }}</th>
+                                    <th style="width: 200px;">Note</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mouvement in pagination %}
+                                    <tr {{ mouvement.mouvement=='revenu' ? "class='success'":"class='danger'" }}>
+                                        <td>{{ mouvement.designation }}</td>
+                                        <td>{{ mouvement.typedoc }}</td>
+                                        <td>{{ mouvement.mouvement }}</td>
+                                        <td>
+                                            {% set pathTier='' %}
+                                            {% if mouvement.fournisseur %}
+                                                {% set pathTier=path('fournisseur_show',{'id':mouvement.fournisseur.id} ) %}
+                                            {% elseif mouvement.client %}
+                                                {% set pathTier=path('client_show',{'id':mouvement.client.id} ) %}
+                                            {% endif %}
+                                            <a href="{{ pathTier }}">
+                                                {{ mouvement.tier }}
+                                            </a>
+                                        </td>
+                                        <td>{{ mouvement.ttc }}</td>
+                                        <td>{{ mouvement.dateEcheance?mouvement.dateEcheance|date('d-m-Y'):'' }}</td>
+                                        <td>{{ mouvement.dateCreation?mouvement.dateCreation|date('d-m-Y'):'' }}
+                                        <td>{{ mouvement.numDoc }}</td>
+                                        <td>
+                                            {% if mouvement.etat=='En cours' %}
+                                                <em class="label label-warning">
+                                                    {{ mouvement.etat }}
+                                                </em>
+                                            {% elseif mouvement.etat=='Impayé' %}
+                                                <em class="label label-danger">
+                                                    {{ mouvement.etat }}
+                                                </em>
+                                            {% elseif mouvement.etat=='Encaissé' %}
+                                                <em class="label label-success">
+                                                    {{ mouvement.etat }}
+                                                </em>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ mouvement.note }}</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal{{mouvement.id}}">
+                                                <span class="fa  fa-refresh"></span> Mise à jour
+                                            </button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="myModal{{mouvement.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title" id="myModalLabel">
+                                                                {{ mouvement.designation }} (num-traite : {{ mouvement.numDoc }})
+                                                            </h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form role="form" action="{{ path('mouvement_cheque_traite_maj') }}" method="POST">
+                                                                <input type="hidden" name="mouvementId" value="{{ mouvement.id }}">
+                                                                <div class="form-group">
+                                                                    <label>Etat</label>
+                                                                    <select class="form-control" name="etat">
+                                                                        <option {{ mouvement.etat=='En cours'?'selected':'' }} value="En cours">En cours</option>
+                                                                        <option {{ mouvement.etat=='Encaissé'?'selected':'' }} value="Encaissé">Encaissé</option>
+                                                                        <option {{ mouvement.etat=='Impayé'?'selected':'' }} value="Impayé">Impayé</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Date écheance</label>
+                                                                    <input name="dateEcheance" value="{{ mouvement.dateEcheance?mouvement.dateEcheance|date('d/m/Y'):'' }}" class="datepicker form-control" data-date-format="dd/mm/yyyy">
+                                                                </div>
+                                                                <button type="submit" class="btn btn-success">Mettre à jour</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.modal-content -->
+                                                </div>
+                                                <!-- /.modal-dialog -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="navigation">
+                            {{ knp_pagination_render(pagination) }}
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="{{ path('mouvement_export_xls',{
+                                'designation':app.request.get('designation'),
+                                'typeDoc':app.request.get('typeDoc'),
+                                'mouvement':app.request.get('mouvement'),
+                                'fournisseur':app.request.get('fournisseur'),
+                                'client':app.request.get('client'),
+                                'modeReglement':'Traite',
+                                'startDateCreation':app.request.get('startDateCreation'),
+                                'endDateCreation':app.request.get('endDateCreation'),
+                                'startDateEcheance':app.request.get('startDateEcheance'),
+                                'endDateEcheance':app.request.get('endDateEcheance'),
+                                'startDateCreation':app.request.get('startDateCreation'),
+                                'startDateCreation':app.request.get('startDateCreation'),
+                                'etat':app.request.get('etat') } )}}" class="btn btn-default">
+                            <span class="glyphicon glyphicon-download-alt"></span> Exporter en Excel
+                        </a>
+                    </div>
+                </div>
+                {# totaux  #}
+                {% include 'mouvement/etat/totaux.html.twig' with 
+                    {
+                        'sumRevenus' : sumRevenus,
+                        'sumDepenses' : sumDepenses,
+                        'total' : total,
+                        'totalEnCoursEntrants' : totalEnCoursEntrants,
+                        'totalEnCoursSortants' : totalEnCoursSortants,
+                        'totalEncaissésEntrants' : totalEncaissésEntrants,
+                        'totalEncaissésSortants' : totalEncaissésSortants,
+                        'totalImpayésEntrants' : totalImpayésEntrants,
+                        'totalImpayésSortants' : totalImpayésSortants 
+                    }
+                %}  
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var myVar = setInterval(myTimer, 2000);
+        function myTimer() {
+            var x = document.readyState;
+            if (x === 'complete') {
+                document.getElementById('loader').style.display = 'none';
+                $('.container-fluid').removeAttr("style");
+            }
+        }
+        function changeMvt(mvtValue) {
+            switch (mvtValue) {
+                case 'tous':
+                    document.getElementById('clients').style.display = 'none';
+                    document.getElementById('fournisseurs').style.display = 'none';
+                    break;
+                case 'depense':
+                    document.getElementById('clients').style.display = 'none';
+                    document.getElementById('fournisseurs').removeAttribute('style');
+                    break;
+                case 'revenu':
+                    document.getElementById('fournisseurs').style.display = 'none';
+                    document.getElementById('clients').removeAttribute('style');
+                    break;
+            }
+        }
+        changeMvt(document.getElementById('mouvement').value);
+        function changeMouvement(mvt) {
+            changeMvt(mvt.value);
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Societé ' }}{% endblock %}
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{path('banque_index')}}"><span class="fa fa-bank"> Banque</a></li>
+                    <li><a href="{{ path('compte_index') }}"><span class="fa fa-suitcase"> Compte</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Paramétrage societé
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        {{ form_start(edit_form) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(edit_form.rs) }}
+                                        {{ form_row(edit_form.mf) }}
+                                        {{ form_row(edit_form.rcs) }}
+                                        {{ form_row(edit_form.compte,{'label':'RIB'} ) }}
+                                        {{ form_row(edit_form.adresse) }}
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {{ form_row(edit_form.ville) }}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                {{ form_row(edit_form.pays) }}
+                                            </div>
+                                            <div class="col-sm-4">
+                                                {{ form_row(edit_form.codePostale) }}
+                                            </div>
+                                        </div>
+                                        {{ form_row(edit_form.desactiverPhoto) }}
+                                        {{ form_row(edit_form.media) }}
+                                        {% if societe.desactiverPhoto==false and societe.media %}
+                                            <img width="200px" heigh="75px" src="{{ asset(societe.media.assetPath) }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        Contact
+                                    </div>
+                                    <div class="panel-body">
+                                        {% form_theme edit_form 'bootstrap_3_layout.html.twig' %}
+                                        {{ form_row(edit_form.tel) }}
+                                        {{ form_row(edit_form.fax) }}
+                                        {{ form_row(edit_form.mobile) }}
+                                        {{ form_row(edit_form.email) }}
+                                        {{ form_row(edit_form.siteWeb) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_widget(edit_form) }}
+                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Enregistrer</button>
+                        {{ form_end(edit_form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

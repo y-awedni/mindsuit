@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent()~' - Fournisseur:'~fournisseur }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-fluid-fixed-top">
+        <section class="content-header">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li><a href="{{path('fournisseur_edit',{'id':fournisseur.id})}}"><span class="glyphicon glyphicon-edit"></span> Modifier</a></li>
+                        <li>
+                            <a href="{{ path('fiche_fournisseur_achat_document',{'id':fournisseur.id}) }}"><span class="glyphicon glyphicon-info-sign"></span> Etat fournisseur</a>
+                        </li>
+                        <li><a href="{{path('fournisseur_index')}}"><span class="glyphicon glyphicon-th-list"></span> Liste</a></li>
+                    </ul>
+                </div>
+            </nav> 
+        </section>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Fournisseur {{ fournisseur }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        Détails
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="list-group">
+                                            <a class="list-group-item article">
+                                                Code
+                                                <span class="pull-right text-muted small"><em  class="em">{{fournisseur.code}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Raison sociale
+                                                <span class="pull-right text-muted small"><em  class="em">{{fournisseur.rs}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Matricule fiscale
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.mf}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Adresse 1
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.adresse1}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Adresse 2
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.adresse2}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Adresse 3
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.adresse3}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Pays
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.pays}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Ville
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.ville}}</em>
+                                                </span>
+                                            </a>
+                                            <a class="list-group-item article">
+                                                Code Postal
+                                                <span class="pull-right text-muted small"><em class="em">{{fournisseur.codePostal}}</em>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                Contact
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="list-group">
+                                                    <a class="list-group-item article">
+                                                        Tel
+                                                        <span class="pull-right text-muted small"><em class="em">{{fournisseur.tel}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Fax
+                                                        <span class="pull-right text-muted small"><em class="em">{{fournisseur.fax}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Mobile
+                                                        <span class="pull-right text-muted small"><em class="em">{{fournisseur.mobile}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Email
+                                                        <span class="pull-right text-muted small"><em class="em">{{fournisseur.email}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Site web
+                                                        <span class="pull-right text-muted small"><em class="em">{{fournisseur.siteweb}}</em>
+                                                        </span>
+                                                    </a>
+                                                    <a class="list-group-item article">
+                                                        Note
+                                                        <span class="pull-right text-muted small"><em class="em">{{fournisseur.note}}</em>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#myModal{{fournisseur.id}}">
+                            <span class="glyphicon glyphicon-remove"></span> Supprimer
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal{{fournisseur.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">{{ fournisseur }}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous supprimer ce fournisseur
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('fournisseur_delete', { 'id': fournisseur.id }) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer</a>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

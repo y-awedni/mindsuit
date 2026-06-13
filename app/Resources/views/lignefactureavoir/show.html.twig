@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Lignefactureavoir</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ligneFactureAvoir.id }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ ligneFactureAvoir.designation }}</td>
+            </tr>
+            <tr>
+                <th>Qte</th>
+                <td>{{ ligneFactureAvoir.qte }}</td>
+            </tr>
+            <tr>
+                <th>Prixunitaire</th>
+                <td>{{ ligneFactureAvoir.prixUnitaire }}</td>
+            </tr>
+            <tr>
+                <th>Remise</th>
+                <td>{{ ligneFactureAvoir.remise }}</td>
+            </tr>
+            <tr>
+                <th>Ttc</th>
+                <td>{{ ligneFactureAvoir.ttc }}</td>
+            </tr>
+            <tr>
+                <th>Benifice</th>
+                <td>{{ ligneFactureAvoir.benifice }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if ligneFactureAvoir.createdAt %}{{ ligneFactureAvoir.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{% if ligneFactureAvoir.updatedAt %}{{ ligneFactureAvoir.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('lignefactureavoir_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('lignefactureavoir_edit', { 'id': ligneFactureAvoir.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

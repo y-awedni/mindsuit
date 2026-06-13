@@ -1,0 +1,95 @@
+{# empty Twig template #}
+<!-- totaux -->
+<div class="panel panel-green">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTotaux"><span class="glyphicon glyphicon-credit-card"></span> Totaux des mouvements</a>
+        </h4>
+    </div>
+    <div id="collapseTotaux" class="panel-collapse collapse in">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a class="list-group-item">
+                            Total en cours entrants
+                            <span class="pull-right text-muted small"><em>{{ totalEnCoursEntrants|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total encaissés entrants
+                            <span class="pull-right text-muted small"><em>{{ totalEncaissésEntrants|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total impayés entrants
+                            <span class="pull-right text-muted small"><em>{{ totalImpayésEntrants|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a class="list-group-item">
+                            Total en cours sortants
+                            <span class="pull-right text-muted small"><em>{{ totalEnCoursSortants|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total encaissés sortants
+                            <span class="pull-right text-muted small"><em>{{ totalEncaissésSortants|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total impayés sortants
+                            <span class="pull-right text-muted small"><em>{{ totalImpayésSortants|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a class="list-group-item">
+                            Total en cours
+                            {% set totalEnCours=totalEnCoursEntrants+totalEnCoursSortants %}
+                            <span class="pull-right text-muted small"><em>{{ totalEnCours|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total encaissés
+                            {% set totalEncaissés=totalEncaissésEntrants+totalEncaissésSortants %}
+                            <span class="pull-right text-muted small"><em>{{ totalEncaissés|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total impayés
+                            {% set totalImpayés=totalImpayésEntrants+totalImpayésSortants %}
+                            <span class="pull-right text-muted small"><em>{{ totalImpayés|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a class="list-group-item">
+                            Total Revenus
+                            <span class="pull-right text-muted small"><em>{{ sumRevenus|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total Dépenses
+                            <span class="pull-right text-muted small"><em>{{ sumDepenses|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                        <a class="list-group-item">
+                            Total
+                            <span class="pull-right text-muted small"><em>{{ total|number_format('3','.',' ') }}</em>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>   
+        </div>
+    </div>
+</div>
