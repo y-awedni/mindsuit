@@ -2,18 +2,20 @@
 
 namespace App\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Translation\TranslatorInterface;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostRemoveEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Entity\User;
 
 class FlashMessages {
 
-    private $session;
-    protected $translator;
+    private RequestStack $requestStack;
+    private TranslatorInterface $translator;
 
-    public function __construct(Session $session, TranslatorInterface $translator) {
-        $this->session = $session;
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator) {
+        $this->requestStack = $requestStack;
         $this->translator = $translator;
     }
 
@@ -29,8 +31,8 @@ class FlashMessages {
         }
     }
 
-    public function postUpdate(LifecycleEventArgs $args) {
-        $entity = $args->getEntity();
+    public function postUpdate(PostUpdateEventArgs $args) {
+        $entity = $args->getObject();
         if($entity instanceof User){
             return;
         }
@@ -38,36 +40,39 @@ class FlashMessages {
         if(in_array($name, ['Media','LigneDevis','LigneFacture','LigneBonLivraison','LigneBonReception','LigneBonCommandeFrs'])){
             return;
         }
-        
-        $this->session->getFlashBag()->add(
+
+        $session = $this->requestStack->getSession();
+        $session->getFlashBag()->add(
                 'notice', $this->translator->trans(
-                        '%name% entityEdited', array('%name%' => $name)
+                        '%name% entityEdited', ['%name%' => $name]
                 )
         );
     }
 
-    public function postRemove(LifecycleEventArgs $args) {
-        $entity = $args->getEntity();
+    public function postRemove(PostRemoveEventArgs $args) {
+        $entity = $args->getObject();
         $name = $this->getName($entity);
         if(in_array($name, ['Media','LigneDevis','LigneFacture','LigneBonLivraison','LigneBonReception','LigneBonCommandeFrs'])){
             return;
         }
-        $this->session->getFlashBag()->add(
+        $session = $this->requestStack->getSession();
+        $session->getFlashBag()->add(
                 'notice', $this->translator->trans(
-                        '%name% entityRemoved', array('%name%' => $name)
+                        '%name% entityRemoved', ['%name%' => $name]
                 )
         );
     }
-//ajout
-    public function postPersist(LifecycleEventArgs $args) {
-        $entity = $args->getEntity();
+
+    public function postPersist(PostPersistEventArgs $args) {
+        $entity = $args->getObject();
         $name = $this->getName($entity);
         if(in_array($name, ['Media','LigneDevis','LigneFacture','LigneBonLivraison','LigneBonReception','LigneBonCommandeFrs'])){
             return;
         }
-        $this->session->getFlashBag()->add(
+        $session = $this->requestStack->getSession();
+        $session->getFlashBag()->add(
                 'notice', $this->translator->trans(
-                        '%name% entityAdded', array('%name%' => $name)
+                        '%name% entityAdded', ['%name%' => $name]
                 )
         );
     }

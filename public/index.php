@@ -6,25 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-(new Symfony\Component\Dotenv\Dotenv())->loadEnv(dirname(__DIR__) . '/.env');
+(new Symfony\Component\Dotenv\Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
 
-$env = $_SERVER['APP_ENV'] ?? 'prod';
-$debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
-
-if ($debug) {
+if ($_SERVER['APP_DEBUG']) {
     umask(0000);
     Debug::enable();
 }
 
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
-    Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
-}
-
-if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
-    Request::setTrustedHosts([$trustedHosts]);
-}
-
-$kernel = new Kernel($env, $debug);
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

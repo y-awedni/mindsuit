@@ -3,18 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Application user.
- *
- * Maps the legacy FOSUserBundle "user" table but implements Symfony's native
- * security UserInterface directly (FOSUserBundle has been removed).
- *
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @var int
@@ -121,6 +117,11 @@ class User implements UserInterface, \Serializable
         return $this->id;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+
     public function setUsername($username)
     {
         $this->username = $username;
@@ -188,7 +189,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -234,7 +235,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
@@ -242,7 +243,7 @@ class User implements UserInterface, \Serializable
         return array_values(array_unique($roles));
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
@@ -270,26 +271,26 @@ class User implements UserInterface, \Serializable
         return $this->updatedAt;
     }
 
-    public function serialize()
+    public function __serialize(): array
     {
-        return serialize([
+        return [
             $this->id,
             $this->username,
             $this->password,
             $this->salt,
             $this->enabled,
-        ]);
+        ];
     }
 
-    public function unserialize($serialized)
+    public function __unserialize(array $data): void
     {
-        list(
+        [
             $this->id,
             $this->username,
             $this->password,
             $this->salt,
             $this->enabled
-        ) = unserialize($serialized);
+        ] = $data;
     }
 
     public function __toString()

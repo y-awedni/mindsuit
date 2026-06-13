@@ -1,27 +1,17 @@
 <?php
 
-// src/Event/UserLoginRouteListener.php
-
 namespace App\Event;
 
 use App\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserLoginRouteListener {
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorageInterface;
-
-    /**
-     * @var RouterInterface
-     */
-    private $routerInterface;
+    private TokenStorageInterface $tokenStorageInterface;
+    private RouterInterface $routerInterface;
 
     public function __construct(TokenStorageInterface $tokenStorageInterface, RouterInterface $routerInterface) {
         $this->tokenStorageInterface = $tokenStorageInterface;
@@ -35,19 +25,16 @@ class UserLoginRouteListener {
 
         $request = $event->getRequest();
         if ($request->get('_route') !== 'app_login') {
-            return false;
+            return;
         }
-       
-        if ($this->tokenStorageInterface->getToken() instanceof AnonymousToken) {
-            return false;
+
+        $token = $this->tokenStorageInterface->getToken();
+        if (null === $token || !$token->getUser() instanceof User) {
+            return;
         }
-        if (!$this->tokenStorageInterface->getToken()->getUser() instanceof User) {
-            return false;
-        }
-        return $event->setResponse(
-                        new RedirectResponse(
-                        $this->routerInterface->generate('homepage')
-                        )
+
+        $event->setResponse(
+            new RedirectResponse($this->routerInterface->generate('homepage'))
         );
     }
 

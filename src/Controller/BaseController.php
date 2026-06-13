@@ -5,15 +5,14 @@ namespace App\Controller;
 use App\Service\ExcelCustomConfig;
 use App\Service\ExcelFactory;
 use App\Service\FormatDate;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Base controller exposing, through the controller service locator, the few
- * application services the legacy controllers still reach via $this->get(...).
- * Replaces the removed Symfony\Bundle\FrameworkBundle\Controller\Controller.
- */
 abstract class BaseController extends AbstractController
 {
     public static function getSubscribedServices(): array
@@ -24,6 +23,28 @@ abstract class BaseController extends AbstractController
             'phpexcel' => ExcelFactory::class,
             'knp_paginator' => PaginatorInterface::class,
             'translator' => TranslatorInterface::class,
+            'doctrine' => ManagerRegistry::class,
+            'request_stack' => RequestStack::class,
+            'session' => '?'.SessionInterface::class,
         ]);
+    }
+
+    protected function getDoctrine(): ManagerRegistry
+    {
+        return $this->container->get('doctrine');
+    }
+
+    protected function get(string $id): object
+    {
+        if ($id === 'session') {
+            return $this->container->get('request_stack')->getSession();
+        }
+
+        return $this->container->get($id);
+    }
+
+    protected function getEm(): ObjectManager
+    {
+        return $this->getDoctrine()->getManager();
     }
 }

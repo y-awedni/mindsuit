@@ -2,7 +2,6 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
          colors="true">
     <php>
         <ini name="error_reporting" value="-1"/>

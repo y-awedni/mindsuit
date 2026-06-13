@@ -15,10 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: composer.json is valid
-        run: docker run --rm -v "$PWD:/app" -w /app composer:2.2 composer validate --no-check-publish --no-check-lock
+        run: docker run --rm -v "$PWD:/app" -w /app composer:2 composer validate --no-check-publish --no-check-lock
       - name: php -l on all sources
         run: |
-          docker run --rm -v "$PWD:/app" -w /app php:7.2-cli \
+          docker run --rm -v "$PWD:/app" -w /app php:8.3-cli \
             sh -c 'find src config public bin -name "*.php" -print0 | xargs -0 -n1 -P4 php -l > /dev/null'
 
   build:

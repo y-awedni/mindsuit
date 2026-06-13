@@ -1,27 +1,15 @@
 <?php
 
-// src/Event/UserLoginRouteListener.php
-
 namespace App\Event;
 
-use App\Entity\User;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RedirectWhenNotConnectedListener {
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorageInterface;
-
-    /**
-     * @var RouterInterface
-     */
-    private $routerInterface;
+    private TokenStorageInterface $tokenStorageInterface;
+    private RouterInterface $routerInterface;
 
     public function __construct(TokenStorageInterface $tokenStorageInterface, RouterInterface $routerInterface) {
         $this->tokenStorageInterface = $tokenStorageInterface;

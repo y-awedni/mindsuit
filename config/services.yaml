@@ -37,7 +37,7 @@ services:
 
     # --- Flash messages -----------------------------------------------------
     App\EventListener\FlashMessages:
-        arguments: ['@session', '@translator']
+        arguments: ['@request_stack', '@translator']
         tags:
             - { name: doctrine.event_listener, event: postUpdate }
             - { name: doctrine.event_listener, event: postRemove }
