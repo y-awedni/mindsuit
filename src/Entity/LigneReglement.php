@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 /**
  * LigneReglement
  *
- * @ORM\Table(name="ligne_reglement", indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"}), @ORM\Index(name="facture_id", columns={"facture_id"}), @ORM\Index(name="reglement_id", columns={"reglement_id"}), @ORM\Index(name="mode_reglement_id", columns={"mode_reglement_id"}), @ORM\Index(name="updated_user_id_2", columns={"updated_user_id"}), @ORM\Index(name="banque_rec_id", columns={"compte_id"}), @ORM\Index(name="compte_id", columns={"compte_id"}), @ORM\Index(name="compte_id_2", columns={"compte_id"})})
+ * @ORM\Table(name="ligne_reglement", indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"}), @ORM\Index(name="facture_id", columns={"facture_id"}), @ORM\Index(name="reglement_id", columns={"reglement_id"}), @ORM\Index(name="mode_reglement", columns={"mode_reglement"}), @ORM\Index(name="updated_user_id_2", columns={"updated_user_id"}), @ORM\Index(name="banque_rec_id", columns={"compte_id"}), @ORM\Index(name="compte_id", columns={"compte_id"}), @ORM\Index(name="compte_id_2", columns={"compte_id"})})
  * @ORM\Entity
  */
 class LigneReglement
