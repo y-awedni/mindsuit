@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap-select-1.12.2/dist/css/bootstrap-select.css')}}">
 
     <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}} ">
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/app.css')}}">
     <link rel="icon" href="{{ asset('bundles/app/favicon.png')}} " type="image/gif" sizes="16x16">
 </head>
 <body>
@@ -217,7 +218,18 @@
     function toNumberWith3Digits(value) {
         return Number(parseFloat(value).toFixed(3));
     }
+    // Keep page content clear of the fixed navbar regardless of its real
+    // height (logo size, wrapped menu items on narrow widths, etc.).
+    function syncNavbarOffset() {
+        var navbar = document.querySelector('.navbar-fixed-top');
+        if (navbar) {
+            document.body.style.paddingTop = navbar.offsetHeight + 'px';
+        }
+    }
+    $(window).on('load resize', syncNavbarOffset);
+
     $(document).ready(function () {
+        syncNavbarOffset();
         $('.datepicker').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,

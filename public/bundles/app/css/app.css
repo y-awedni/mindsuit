@@ -1,0 +1,14 @@
+/*
+ * Application-level overrides. Loaded after the vendored CSS in base.html.twig
+ * so our rules win without editing third-party files.
+ */
+
+/*
+ * The navbar is `navbar-fixed-top`, so it overlays page content. Bootstrap 3
+ * does not auto-pad the body for it. The brand logo makes the bar ~71px tall
+ * (taller than Bootstrap's 50px default), so a static fallback plus a JS sync
+ * (see base.html.twig) keeps content clear regardless of the bar's real height.
+ */
+body {
+    padding-top: 75px;
+}
