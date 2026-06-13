@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneReglement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneReglementController extends Controller
     /**
      * Lists all ligneReglement entities.
      *
-     * @Route("/", name="lignereglement_index")
-     * @Method("GET")
+     * @Route("/", name="lignereglement_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneReglementController extends Controller
     /**
      * Creates a new ligneReglement entity.
      *
-     * @Route("/new", name="lignereglement_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignereglement_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneReglementController extends Controller
     /**
      * Finds and displays a ligneReglement entity.
      *
-     * @Route("/{id}", name="lignereglement_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignereglement_show", methods={"GET"})
      */
     public function showAction(LigneReglement $ligneReglement)
     {
@@ -76,8 +72,7 @@ class LigneReglementController extends Controller
     /**
      * Displays a form to edit an existing ligneReglement entity.
      *
-     * @Route("/{id}/edit", name="lignereglement_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignereglement_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneReglement $ligneReglement)
     {
@@ -101,8 +96,7 @@ class LigneReglementController extends Controller
     /**
      * Deletes a ligneReglement entity.
      *
-     * @Route("/{id}", name="lignereglement_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignereglement_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneReglement $ligneReglement)
     {

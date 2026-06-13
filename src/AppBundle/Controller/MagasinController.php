@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Magasin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class MagasinController extends Controller {
     /**
      * Lists all magasin entities.
      *
-     * @Route("/", name="magasin_index")
-     * @Method("GET")
+     * @Route("/", name="magasin_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,8 +32,7 @@ class MagasinController extends Controller {
     /**
      * Creates a new magasin entity.
      *
-     * @Route("/new", name="magasin_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="magasin_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $magasin = new Magasin();
@@ -64,8 +61,7 @@ class MagasinController extends Controller {
     /**
      * Displays a form to edit an existing magasin entity.
      *
-     * @Route("/{id}/edit", name="magasin_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="magasin_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Magasin $magasin) {
         $editForm = $this->createForm('AppBundle\Form\MagasinType', $magasin);
@@ -87,8 +83,7 @@ class MagasinController extends Controller {
     /**
      * Deletes a magasin entity.
      *
-     * @Route("/{id}/delete", name="magasin_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="magasin_delete", methods={"GET"})
      */
     public function deleteAction(Magasin $magasin) {
         if ($magasin) {

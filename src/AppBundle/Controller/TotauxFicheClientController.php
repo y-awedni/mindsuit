@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Fiche client controller.
@@ -37,8 +36,7 @@ class TotauxFicheClientController extends Controller {
     }
 
     /**
-     * @Route("/totaux/document/{code}/{typeDoc}/{client}/{startDateCreation}/{endDateCreation}", name="fiche_client_vente_document_totaux")
-     * @Method("GET")
+     * @Route("/totaux/document/{code}/{typeDoc}/{client}/{startDateCreation}/{endDateCreation}", name="fiche_client_vente_document_totaux", methods={"GET"})
      */
     public function totauxParDocumentAction($code = null, $typeDoc = null, $client = null, $startDateCreation = null, $endDateCreation = null) {
         $em = $this->getDoctrine()->getManager();
@@ -76,8 +74,7 @@ class TotauxFicheClientController extends Controller {
     }
 
     /**
-     * @Route("/totaux/article/{code}/{designation}/{client}", name="fiche_client_vente_article_totaux")
-     * @Method("GET")
+     * @Route("/totaux/article/{code}/{designation}/{client}", name="fiche_client_vente_article_totaux", methods={"GET"})
      */
     public function totauxParArticleAction($code = null, $designation = null, $client = null) {
         $em = $this->getDoctrine()->getManager();
@@ -124,8 +121,7 @@ class TotauxFicheClientController extends Controller {
     }
 
     /**
-     * @Route("/totaux/avoirs/{codeAvoir}/{startDateCreation}/{endDateCreation}/{client}/{codeArticle}/{designationArticle}", name="fiche_client_vente_avoirs_totaux")
-     * @Method("GET")
+     * @Route("/totaux/avoirs/{codeAvoir}/{startDateCreation}/{endDateCreation}/{client}/{codeArticle}/{designationArticle}", name="fiche_client_vente_avoirs_totaux", methods={"GET"})
      */
     public function totauxAvoirsAction($codeAvoir = null, $startDateCreation = null, $endDateCreation = null, $client = null, $codeArticle = null, $designationArticle = null) {
         $em = $this->getDoctrine()->getManager();
@@ -171,8 +167,7 @@ class TotauxFicheClientController extends Controller {
     }
 
     /**
-     * @Route("/totaux/reglements/{designation}/{startDateCreation}/{endDateCreation}/{client}/{typeDoc}/{modeReglement}", name="fiche_client_vente_avoirs_totaux")
-     * @Method("GET")
+     * @Route("/totaux/reglements/{designation}/{startDateCreation}/{endDateCreation}/{client}/{typeDoc}/{modeReglement}", name="fiche_client_vente_avoirs_totaux", methods={"GET"})
      */
     public function totauxReglementsAction($designation = null, $startDateCreation = null, $endDateCreation = null, $client = null, $typeDoc = null, $modeReglement = null) {
         $em = $this->getDoctrine()->getManager();

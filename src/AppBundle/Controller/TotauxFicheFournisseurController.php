@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -33,8 +32,7 @@ class TotauxFicheFournisseurController extends Controller {
     }
 
     /**
-     * @Route("/totaux/document/{code}/{fournisseur}/{startDateCreation}/{endDateCreation}", name="fiche_client_vente_document_totaux")
-     * @Method("GET")
+     * @Route("/totaux/document/{code}/{fournisseur}/{startDateCreation}/{endDateCreation}", name="fiche_client_vente_document_totaux", methods={"GET"})
      */
     public function totauxParDocumentAction($code = null, $fournisseur = null, $startDateCreation = null, $endDateCreation = null) {
         $em = $this->getDoctrine()->getManager();
@@ -72,8 +70,7 @@ class TotauxFicheFournisseurController extends Controller {
     }
 
     /**
-     * @Route("/totaux/article/{code}/{designation}/{fournisseur}", name="fiche_client_vente_article_totaux")
-     * @Method("GET")
+     * @Route("/totaux/article/{code}/{designation}/{fournisseur}", name="fiche_client_vente_article_totaux", methods={"GET"})
      */
     public function totauxParArticleAction($code = null, $designation = null, $fournisseur = null) {
         $em = $this->getDoctrine()->getManager();
@@ -115,8 +112,7 @@ class TotauxFicheFournisseurController extends Controller {
     }
 
     /**
-     * @Route("/totaux/reglements/{designation}/{startDateCreation}/{endDateCreation}/{fournisseur}/{modeReglement}", name="fiche_client_vente_avoirs_totaux")
-     * @Method("GET")
+     * @Route("/totaux/reglements/{designation}/{startDateCreation}/{endDateCreation}/{fournisseur}/{modeReglement}", name="fiche_client_vente_avoirs_totaux", methods={"GET"})
      */
     public function totauxReglementsAction($designation = null, $startDateCreation = null, $endDateCreation = null, $fournisseur = null, $modeReglement = null) {
         $em = $this->getDoctrine()->getManager();

@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Sousfamille;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +18,7 @@ class SousfamilleController extends Controller {
     /**
      * Lists all sousfamille entities.
      *
-     * @Route("/", name="sousfamille_index")
-     * @Method("GET")
+     * @Route("/", name="sousfamille_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -35,8 +33,7 @@ class SousfamilleController extends Controller {
     /**
      * Creates a new sousfamille entity.
      *
-     * @Route("/new", name="sousfamille_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="sousfamille_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $sousfamille = new Sousfamille();
@@ -65,8 +62,7 @@ class SousfamilleController extends Controller {
     /**
      * Displays a form to edit an existing sousfamille entity.
      *
-     * @Route("/{id}/edit", name="sousfamille_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="sousfamille_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Sousfamille $sousfamille) {
         
@@ -88,8 +84,7 @@ class SousfamilleController extends Controller {
     /**
      * Deletes a sousfamille entity.
      *
-     * @Route("/{id}/delete", name="sousfamille_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="sousfamille_delete", methods={"GET"})
      */
     public function deleteAction(Sousfamille $sousfamille) {
         if ($sousfamille) {
@@ -109,9 +104,7 @@ class SousfamilleController extends Controller {
     /**
      * Get sous famille by famille
      *
-     * @Route("/api/famille", name="sousfamille_famille_api")
-     * 
-     * @Method("GET")
+     * @Route("/api/famille", name="sousfamille_famille_api", methods={"GET"})
      */
     public function getSousFamilleByFamilleAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {

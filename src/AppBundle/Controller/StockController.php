@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Stock;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
@@ -107,8 +106,7 @@ class StockController extends Controller {
     /**
      * Lists all stock entities.
      *
-     * @Route("/", name="stock_index")
-     * @Method("GET")
+     * @Route("/", name="stock_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -135,8 +133,7 @@ class StockController extends Controller {
     /**
      * Lists all stocks entities.
      *
-     * @Route("/export/xls", name="stock_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="stock_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -211,8 +208,7 @@ class StockController extends Controller {
     /**
      * Lists all stock entities.
      *
-     * @Route("/new", name="stock_new")
-     * @Method({"GET","POST"})
+     * @Route("/new", name="stock_new", methods={"GET","POST"})
      */
     public function newAction(Request $request) {
         $stock = new Stock();
@@ -248,8 +244,7 @@ class StockController extends Controller {
     /**
      * Lists all stock entities.
      *
-     * @Route("/delete", name="stock_delete")
-     * @Method({"GET","POST"})
+     * @Route("/delete", name="stock_delete", methods={"GET","POST"})
      */
     public function deleteAction(Request $request) {
         $stock = new Stock();

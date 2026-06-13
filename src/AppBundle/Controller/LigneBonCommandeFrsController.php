@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneBonCommandeFrs;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneBonCommandeFrsController extends Controller
     /**
      * Lists all ligneBonCommandeFr entities.
      *
-     * @Route("/", name="ligneboncommandefrs_index")
-     * @Method("GET")
+     * @Route("/", name="ligneboncommandefrs_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneBonCommandeFrsController extends Controller
     /**
      * Creates a new ligneBonCommandeFr entity.
      *
-     * @Route("/new", name="ligneboncommandefrs_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="ligneboncommandefrs_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneBonCommandeFrsController extends Controller
     /**
      * Finds and displays a ligneBonCommandeFr entity.
      *
-     * @Route("/{id}", name="ligneboncommandefrs_show")
-     * @Method("GET")
+     * @Route("/{id}", name="ligneboncommandefrs_show", methods={"GET"})
      */
     public function showAction(LigneBonCommandeFrs $ligneBonCommandeFr)
     {
@@ -76,8 +72,7 @@ class LigneBonCommandeFrsController extends Controller
     /**
      * Displays a form to edit an existing ligneBonCommandeFr entity.
      *
-     * @Route("/{id}/edit", name="ligneboncommandefrs_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="ligneboncommandefrs_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneBonCommandeFrs $ligneBonCommandeFr)
     {
@@ -101,8 +96,7 @@ class LigneBonCommandeFrsController extends Controller
     /**
      * Deletes a ligneBonCommandeFr entity.
      *
-     * @Route("/{id}", name="ligneboncommandefrs_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="ligneboncommandefrs_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneBonCommandeFrs $ligneBonCommandeFr)
     {

@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Fournisseur;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
@@ -87,8 +86,7 @@ class ReglementsController extends Controller {
     /**
      * Liste des reglements
      *
-     * @Route("/{id}", name="fiche_fournisseur_reglements")
-     * @Method("GET")
+     * @Route("/{id}", name="fiche_fournisseur_reglements", methods={"GET"})
      */
     public function reglementsAction(Request $request, Fournisseur $fournisseur, $offset = 0, $limit = 10) {
         $em = $this->getDoctrine()->getManager();
@@ -128,8 +126,7 @@ class ReglementsController extends Controller {
     /**
      * Export excel vente par document
      *
-     * @Route("/export/xls", name="fiche_fournisseur_reglements_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="fiche_fournisseur_reglements_xls", methods={"GET"})
      */
     public function reglementsExportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

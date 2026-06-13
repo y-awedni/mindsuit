@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -22,8 +21,7 @@ class ComptabiliteController extends Controller {
     /**
      * Lists all article entities.
      *
-     * @Route("/", name="comptabilite_index")
-     * @Method({"GET","POST"})
+     * @Route("/", name="comptabilite_index", methods={"GET","POST"})
      */
     public function indexAction(Request $request) {
         $date = date("d-m-Y");

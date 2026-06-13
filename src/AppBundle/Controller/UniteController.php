@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Unite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class UniteController extends Controller {
     /**
      * Lists all unite entities.
      *
-     * @Route("/", name="unite_index")
-     * @Method("GET")
+     * @Route("/", name="unite_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -32,8 +30,7 @@ class UniteController extends Controller {
     /**
      * Creates a new unite entity.
      *
-     * @Route("/new", name="unite_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="unite_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $unite = new Unite();
@@ -62,8 +59,7 @@ class UniteController extends Controller {
     /**
      * Displays a form to edit an existing unite entity.
      *
-     * @Route("/{id}/edit", name="unite_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="unite_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Unite $unite) {
         $editForm = $this->createForm('AppBundle\Form\UniteType', $unite);
@@ -83,8 +79,7 @@ class UniteController extends Controller {
     /**
      * Deletes a unite entity.
      *
-     * @Route("/{id}/delete", name="unite_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="unite_delete", methods={"GET"})
      */
     public function deleteAction(Unite $unite) {
         if ($unite) {

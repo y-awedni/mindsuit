@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneBonLivraison;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class LigneBonLivraisonController extends Controller {
     /**
      * Lists all ligneBonLivraison entities.
      *
-     * @Route("/", name="lignebonlivraison_index")
-     * @Method("GET")
+     * @Route("/", name="lignebonlivraison_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,8 +32,7 @@ class LigneBonLivraisonController extends Controller {
     /**
      * Creates a new ligneBonLivraison entity.
      *
-     * @Route("/new", name="lignebonlivraison_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignebonlivraison_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $ligneBonLivraison = new Lignebonlivraison();
@@ -59,8 +56,7 @@ class LigneBonLivraisonController extends Controller {
     /**
      * Finds and displays a ligneBonLivraison entity.
      *
-     * @Route("/{id}", name="lignebonlivraison_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignebonlivraison_show", methods={"GET"})
      */
     public function showAction(LigneBonLivraison $ligneBonLivraison) {
         $deleteForm = $this->createDeleteForm($ligneBonLivraison);
@@ -74,8 +70,7 @@ class LigneBonLivraisonController extends Controller {
     /**
      * Displays a form to edit an existing ligneBonLivraison entity.
      *
-     * @Route("/{id}/edit", name="lignebonlivraison_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignebonlivraison_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneBonLivraison $ligneBonLivraison) {
         $deleteForm = $this->createDeleteForm($ligneBonLivraison);
@@ -98,8 +93,7 @@ class LigneBonLivraisonController extends Controller {
     /**
      * Deletes a ligneBonLivraison entity.
      *
-     * @Route("/{id}", name="lignebonlivraison_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignebonlivraison_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneBonLivraison $ligneBonLivraison) {
         $form = $this->createDeleteForm($ligneBonLivraison);

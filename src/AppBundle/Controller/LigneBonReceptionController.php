@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneBonReception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneBonReceptionController extends Controller
     /**
      * Lists all ligneBonReception entities.
      *
-     * @Route("/", name="lignebonreception_index")
-     * @Method("GET")
+     * @Route("/", name="lignebonreception_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneBonReceptionController extends Controller
     /**
      * Creates a new ligneBonReception entity.
      *
-     * @Route("/new", name="lignebonreception_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignebonreception_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneBonReceptionController extends Controller
     /**
      * Finds and displays a ligneBonReception entity.
      *
-     * @Route("/{id}", name="lignebonreception_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignebonreception_show", methods={"GET"})
      */
     public function showAction(LigneBonReception $ligneBonReception)
     {
@@ -76,8 +72,7 @@ class LigneBonReceptionController extends Controller
     /**
      * Displays a form to edit an existing ligneBonReception entity.
      *
-     * @Route("/{id}/edit", name="lignebonreception_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignebonreception_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneBonReception $ligneBonReception)
     {
@@ -101,8 +96,7 @@ class LigneBonReceptionController extends Controller
     /**
      * Deletes a ligneBonReception entity.
      *
-     * @Route("/{id}", name="lignebonreception_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignebonreception_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneBonReception $ligneBonReception)
     {

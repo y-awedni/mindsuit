@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -105,8 +104,7 @@ class ArticleController extends Controller {
     /**
      * Lists all article entities.
      *
-     * @Route("/", name="article_index")
-     * @Method("GET")
+     * @Route("/", name="article_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -138,8 +136,7 @@ class ArticleController extends Controller {
     /**
      * Lists all article entities.
      *
-     * @Route("/export/xls", name="article_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="article_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -224,8 +221,7 @@ class ArticleController extends Controller {
     /**
      * Creates a new article entity.
      *
-     * @Route("/new", name="article_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="article_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $article = new Article();
@@ -281,8 +277,7 @@ class ArticleController extends Controller {
     /**
      * Displays a form to show an existing article entity.
      *
-     * @Route("/{id}/show", name="article_show")
-     * @Method({"GET"})
+     * @Route("/{id}/show", name="article_show", methods={"GET"})
      */
     public function showAction(Article $article) {
         return $this->render('article/show.html.twig', array(
@@ -293,8 +288,7 @@ class ArticleController extends Controller {
     /**
      * Displays a form to edit an existing article entity.
      *
-     * @Route("/{id}/edit", name="article_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="article_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Article $article) {
         $editForm = $this->createForm('AppBundle\Form\ArticleType', $article);
@@ -324,8 +318,7 @@ class ArticleController extends Controller {
     /**
      * Deletes a article entity.
      *
-     * @Route("/{id}/delete", name="article_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="article_delete", methods={"GET"})
      */
     public function deleteAction(Article $article) {
         if ($article) {
@@ -345,9 +338,7 @@ class ArticleController extends Controller {
     /**
      * Get article
      *
-     * @Route("/api", name="article")
-     * 
-     * @Method("GET")
+     * @Route("/api", name="article", methods={"GET"})
      */
     public function getArticleAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -373,8 +364,7 @@ class ArticleController extends Controller {
     /**
      * Creates a new custom article entity.
      *
-     * @Route("/custom/new", name="article_custom_new")
-     * @Method({"GET", "POST"})
+     * @Route("/custom/new", name="article_custom_new", methods={"GET", "POST"})
      */
     public function customNewAction(Request $request) {
         $article = new Article();
@@ -402,8 +392,7 @@ class ArticleController extends Controller {
     /**
      * Creates a new custom produit entity.
      *
-     * @Route("/produit/custom/new", name="produit_custom_new")
-     * @Method({"GET", "POST"})
+     * @Route("/produit/custom/new", name="produit_custom_new", methods={"GET", "POST"})
      */
     public function customProduitNewAction(Request $request) {
         $article = new Article();

@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneDevis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneDevisController extends Controller
     /**
      * Lists all ligneDevi entities.
      *
-     * @Route("/", name="lignedevis_index")
-     * @Method("GET")
+     * @Route("/", name="lignedevis_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneDevisController extends Controller
     /**
      * Creates a new ligneDevi entity.
      *
-     * @Route("/new", name="lignedevis_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignedevis_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneDevisController extends Controller
     /**
      * Finds and displays a ligneDevi entity.
      *
-     * @Route("/{id}", name="lignedevis_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignedevis_show", methods={"GET"})
      */
     public function showAction(LigneDevis $ligneDevi)
     {
@@ -76,8 +72,7 @@ class LigneDevisController extends Controller
     /**
      * Displays a form to edit an existing ligneDevi entity.
      *
-     * @Route("/{id}/edit", name="lignedevis_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignedevis_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneDevis $ligneDevi)
     {
@@ -101,8 +96,7 @@ class LigneDevisController extends Controller
     /**
      * Deletes a ligneDevi entity.
      *
-     * @Route("/{id}", name="lignedevis_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignedevis_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneDevis $ligneDevi)
     {

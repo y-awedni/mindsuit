@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Reglement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class ReglementController extends Controller
     /**
      * Lists all reglement entities.
      *
-     * @Route("/", name="reglement_index")
-     * @Method("GET")
+     * @Route("/", name="reglement_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class ReglementController extends Controller
     /**
      * Creates a new reglement entity.
      *
-     * @Route("/new", name="reglement_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="reglement_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class ReglementController extends Controller
     /**
      * Finds and displays a reglement entity.
      *
-     * @Route("/{id}", name="reglement_show")
-     * @Method("GET")
+     * @Route("/{id}", name="reglement_show", methods={"GET"})
      */
     public function showAction(Reglement $reglement)
     {
@@ -76,8 +72,7 @@ class ReglementController extends Controller
     /**
      * Displays a form to edit an existing reglement entity.
      *
-     * @Route("/{id}/edit", name="reglement_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="reglement_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Reglement $reglement)
     {
@@ -101,8 +96,7 @@ class ReglementController extends Controller
     /**
      * Deletes a reglement entity.
      *
-     * @Route("/{id}", name="reglement_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="reglement_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, Reglement $reglement)
     {

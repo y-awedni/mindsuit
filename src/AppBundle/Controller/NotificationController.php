@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +18,7 @@ class NotificationController extends Controller {
     /**
      * Lists all notification entities.
      *
-     * @Route("/", name="notification_index")
-     * @Method("GET")
+     * @Route("/", name="notification_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -57,8 +55,7 @@ class NotificationController extends Controller {
 
     /**
      * get notifications news
-     * @Route("/news",name="notification_news")
-     * @Method({"GET"})
+     * @Route("/news",name="notification_news", methods={"GET"})
      */
     public function newsAction() {
         $em = $this->getDoctrine()->getManager();
@@ -73,8 +70,7 @@ class NotificationController extends Controller {
     /**
      * Finds and displays a notification entity.
      *
-     * @Route("/vu/all", name="notification_vu_all")
-     * @Method("GET")
+     * @Route("/vu/all", name="notification_vu_all", methods={"GET"})
      */
     public function vuAllAction() {
         $em = $this->getDoctrine()->getManager();
@@ -89,8 +85,7 @@ class NotificationController extends Controller {
     /**
      * 
      *
-     * @Route("change/vu/true", name="changeNotificationVu")
-     * @Method("POST")
+     * @Route("change/vu/true", name="changeNotificationVu", methods={"POST"})
      */
     public function changeNotificationVuAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {

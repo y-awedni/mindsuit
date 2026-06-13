@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -115,8 +114,7 @@ class ServiceController extends Controller {
     /**
      * Lists all services entities.
      *
-     * @Route("/", name="services_index")
-     * @Method("GET")
+     * @Route("/", name="services_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -144,8 +142,7 @@ class ServiceController extends Controller {
     /**
      * Lists all stocks entities.
      *
-     * @Route("/export/xls", name="service_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="service_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

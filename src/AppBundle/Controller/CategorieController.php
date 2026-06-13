@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Categorie;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class CategorieController extends Controller {
     /**
      * Lists all categorie entities.
      *
-     * @Route("/", name="categorie_index")
-     * @Method("GET")
+     * @Route("/", name="categorie_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,8 +32,7 @@ class CategorieController extends Controller {
     /**
      * Creates a new categorie entity.
      *
-     * @Route("/new", name="categorie_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="categorie_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $categorie = new Categorie();
@@ -64,8 +61,7 @@ class CategorieController extends Controller {
     /**
      * Displays a form to edit an existing categorie entity.
      *
-     * @Route("/{id}/edit", name="categorie_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="categorie_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Categorie $categorie) {
         $editForm = $this->createForm('AppBundle\Form\CategorieType', $categorie);
@@ -86,8 +82,7 @@ class CategorieController extends Controller {
     /**
      * Deletes a categorie entity.
      *
-     * @Route("/{id}/delete", name="categorie_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="categorie_delete", methods={"GET"})
      */
     public function deleteAction(Categorie $categorie) {
         if ($categorie) {

@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Retenu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +18,7 @@ class RetenuController extends Controller {
     /**
      * Lists all retenu entities.
      *
-     * @Route("/", name="retenu_index")
-     * @Method("GET")
+     * @Route("/", name="retenu_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -35,8 +33,7 @@ class RetenuController extends Controller {
     /**
      * Creates a new retenu entity.
      *
-     * @Route("/new", name="retenu_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="retenu_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $retenu = new Retenu();
@@ -65,8 +62,7 @@ class RetenuController extends Controller {
     /**
      * Finds and displays a retenu entity.
      *
-     * @Route("/{id}/show", name="retenu_show")
-     * @Method("GET")
+     * @Route("/{id}/show", name="retenu_show", methods={"GET"})
      */
     public function showAction(Retenu $retenu) {
         $deleteForm = $this->createDeleteForm($retenu);
@@ -80,8 +76,7 @@ class RetenuController extends Controller {
     /**
      * Displays a form to edit an existing retenu entity.
      *
-     * @Route("/{id}/edit", name="retenu_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="retenu_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Retenu $retenu) {
         $editForm = $this->createForm('AppBundle\Form\RetenuType', $retenu);
@@ -102,8 +97,7 @@ class RetenuController extends Controller {
     /**
      * Deletes a retenu entity.
      *
-     * @Route("/{id}/delete", name="retenu_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="retenu_delete", methods={"GET"})
      */
     public function deleteAction(Retenu $retenu) {
         if ($retenu) {
@@ -121,9 +115,7 @@ class RetenuController extends Controller {
     /**
      * Get facture
      *
-     * @Route("/api", name="retenu_montant")
-     * 
-     * @Method("GET")
+     * @Route("/api", name="retenu_montant", methods={"GET"})
      */
     public function getRetenuMontantAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {

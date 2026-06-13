@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Famille;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +18,7 @@ class FamilleController extends Controller {
     /**
      * Lists all famille entities.
      *
-     * @Route("/", name="famille_index")
-     * @Method("GET")
+     * @Route("/", name="famille_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -35,8 +33,7 @@ class FamilleController extends Controller {
     /**
      * Creates a new famille entity.
      *
-     * @Route("/new", name="famille_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="famille_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $famille = new Famille();
@@ -65,8 +62,7 @@ class FamilleController extends Controller {
     /**
      * Displays a form to edit an existing famille entity.
      *
-     * @Route("/{id}/edit", name="famille_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="famille_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Famille $famille) {
         $editForm = $this->createForm('AppBundle\Form\FamilleType', $famille);
@@ -87,8 +83,7 @@ class FamilleController extends Controller {
     /**
      * Deletes a famille entity.
      *
-     * @Route("/{id}/delete", name="famille_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="famille_delete", methods={"GET"})
      */
     public function deleteAction(Famille $famille) {
         if ($famille) {
@@ -106,9 +101,7 @@ class FamilleController extends Controller {
     /**
      * Get famille by categorie
      *
-     * @Route("/api/categorie", name="famille_categorie_api")
-     * 
-     * @Method("GET")
+     * @Route("/api/categorie", name="famille_categorie_api", methods={"GET"})
      */
     public function getFamilleByCategorieAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {

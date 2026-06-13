@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,8 +68,7 @@ class ClientController extends Controller {
     /**
      * Lists all client entities.
      *
-     * @Route("/", name="client_index")
-     * @Method("GET")
+     * @Route("/", name="client_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -91,8 +89,7 @@ class ClientController extends Controller {
     /**
      * Lists all client entities.
      *
-     * @Route("/export/xls", name="client_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="client_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -181,8 +178,7 @@ class ClientController extends Controller {
     /**
      * Displays a form to show an existing article entity.
      *
-     * @Route("/{id}/show", name="client_show")
-     * @Method({"GET"})
+     * @Route("/{id}/show", name="client_show", methods={"GET"})
      */
     public function showAction(Client $client) {
         return $this->render('client/show.html.twig', array(
@@ -193,8 +189,7 @@ class ClientController extends Controller {
     /**
      * Creates a new client entity.
      *
-     * @Route("/new", name="client_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="client_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $client = new Client();
@@ -233,8 +228,7 @@ class ClientController extends Controller {
     /**
      * Displays a form to edit an existing client entity.
      *
-     * @Route("/{id}/edit", name="client_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="client_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Client $client) {
         $editForm = $this->createForm('AppBundle\Form\ClientType', $client);
@@ -268,8 +262,7 @@ class ClientController extends Controller {
     /**
      * Deletes a client entity.
      *
-     * @Route("/{id}/delete", name="client_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="client_delete", methods={"GET"})
      */
     public function deleteAction(Client $client) {
         if ($client) {
@@ -287,8 +280,7 @@ class ClientController extends Controller {
     /**
      * Displays client in session
      *
-     * @Route("/session", name="client_session")
-     * @Method({"GET"})
+     * @Route("/session", name="client_session", methods={"GET"})
      */
     public function clientSessionAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -326,9 +318,7 @@ class ClientController extends Controller {
     /**
      * Get client
      *
-     * @Route("/api", name="client")
-     * 
-     * @Method("GET")
+     * @Route("/api", name="client", methods={"GET"})
      */
     public function getClientAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -368,8 +358,7 @@ class ClientController extends Controller {
     /**
      * Creates a new custom client entity.
      *
-     * @Route("/custom/new", name="client_custom_new")
-     * @Method({"GET", "POST"})
+     * @Route("/custom/new", name="client_custom_new", methods={"GET", "POST"})
      */
     public function customNewAction(Request $request) {
         $client = new Client();

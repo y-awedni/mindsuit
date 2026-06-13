@@ -5,7 +5,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Fournisseur;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
@@ -76,8 +75,7 @@ class AchatParDocumentController extends Controller {
     /**
      * Liste des achats par document
      *
-     * @Route("/{id}", name="fiche_fournisseur_achat_document")
-     * @Method("GET")
+     * @Route("/{id}", name="fiche_fournisseur_achat_document", methods={"GET"})
      */
     public function achatParDocumentAction(Request $request, Fournisseur $fournisseur, $offset = 0, $limit = 10) {
         $em = $this->getDoctrine()->getManager();
@@ -122,8 +120,7 @@ class AchatParDocumentController extends Controller {
     /**
      * Export excel vente par document
      *
-     * @Route("/export/xls", name="fiche_client_vente_document_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="fiche_client_vente_document_xls", methods={"GET"})
      */
     public function achatParDocumentExportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

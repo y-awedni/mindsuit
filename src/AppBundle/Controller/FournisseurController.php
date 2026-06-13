@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Fournisseur;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -46,8 +45,7 @@ class FournisseurController extends Controller {
     /**
      * Lists all fournisseur entities.
      *
-     * @Route("/", name="fournisseur_index")
-     * @Method("GET")
+     * @Route("/", name="fournisseur_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -69,8 +67,7 @@ class FournisseurController extends Controller {
     /**
      * Lists all fournisseur entities.
      *
-     * @Route("/export/xls", name="fournisseur_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="fournisseur_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -142,8 +139,7 @@ class FournisseurController extends Controller {
     /**
      * Displays a form to show an existing fournisseur entity.
      *
-     * @Route("/{id}/show", name="fournisseur_show")
-     * @Method({"GET"})
+     * @Route("/{id}/show", name="fournisseur_show", methods={"GET"})
      */
     public function showAction(Fournisseur $fournisseur) {
         return $this->render('fournisseur/show.html.twig', array(
@@ -154,8 +150,7 @@ class FournisseurController extends Controller {
     /**
      * Creates a new fournisseur entity.
      *
-     * @Route("/new", name="fournisseur_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="fournisseur_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $fournisseur = new Fournisseur();
@@ -184,8 +179,7 @@ class FournisseurController extends Controller {
     /**
      * Displays a form to edit an existing fournisseur entity.
      *
-     * @Route("/{id}/edit", name="fournisseur_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="fournisseur_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Fournisseur $fournisseur) {
         $editForm = $this->createForm('AppBundle\Form\FournisseurType', $fournisseur);
@@ -205,8 +199,7 @@ class FournisseurController extends Controller {
     /**
      * Deletes a fournisseur entity.
      *
-     * @Route("/{id}/delete", name="fournisseur_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="fournisseur_delete", methods={"GET"})
      */
     public function deleteAction(Fournisseur $fournisseur) {
         if ($fournisseur) {
@@ -224,8 +217,7 @@ class FournisseurController extends Controller {
     /**
      * Creates a new custom fournisseur entity.
      *
-     * @Route("/custom/new", name="fournisseur_custom_new")
-     * @Method({"GET", "POST"})
+     * @Route("/custom/new", name="fournisseur_custom_new", methods={"GET", "POST"})
      */
     public function customNewAction(Request $request) {
         $fournisseur = new Fournisseur();

@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Stats;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,8 +16,7 @@ class FournisseurController extends Controller {
     /**
      * Lists all fournisseur entities.
      *
-     * @Route("/", name="fournisseurs_stats")
-     * @Method("GET")
+     * @Route("/", name="fournisseurs_stats", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -179,8 +177,7 @@ class FournisseurController extends Controller {
     /**
      * Show client stats.
      *
-     * @Route("/{id}", name="fournisseur_stats_show")
-     * @Method("GET")
+     * @Route("/{id}", name="fournisseur_stats_show", methods={"GET"})
      */
     public function showAction(Request $request) {
         $id = $request->query->get('id');
@@ -215,8 +212,7 @@ class FournisseurController extends Controller {
     /**
      * redirect
      *
-     * @Route("/id", name="fournisseur_stats_id")
-     * @Method("GET")
+     * @Route("/id", name="fournisseur_stats_id", methods={"GET"})
      */
     public function statsAction(Request $request) {
         return $this->redirectToRoute('fournisseur_stats_show', array('id' => $request->query->get('id')));

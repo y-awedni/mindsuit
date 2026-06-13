@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Compte;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class CompteController extends Controller {
     /**
      * Lists all compte entities.
      *
-     * @Route("/", name="compte_index")
-     * @Method("GET")
+     * @Route("/", name="compte_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,8 +32,7 @@ class CompteController extends Controller {
     /**
      * Creates a new compte entity.
      *
-     * @Route("/new", name="compte_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="compte_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $compte = new Compte();
@@ -64,8 +61,7 @@ class CompteController extends Controller {
     /**
      * Displays a form to edit an existing compte entity.
      *
-     * @Route("/{id}/edit", name="compte_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="compte_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Compte $compte) {
         $editForm = $this->createForm('AppBundle\Form\CompteType', $compte);
@@ -85,8 +81,7 @@ class CompteController extends Controller {
     /**
      * Deletes a compte entity.
      *
-     * @Route("/{id}/delete", name="compte_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="compte_delete", methods={"GET"})
      */
     public function deleteAction(Compte $compte) {
         if ($compte) {

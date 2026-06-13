@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Facture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -158,8 +157,7 @@ class FactureController extends Controller {
     /**
      * Lists all facture entities.
      *
-     * @Route("/", name="facture_index")
-     * @Method("GET")
+     * @Route("/", name="facture_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -183,8 +181,7 @@ class FactureController extends Controller {
     /**
      * Totaux facture.
      *
-     * @Route("/totaux/{code}/{client}/{termine}/{regle}/{startDateCreation}/{endDateCreation}/{startDateEcheance}/{endDateEcheance}", name="facture_totaux")
-     * @Method("GET")
+     * @Route("/totaux/{code}/{client}/{termine}/{regle}/{startDateCreation}/{endDateCreation}/{startDateEcheance}/{endDateEcheance}", name="facture_totaux", methods={"GET"})
      */
     public function totauxFactureAction(Request $request,$code = null, $client = null, $termine = null,$regle = null, $startDateCreation = null, $endDateCreation = null, $startDateEcheance = null, $endDateEcheance = null) {
         $request->query->set('code', $code);
@@ -212,8 +209,7 @@ class FactureController extends Controller {
     /**
      * Lists all facture entities print.
      *
-     * @Route("/factureglobal", name="factureglobal")
-     * @Method("GET")
+     * @Route("/factureglobal", name="factureglobal", methods={"GET"})
      */
     public function factureGlobalAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -238,8 +234,7 @@ class FactureController extends Controller {
     /**
      * Lists all stocks entities.
      *
-     * @Route("/export/xls", name="facture_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="facture_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -320,8 +315,7 @@ class FactureController extends Controller {
     /**
      * Creates a new facture entity.
      *
-     * @Route("/new", name="facture_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="facture_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -345,8 +339,7 @@ class FactureController extends Controller {
     }
 
     /**
-     * @Route("/{id}/show",name="facture_show")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/show",name="facture_show", methods={"GET","POST"})
      */
     public function showAction(Request $request, facture $facture) {
         $form_regler = $this->createFormBuilder($facture)
@@ -383,8 +376,7 @@ class FactureController extends Controller {
     /**
      * Displays a form to edit an existing facture entity.
      *
-     * @Route("/{id}/edit", name="facture_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="facture_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Facture $facture) {
         $em = $this->getDoctrine()->getManager();
@@ -429,8 +421,7 @@ class FactureController extends Controller {
     /**
      * Displays a form to print an existing devi entity.
      *
-     * @Route("/{id}/print", name="facture_print")
-     * @Method({"GET"})
+     * @Route("/{id}/print", name="facture_print", methods={"GET"})
      */
     public function printAction(Facture $facture, Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -450,8 +441,7 @@ class FactureController extends Controller {
     /**
      * Reglements
      * 
-     * @Route("/{id}/reglements",name="facture_reglements")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/reglements",name="facture_reglements", methods={"GET","POST"})
      */
     public function reglementsAction(Request $request, Facture $facture) {
         if (!$facture->getTermine()) {
@@ -485,8 +475,7 @@ class FactureController extends Controller {
     /**
      * delete reglement
      * 
-     * @Route("/{id}/reglement/{idLigneReglement}/delete",name="facture_reglement_delete")
-     * @Method({"GET"})
+     * @Route("/{id}/reglement/{idLigneReglement}/delete",name="facture_reglement_delete", methods={"GET"})
      */
     public function reglementDeleteAction($id, $idLigneReglement) {
         $em = $this->getDoctrine()->getManager();
@@ -501,9 +490,7 @@ class FactureController extends Controller {
     /**
      * Get facture
      *
-     * @Route("/api", name="facture")
-     * 
-     * @Method("GET")
+     * @Route("/api", name="facture", methods={"GET"})
      */
     public function getFactureAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {

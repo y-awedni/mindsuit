@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Client;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
@@ -49,8 +48,7 @@ class VenteParArticleController extends Controller {
     /**
      * Liste des articles par document
      *
-     * @Route("/{id}", name="fiche_client_vente_article")
-     * @Method("GET")
+     * @Route("/{id}", name="fiche_client_vente_article", methods={"GET"})
      */
     public function venteParArticleAction(Request $request, Client $client, $offset = 0, $limit = 10) {
         $em = $this->getDoctrine()->getManager();
@@ -91,8 +89,7 @@ class VenteParArticleController extends Controller {
     /**
      * Export excel vente par document
      *
-     * @Route("/export/xls", name="fiche_client_vente_article_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="fiche_client_vente_article_xls", methods={"GET"})
      */
     public function venteParArticleExportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

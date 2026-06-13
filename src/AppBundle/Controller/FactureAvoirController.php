@@ -6,7 +6,6 @@ use AppBundle\Entity\FactureAvoir;
 use AppBundle\Entity\Facture;
 use AppBundle\Entity\LigneFactureAvoir;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
@@ -96,8 +95,7 @@ class FactureAvoirController extends Controller {
     /**
      * Lists all factureAvoir entities.
      *
-     * @Route("/", name="factureavoir_index")
-     * @Method("GET")
+     * @Route("/", name="factureavoir_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -119,8 +117,7 @@ class FactureAvoirController extends Controller {
     /**
      * Lists all stocks entities.
      *
-     * @Route("/export/xls", name="factureavoir_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="factureavoir_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -186,8 +183,7 @@ class FactureAvoirController extends Controller {
     /**
      * Lists all factureAvoir entities.
      *
-     * @Route("/{id}/facture", name="factureavoir_facture")
-     * @Method({"GET"})
+     * @Route("/{id}/facture", name="factureavoir_facture", methods={"GET"})
      */
     public function factureAvoirAction(Request $request, Facture $facture) {
         if (!$facture->getTermine()) {
@@ -217,8 +213,7 @@ class FactureAvoirController extends Controller {
     /**
      * Redirect to a new factureAvoir entity.
      *
-     * @Route("/facture/new/id", name="factureavoir_facture_new_id")
-     * @Method({"GET"})
+     * @Route("/facture/new/id", name="factureavoir_facture_new_id", methods={"GET"})
      */
     public function factureNewIdAction(Request $request) {
         if ($request->query->get('facture')) {
@@ -232,8 +227,7 @@ class FactureAvoirController extends Controller {
     /**
      * Creates a new factureAvoir entity.
      *
-     * @Route("/{id}/facture/new", name="factureavoir_facture_new")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/facture/new", name="factureavoir_facture_new", methods={"GET", "POST"})
      */
     public function factureNewAction(Request $request, Facture $facture) {
         if (!$facture->getTermine()) {
@@ -298,8 +292,7 @@ class FactureAvoirController extends Controller {
     /**
      * Finds and displays a factureAvoir entity.
      *
-     * @Route("/{id}/show", name="factureavoir_show")
-     * @Method("GET")
+     * @Route("/{id}/show", name="factureavoir_show", methods={"GET"})
      */
     public function showAction(FactureAvoir $factureAvoir) {
         return $this->render('factureavoir/show.html.twig', array(
@@ -310,8 +303,7 @@ class FactureAvoirController extends Controller {
     /**
      * Displays a form to edit an existing factureAvoir entity.
      *
-     * @Route("/{id}/edit", name="factureavoir_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="factureavoir_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, FactureAvoir $factureAvoir) {
         if ($factureAvoir->getTermine()) {
@@ -364,8 +356,7 @@ class FactureAvoirController extends Controller {
     /**
      * Displays a form to print an existing devi entity.
      *
-     * @Route("/{id}/print", name="factureavoir_print")
-     * @Method({"GET"})
+     * @Route("/{id}/print", name="factureavoir_print", methods={"GET"})
      */
     public function printAction(FactureAvoir $factureAvoir, Request $request) {
         $em = $this->getDoctrine()->getManager();

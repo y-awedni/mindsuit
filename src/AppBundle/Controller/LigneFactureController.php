@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneFacture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneFactureController extends Controller
     /**
      * Lists all ligneFacture entities.
      *
-     * @Route("/", name="lignefacture_index")
-     * @Method("GET")
+     * @Route("/", name="lignefacture_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneFactureController extends Controller
     /**
      * Creates a new ligneFacture entity.
      *
-     * @Route("/new", name="lignefacture_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignefacture_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneFactureController extends Controller
     /**
      * Finds and displays a ligneFacture entity.
      *
-     * @Route("/{id}", name="lignefacture_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignefacture_show", methods={"GET"})
      */
     public function showAction(LigneFacture $ligneFacture)
     {
@@ -76,8 +72,7 @@ class LigneFactureController extends Controller
     /**
      * Displays a form to edit an existing ligneFacture entity.
      *
-     * @Route("/{id}/edit", name="lignefacture_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignefacture_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneFacture $ligneFacture)
     {
@@ -101,8 +96,7 @@ class LigneFactureController extends Controller
     /**
      * Deletes a ligneFacture entity.
      *
-     * @Route("/{id}", name="lignefacture_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignefacture_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneFacture $ligneFacture)
     {

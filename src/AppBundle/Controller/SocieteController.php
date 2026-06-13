@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Societe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class SocieteController extends Controller {
     /**
      * Lists all societe entities.
      *
-     * @Route("/", name="societe_index")
-     * @Method({"GET","POST"})
+     * @Route("/", name="societe_index", methods={"GET","POST"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -50,8 +48,7 @@ class SocieteController extends Controller {
     /**
      * Displays a form to edit an existing societe entity.
      *
-     * @Route("/{id}/edit", name="societe_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="societe_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Societe $societe) {
         $deleteForm = $this->createDeleteForm($societe);
@@ -77,8 +74,7 @@ class SocieteController extends Controller {
     /**
      * Deletes a societe entity.
      *
-     * @Route("/{id}", name="societe_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="societe_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, Societe $societe) {
         $form = $this->createDeleteForm($societe);

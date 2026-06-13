@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneReglementBonReception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneReglementBonReceptionController extends Controller
     /**
      * Lists all ligneReglementBonReception entities.
      *
-     * @Route("/", name="lignereglementbonreception_index")
-     * @Method("GET")
+     * @Route("/", name="lignereglementbonreception_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneReglementBonReceptionController extends Controller
     /**
      * Creates a new ligneReglementBonReception entity.
      *
-     * @Route("/new", name="lignereglementbonreception_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignereglementbonreception_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneReglementBonReceptionController extends Controller
     /**
      * Finds and displays a ligneReglementBonReception entity.
      *
-     * @Route("/{id}", name="lignereglementbonreception_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignereglementbonreception_show", methods={"GET"})
      */
     public function showAction(LigneReglementBonReception $ligneReglementBonReception)
     {
@@ -76,8 +72,7 @@ class LigneReglementBonReceptionController extends Controller
     /**
      * Displays a form to edit an existing ligneReglementBonReception entity.
      *
-     * @Route("/{id}/edit", name="lignereglementbonreception_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignereglementbonreception_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneReglementBonReception $ligneReglementBonReception)
     {
@@ -101,8 +96,7 @@ class LigneReglementBonReceptionController extends Controller
     /**
      * Deletes a ligneReglementBonReception entity.
      *
-     * @Route("/{id}", name="lignereglementbonreception_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignereglementbonreception_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneReglementBonReception $ligneReglementBonReception)
     {

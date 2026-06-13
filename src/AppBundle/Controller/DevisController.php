@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Devis;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -106,8 +105,7 @@ class DevisController extends Controller {
     /**
      * Lists all devi entities.
      *
-     * @Route("/", name="devis_index")
-     * @Method("GET")
+     * @Route("/", name="devis_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -130,8 +128,7 @@ class DevisController extends Controller {
     /**
      * Lists all devis entities.
      *
-     * @Route("/export/xls", name="devis_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="devis_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -203,8 +200,7 @@ class DevisController extends Controller {
     /**
      * Creates a new devi entity.
      *
-     * @Route("/new", name="devis_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="devis_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $devi = new Devis();
@@ -234,8 +230,7 @@ class DevisController extends Controller {
 
     /**
      * Convert devis to facture
-     * @Route("/{id}/facture",name="devis_to_facture")
-     * @Method({"GET"})
+     * @Route("/{id}/facture",name="devis_to_facture", methods={"GET"})
      */
     public function devisToFacture(Devis $devi) {
         $em = $this->getDoctrine()->getManager();
@@ -266,8 +261,7 @@ class DevisController extends Controller {
     }
 
     /**
-     * @Route("/{id}/show",name="devis_show")
-     * @Method({"GET"})
+     * @Route("/{id}/show",name="devis_show", methods={"GET"})
      */
     public function showAction(Devis $devi) {
         return $this->render('devis/show.html.twig', array(
@@ -278,8 +272,7 @@ class DevisController extends Controller {
     /**
      * Displays a form to edit an existing devi entity.
      *
-     * @Route("/{id}/edit", name="devis_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="devis_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Devis $devi) {
         $originalLignesDevis = new ArrayCollection();
@@ -316,8 +309,7 @@ class DevisController extends Controller {
     /**
      * Displays a form to print an existing devi entity.
      *
-     * @Route("/{id}/print", name="devis_print")
-     * @Method({"GET"})
+     * @Route("/{id}/print", name="devis_print", methods={"GET"})
      */
     public function printAction(Devis $devi,Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -338,8 +330,7 @@ class DevisController extends Controller {
     /**
      * Deletes a devi entity.
      *
-     * @Route("/{id}", name="devis_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="devis_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, Devis $devi) {
         $form = $this->createDeleteForm($devi);

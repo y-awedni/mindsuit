@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Facture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class BenificeController extends Controller {
     /**
      * Lists all facture entities.
      *
-     * @Route("/", name="facture_benifice_index")
-     * @Method("GET")
+     * @Route("/", name="facture_benifice_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -103,8 +101,7 @@ class BenificeController extends Controller {
     }
 
     /**
-     * @Route("/{code}/{total}/{client}/{startDateCreation}/{endDateCreation}/{startDateEcheance}/{endDateEcheance}/benefice",name="facture_benefice_get")
-     * @Method({"GET"})
+     * @Route("/{code}/{total}/{client}/{startDateCreation}/{endDateCreation}/{startDateEcheance}/{endDateEcheance}/benefice",name="facture_benefice_get", methods={"GET"})
      */
     public function getBeneficeAction($code = null, $total = null, $client = null, $startDateCreation = null, $endDateCreation = null, $startDateEcheance = null, $endDateEcheance = null) {
         $em = $this->getDoctrine()->getManager();
@@ -148,8 +145,7 @@ class BenificeController extends Controller {
 
     
     /**
-     * @Route("/{id}/show",name="facture_benifice_show")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/show",name="facture_benifice_show", methods={"GET","POST"})
      */
     public function showAction(Request $request, facture $facture) {
         $form_regler = $this->createFormBuilder($facture)

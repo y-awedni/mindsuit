@@ -5,7 +5,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Client;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
@@ -85,8 +84,7 @@ class AvoirsController extends Controller {
     /**
      * Liste des avoirs
      *
-     * @Route("/{id}", name="fiche_client_avoirs")
-     * @Method("GET")
+     * @Route("/{id}", name="fiche_client_avoirs", methods={"GET"})
      */
     public function avoirsAction(Request $request, Client $client, $offset = 0, $limit = 10) {
         $em = $this->getDoctrine()->getManager();
@@ -126,8 +124,7 @@ class AvoirsController extends Controller {
     /**
      * Export excel vente par document
      *
-     * @Route("/export/xls", name="fiche_client_avoirs_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="fiche_client_avoirs_xls", methods={"GET"})
      */
     public function avoirsExportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

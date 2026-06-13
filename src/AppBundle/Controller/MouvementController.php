@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Mouvement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -167,8 +166,7 @@ class MouvementController extends Controller {
     /**
      * Lists all mouvement entities.
      *
-     * @Route("/", name="mouvement_index")
-     * @Method("GET")
+     * @Route("/", name="mouvement_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -208,8 +206,7 @@ class MouvementController extends Controller {
     /**
      * Lists all mouvements entities.
      *
-     * @Route("/export/xls", name="mouvement_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="mouvement_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -289,8 +286,7 @@ class MouvementController extends Controller {
     /**
      * Creates a new mouvement entity.
      *
-     * @Route("/depense/new", name="depense_new")
-     * @Method({"GET", "POST"})
+     * @Route("/depense/new", name="depense_new", methods={"GET", "POST"})
      */
     public function depenseNewAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -315,8 +311,7 @@ class MouvementController extends Controller {
     /**
      * Creates a new mouvement entity.
      *
-     * @Route("/revenu/new", name="revenu_new")
-     * @Method({"GET", "POST"})
+     * @Route("/revenu/new", name="revenu_new", methods={"GET", "POST"})
      */
     public function revenuNewAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\BonLivraison;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -177,8 +176,7 @@ class BonLivraisonController extends Controller {
     /**
      * Lists all bonLivraison entities.
      *
-     * @Route("/", name="bonlivraison_index")
-     * @Method("GET")
+     * @Route("/", name="bonlivraison_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -202,8 +200,7 @@ class BonLivraisonController extends Controller {
     /**
      * Totaux bonLivraison.
      *
-     * @Route("/totaux/{code}/{client}/{termine}/{regle}/{facture}/{startDateCreation}/{endDateCreation}/{startDateLivraison}/{endDateLivraison}", name="bonlivraison_totaux")
-     * @Method("GET")
+     * @Route("/totaux/{code}/{client}/{termine}/{regle}/{facture}/{startDateCreation}/{endDateCreation}/{startDateLivraison}/{endDateLivraison}", name="bonlivraison_totaux", methods={"GET"})
      */
     public function totauxBlAction(Request $request, $code = null, $client = null, $termine = null,$regle = null,$facture = null,$startDateCreation = null, $endDateCreation = null, $startDateLivraison = null, $endDateLivraison = null) {
         $request->query->set('code', $code);
@@ -250,8 +247,7 @@ class BonLivraisonController extends Controller {
     /**
      * Lists all bonlivraison entities print.
      *
-     * @Route("/blglobal", name="blglobal")
-     * @Method("GET")
+     * @Route("/blglobal", name="blglobal", methods={"GET"})
      */
     public function blglobalAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -276,8 +272,7 @@ class BonLivraisonController extends Controller {
     /**
      * Lists all bonlivraison entities.
      *
-     * @Route("/export/xls", name="bonlivraison_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="bonlivraison_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -352,8 +347,7 @@ class BonLivraisonController extends Controller {
     /**
      * Creates a new bonLivraison entity.
      *
-     * @Route("/new", name="bonlivraison_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="bonlivraison_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -379,8 +373,7 @@ class BonLivraisonController extends Controller {
     }
 
     /**
-     * @Route("/{id}/show",name="bonlivraison_show")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/show",name="bonlivraison_show", methods={"GET","POST"})
      */
     public function showAction(Request $request, BonLivraison $bonlivraison) {
 
@@ -431,8 +424,7 @@ class BonLivraisonController extends Controller {
     /**
      * Displays a form to edit an existing bonLivraison entity.
      *
-     * @Route("/{id}/edit", name="bonlivraison_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="bonlivraison_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, BonLivraison $bonLivraison) {
         $em = $this->getDoctrine()->getManager();
@@ -473,8 +465,7 @@ class BonLivraisonController extends Controller {
     /**
      * Displays a form to print an existing bonlivraison entity.
      *
-     * @Route("/{id}/print", name="bonlivraison_print")
-     * @Method({"GET"})
+     * @Route("/{id}/print", name="bonlivraison_print", methods={"GET"})
      */
     public function printAction(BonLivraison $bonlivraison, Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -494,8 +485,7 @@ class BonLivraisonController extends Controller {
     /**
      * Reglements
      * 
-     * @Route("/{id}/reglements",name="bonlivraison_reglements")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/reglements",name="bonlivraison_reglements", methods={"GET","POST"})
      */
     public function reglementsAction(Request $request, BonLivraison $bonlivraison) {
         if (!$bonlivraison->getTermine()) {
@@ -526,8 +516,7 @@ class BonLivraisonController extends Controller {
     /**
      * delete reglement
      * 
-     * @Route("/{id}/reglement/{idLigneReglement}/delete",name="bonlivraison_reglement_delete")
-     * @Method({"GET"})
+     * @Route("/{id}/reglement/{idLigneReglement}/delete",name="bonlivraison_reglement_delete", methods={"GET"})
      */
     public function reglementDeleteAction($id, $idLigneReglement) {
         $em = $this->getDoctrine()->getManager();
@@ -539,8 +528,7 @@ class BonLivraisonController extends Controller {
 
     /**
      * Convert bonlivraison to facture
-     * @Route("/{id}/facture",name="bonlivraison_to_facture")
-     * @Method({"GET"})
+     * @Route("/{id}/facture",name="bonlivraison_to_facture", methods={"GET"})
      */
     public function bonlivraisonToFacture(BonLivraison $bonlivraison) {
         if (!$bonlivraison->getTermine()) {
@@ -589,8 +577,7 @@ class BonLivraisonController extends Controller {
     }
 
     /**
-     * @Route("/checked/add",name="addBlToChecked")
-     * @Method({"GET"})
+     * @Route("/checked/add",name="addBlToChecked", methods={"GET"})
      */
     public function addBlToCheckedAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -613,8 +600,7 @@ class BonLivraisonController extends Controller {
     }
 
     /**
-     * @Route("/checked/delete",name="deleteBlFromChecked")
-     * @Method({"GET"})
+     * @Route("/checked/delete",name="deleteBlFromChecked", methods={"GET"})
      */
     public function deleteBlFromCheckedAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -641,8 +627,7 @@ class BonLivraisonController extends Controller {
     }
 
     /**
-     * @Route("/checked/all",name="getBlsChecked")
-     * @Method({"GET"})
+     * @Route("/checked/all",name="getBlsChecked", methods={"GET"})
      */
     public function getBlsCheckedAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -673,8 +658,7 @@ class BonLivraisonController extends Controller {
     }
 
     /**
-     * @Route("/checked/convert",name="convertirBlsEnFacture")
-     * @Method({"GET"})
+     * @Route("/checked/convert",name="convertirBlsEnFacture", methods={"GET"})
      */
     public function convertirBlsEnFactureAction(Request $request) {
         if (!$request->isXmlHttpRequest()) {
@@ -801,8 +785,7 @@ class BonLivraisonController extends Controller {
     /**
      * Deletes a bonlivraison entity.
      *
-     * @Route("/{id}/delete", name="bonlivraison_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="bonlivraison_delete", methods={"GET"})
      */
     public function deleteAction(BonLivraison $bonlivraison) {
         $em = $this->getDoctrine()->getManager();

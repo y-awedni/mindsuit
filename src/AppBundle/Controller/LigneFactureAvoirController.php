@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneFactureAvoir;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneFactureAvoirController extends Controller
     /**
      * Lists all ligneFactureAvoir entities.
      *
-     * @Route("/", name="lignefactureavoir_index")
-     * @Method("GET")
+     * @Route("/", name="lignefactureavoir_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneFactureAvoirController extends Controller
     /**
      * Creates a new ligneFactureAvoir entity.
      *
-     * @Route("/new", name="lignefactureavoir_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignefactureavoir_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneFactureAvoirController extends Controller
     /**
      * Finds and displays a ligneFactureAvoir entity.
      *
-     * @Route("/{id}", name="lignefactureavoir_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignefactureavoir_show", methods={"GET"})
      */
     public function showAction(LigneFactureAvoir $ligneFactureAvoir)
     {
@@ -76,8 +72,7 @@ class LigneFactureAvoirController extends Controller
     /**
      * Displays a form to edit an existing ligneFactureAvoir entity.
      *
-     * @Route("/{id}/edit", name="lignefactureavoir_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignefactureavoir_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneFactureAvoir $ligneFactureAvoir)
     {
@@ -101,8 +96,7 @@ class LigneFactureAvoirController extends Controller
     /**
      * Deletes a ligneFactureAvoir entity.
      *
-     * @Route("/{id}", name="lignefactureavoir_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignefactureavoir_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneFactureAvoir $ligneFactureAvoir)
     {

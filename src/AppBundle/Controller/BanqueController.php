@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Banque;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class BanqueController extends Controller {
     /**
      * Lists all banque entities.
      *
-     * @Route("/", name="banque_index")
-     * @Method("GET")
+     * @Route("/", name="banque_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,8 +32,7 @@ class BanqueController extends Controller {
     /**
      * Creates a new banque entity.
      *
-     * @Route("/new", name="banque_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="banque_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $banque = new Banque();
@@ -64,8 +61,7 @@ class BanqueController extends Controller {
     /**
      * Displays a form to edit an existing banque entity.
      *
-     * @Route("/{id}/edit", name="banque_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="banque_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Banque $banque) {
         $editForm = $this->createForm('AppBundle\Form\BanqueType', $banque);
@@ -86,8 +82,7 @@ class BanqueController extends Controller {
     /**
      * Deletes a banque entity.
      *
-     * @Route("/{id}/delete", name="banque_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="banque_delete", methods={"GET"})
      */
     public function deleteAction(Banque $banque) {
         if ($banque) {

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Mouvement;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -102,8 +101,7 @@ class EtatController extends Controller {
     /**
      * Lists all mouvement Cheque entities.
      *
-     * @Route("/cheque", name="mouvement_cheque_index")
-     * @Method("GET")
+     * @Route("/cheque", name="mouvement_cheque_index", methods={"GET"})
      */
     public function chequeAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -221,8 +219,7 @@ class EtatController extends Controller {
     /**
      * maj cheque
      *
-     * @Route("/cheque/traite/maj", name="mouvement_cheque_traite_maj")
-     * @Method("POST")
+     * @Route("/cheque/traite/maj", name="mouvement_cheque_traite_maj", methods={"POST"})
      */
     public function majChequeAction(Request $request) {
         $mouvementId = $request->request->get('mouvementId');
@@ -244,8 +241,7 @@ class EtatController extends Controller {
     /**
      * Lists all mouvement Traite entities.
      *
-     * @Route("/traite", name="mouvement_traite_index")
-     * @Method("GET")
+     * @Route("/traite", name="mouvement_traite_index", methods={"GET"})
      */
     public function traiteAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\BonCommandeFrs;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -111,8 +110,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Lists all bonCommandeFrs entities.
      *
-     * @Route("/", name="boncommandefrs_index")
-     * @Method("GET")
+     * @Route("/", name="boncommandefrs_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -135,8 +133,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Lists all article entities.
      *
-     * @Route("/export/xls", name="boncommandefrs_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="boncommandefrs_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -193,8 +190,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Creates a new bonCommandeFrs entity.
      *
-     * @Route("/new", name="boncommandefrs_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="boncommandefrs_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $bonCommandeFrs = new Boncommandefrs();
@@ -218,8 +214,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Finds and displays a bonCommandeFrs entity.
      *
-     * @Route("/{id}", name="boncommandefrs_show")
-     * @Method("GET")
+     * @Route("/{id}", name="boncommandefrs_show", methods={"GET"})
      */
     public function showAction(BonCommandeFrs $bonCommandeFrs) {
         $deleteForm = $this->createDeleteForm($bonCommandeFrs);
@@ -233,8 +228,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Displays a form to print an existing devi entity.
      *
-     * @Route("/{id}/print", name="boncommandefrs_print")
-     * @Method({"GET"})
+     * @Route("/{id}/print", name="boncommandefrs_print", methods={"GET"})
      */
     public function printAction(BonCommandeFrs $bonCommandeFrs) {
         $em = $this->getDoctrine()->getManager();
@@ -248,8 +242,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Displays a form to edit an existing bonCommandeFrs entity.
      *
-     * @Route("/{id}/edit", name="boncommandefrs_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="boncommandefrs_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, BonCommandeFrs $bonCommandeFrs) {
         $originalLigneBonCommandeFrss = new ArrayCollection();
@@ -286,8 +279,7 @@ class BonCommandeFrsController extends Controller {
     /**
      * Deletes a bonCommandeFrs entity.
      *
-     * @Route("/{id}", name="boncommandefrs_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="boncommandefrs_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, BonCommandeFrs $bonCommandeFrs) {
         $form = $this->createDeleteForm($bonCommandeFrs);

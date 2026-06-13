@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\BonReception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -152,8 +151,7 @@ class BonReceptionController extends Controller {
     /**
      * Lists all bonReception entities.
      *
-     * @Route("/", name="bonreception_index")
-     * @Method("GET")
+     * @Route("/", name="bonreception_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -178,8 +176,7 @@ class BonReceptionController extends Controller {
     /**
      * Totaux facture.
      *
-     * @Route("/totaux/{code}/{fournisseur}/{termine}/{regle}/{startDateCreation}/{endDateCreation}/{startDateReception}/{endDateReception}", name="facture_totaux")
-     * @Method("GET")
+     * @Route("/totaux/{code}/{fournisseur}/{termine}/{regle}/{startDateCreation}/{endDateCreation}/{startDateReception}/{endDateReception}", name="facture_totaux", methods={"GET"})
      */
     public function totauxBrAction(Request $request,$code = null, $fournisseur = null, $termine = null,$regle = null, $startDateCreation = null, $endDateCreation = null, $startDateReception = null, $endDateReception = null) {
         $request->query->set('code', $code);
@@ -207,8 +204,7 @@ class BonReceptionController extends Controller {
     /**
      * Lists all article entities.
      *
-     * @Route("/export/xls", name="bonreception_export_xls")
-     * @Method("GET")
+     * @Route("/export/xls", name="bonreception_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -284,8 +280,7 @@ class BonReceptionController extends Controller {
     /**
      * Creates a new bonreception_boncommande entity.
      *
-     * @Route("/boncommande/new/id", name="bonreception_boncommande_new_id")
-     * @Method({"GET", "POST"})
+     * @Route("/boncommande/new/id", name="bonreception_boncommande_new_id", methods={"GET", "POST"})
      */
     public function bonreceptionBoncommandeNewIdAction(Request $request) {
 
@@ -300,8 +295,7 @@ class BonReceptionController extends Controller {
     /**
      * Creates a new bonreception_boncommande entity.
      *
-     * @Route("/boncommande/new", name="bonreception_boncommande_new")
-     * @Method({"GET", "POST"})
+     * @Route("/boncommande/new", name="bonreception_boncommande_new", methods={"GET", "POST"})
      */
     public function bonreceptionBoncommandeNewAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -343,8 +337,7 @@ class BonReceptionController extends Controller {
     /**
      * Creates a new bonReception entity.
      *
-     * @Route("/new", name="bonreception_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="bonreception_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -372,8 +365,7 @@ class BonReceptionController extends Controller {
     }
 
     /**
-     * @Route("/{id}/show",name="bonreception_show")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/show",name="bonreception_show", methods={"GET","POST"})
      */
     public function showAction(Request $request, BonReception $bonreception) {
         $form_regler = $this->createFormBuilder($bonreception)
@@ -410,8 +402,7 @@ class BonReceptionController extends Controller {
     /**
      * Displays a form to edit an existing bonReception entity.
      *
-     * @Route("/{id}/edit", name="bonreception_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="bonreception_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, BonReception $bonReception) {
         $em = $this->getDoctrine()->getManager();
@@ -454,8 +445,7 @@ class BonReceptionController extends Controller {
     /**
      * Displays a form to print an existing bnoreception entity.
      *
-     * @Route("/{id}/print", name="bonreception_print")
-     * @Method({"GET"})
+     * @Route("/{id}/print", name="bonreception_print", methods={"GET"})
      */
     public function printAction(BonReception $bonreception, Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -476,8 +466,7 @@ class BonReceptionController extends Controller {
     /**
      * Reglements
      * 
-     * @Route("/{id}/reglements",name="bonreception_reglements")
-     * @Method({"GET","POST"})
+     * @Route("/{id}/reglements",name="bonreception_reglements", methods={"GET","POST"})
      */
     public function reglementsAction(Request $request, BonReception $bonreception) {
         if (!$bonreception->getTermine()) {
@@ -508,8 +497,7 @@ class BonReceptionController extends Controller {
     /**
      * delete reglement
      * 
-     * @Route("/{id}/reglement/{idLigneReglement}/delete",name="bonreception_reglement_delete")
-     * @Method({"GET"})
+     * @Route("/{id}/reglement/{idLigneReglement}/delete",name="bonreception_reglement_delete", methods={"GET"})
      */
     public function reglementDeleteAction($id, $idLigneReglement) {
         $em = $this->getDoctrine()->getManager();

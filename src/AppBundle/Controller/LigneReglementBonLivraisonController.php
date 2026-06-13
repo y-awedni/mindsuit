@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LigneReglementBonLivraison;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -17,8 +16,7 @@ class LigneReglementBonLivraisonController extends Controller
     /**
      * Lists all ligneReglementBonLivraison entities.
      *
-     * @Route("/", name="lignereglementbonlivraison_index")
-     * @Method("GET")
+     * @Route("/", name="lignereglementbonlivraison_index", methods={"GET"})
      */
     public function indexAction()
     {
@@ -34,8 +32,7 @@ class LigneReglementBonLivraisonController extends Controller
     /**
      * Creates a new ligneReglementBonLivraison entity.
      *
-     * @Route("/new", name="lignereglementbonlivraison_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="lignereglementbonlivraison_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request)
     {
@@ -60,8 +57,7 @@ class LigneReglementBonLivraisonController extends Controller
     /**
      * Finds and displays a ligneReglementBonLivraison entity.
      *
-     * @Route("/{id}", name="lignereglementbonlivraison_show")
-     * @Method("GET")
+     * @Route("/{id}", name="lignereglementbonlivraison_show", methods={"GET"})
      */
     public function showAction(LigneReglementBonLivraison $ligneReglementBonLivraison)
     {
@@ -76,8 +72,7 @@ class LigneReglementBonLivraisonController extends Controller
     /**
      * Displays a form to edit an existing ligneReglementBonLivraison entity.
      *
-     * @Route("/{id}/edit", name="lignereglementbonlivraison_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="lignereglementbonlivraison_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, LigneReglementBonLivraison $ligneReglementBonLivraison)
     {
@@ -101,8 +96,7 @@ class LigneReglementBonLivraisonController extends Controller
     /**
      * Deletes a ligneReglementBonLivraison entity.
      *
-     * @Route("/{id}", name="lignereglementbonlivraison_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="lignereglementbonlivraison_delete", methods={"DELETE"})
      */
     public function deleteAction(Request $request, LigneReglementBonLivraison $ligneReglementBonLivraison)
     {

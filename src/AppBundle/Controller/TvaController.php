@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Tva;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,8 +17,7 @@ class TvaController extends Controller {
     /**
      * Lists all tva entities.
      *
-     * @Route("/", name="tva_index")
-     * @Method("GET")
+     * @Route("/", name="tva_index", methods={"GET"})
      */
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
@@ -34,8 +32,7 @@ class TvaController extends Controller {
     /**
      * Creates a new tva entity.
      *
-     * @Route("/new", name="tva_new")
-     * @Method({"GET", "POST"})
+     * @Route("/new", name="tva_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
         $tva = new Tva();
@@ -64,8 +61,7 @@ class TvaController extends Controller {
     /**
      * Displays a form to edit an existing tva entity.
      *
-     * @Route("/{id}/edit", name="tva_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="tva_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Tva $tva) {
         $editForm = $this->createForm('AppBundle\Form\TvaType', $tva);
@@ -86,8 +82,7 @@ class TvaController extends Controller {
     /**
      * Deletes a tva entity.
      *
-     * @Route("/{id}/delete", name="tva_delete")
-     * @Method("GET")
+     * @Route("/{id}/delete", name="tva_delete", methods={"GET"})
      */
     public function deleteAction(Tva $tva) {
         if ($tva) {
