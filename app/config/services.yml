@@ -126,6 +126,10 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
     app.excel_custom_config:
         class: AppBundle\Service\ExcelCustomConfig
+    # Drop-in replacement for the removed liuggio/excelbundle "phpexcel" service.
+    phpexcel:
+        class: AppBundle\Service\ExcelFactory
+        public: true
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

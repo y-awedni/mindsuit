@@ -15,8 +15,7 @@ class AppKernel extends Kernel {
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-            new Knp\Bundle\TimeBundle\KnpTimeBundle(),
-            new Liuggio\ExcelBundle\LiuggioExcelBundle()
+            new Knp\Bundle\TimeBundle\KnpTimeBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

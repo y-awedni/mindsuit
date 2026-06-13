@@ -30,7 +30,7 @@
         "twig/twig": "^1.0||^2.0",
         "knplabs/knp-paginator-bundle": "^3.0",
         "knplabs/knp-time-bundle": "^1.8",
-        "liuggio/excelbundle": "^2.1",
+        "phpoffice/phpspreadsheet": "^1.6",
         "pear/numbers_words": "^0.18.1"
     },
     "require-dev": {
