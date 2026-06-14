@@ -26,8 +26,8 @@ git clone <repo-url> .
 Point both the apex and a wildcard at the VPS:
 
 ```
-A     minduos.com        -> <vps-ip>
-A     *.minduos.com      -> <vps-ip>
+A     moudir.pro        -> <vps-ip>
+A     *.moudir.pro      -> <vps-ip>
 ```
 
 Wildcard TLS uses DNS-01, so create a scoped API token at your DNS provider
@@ -39,7 +39,7 @@ Never committed. Create it on the server:
 
 ```ini
 # Caddy / TLS
-ACME_EMAIL=ops@minduos.com
+ACME_EMAIL=ops@moudir.pro
 CF_API_TOKEN=<cloudflare-scoped-token>
 
 # App
@@ -94,7 +94,7 @@ Test a restore quarterly with `scripts/restore.sh`.
 
 - **Errors**: add `sentry/sentry-symfony`; set `SENTRY_DSN` in `.env`.
 - **Logs**: Monolog -> stdout, captured by `docker compose logs` / your log driver.
-- **Uptime**: an external monitor (UptimeRobot / BetterStack) on `https://minduos.com`.
+- **Uptime**: an external monitor (UptimeRobot / BetterStack) on `https://moudir.pro`.
 
 ## Environments
 

@@ -1,7 +1,7 @@
 # SaaS architecture (Phase 4)
 
 Goal: let customers self-serve sign up and get an isolated ERP instance at
-`https://<tenant>.minduos.com`, on a single app deployment, with subscription
+`https://<tenant>.moudir.pro`, on a single app deployment, with subscription
 billing suited to the Tunisian market.
 
 > Prerequisite: the framework upgrade ([UPGRADE.md](UPGRADE.md)) must be done.
@@ -17,7 +17,7 @@ DB-per-tenant gives strong isolation with near-zero changes to the 35 entities.
 ```mermaid
 flowchart TB
     subgraph edge [Caddy - wildcard TLS]
-        req["client.minduos.com"]
+        req["client.moudir.pro"]
     end
     subgraph app [Single Symfony app]
         resolver[TenantResolver - reads Host]
@@ -59,7 +59,7 @@ request-scoped `TenantContext`.
 1. A `kernel.request` listener (high priority) reads the `Host` header.
 2. Apex / `www` / `app` -> control-plane routes (marketing, signup, operator
    back-office). No tenant connection.
-3. `<sub>.minduos.com` -> look up `Tenant` by `subdomain` in the control DB.
+3. `<sub>.moudir.pro` -> look up `Tenant` by `subdomain` in the control DB.
    - not found -> 404; `suspended` -> billing wall; `trial`/`active` -> proceed.
 4. Set `TenantContext::setTenant($tenant)`; the tenant EM connection resolves
    `dbName` lazily on first use.
