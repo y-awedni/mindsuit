@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Tva
  *
- * @ORM\Table(name="tva", indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"})})
+ * @ORM\Table(name="tva", uniqueConstraints={@ORM\UniqueConstraint(name="taux", columns={"taux"})}, indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"})})
  * @ORM\Entity
  * @UniqueEntity("taux")
  */

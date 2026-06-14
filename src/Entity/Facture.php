@@ -167,7 +167,6 @@ class Facture {
      *
      * @ORM\Column(name="date_creation", type="date", nullable=true)
      * @Groups({"facture", "lignes"})
-     * @Assert\Date()
      * @Assert\NotBlank()
      */
     private $dateCreation;
@@ -177,7 +176,6 @@ class Facture {
      *
      * @ORM\Column(name="date_echeance", type="date", nullable=true)
      * @Groups({"facture", "lignes"})
-     * @Assert\Date()
      * @Assert\NotBlank()
      */
     private $dateEcheance;

@@ -14,5 +14,7 @@ framework:
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
     http_method_override: true
     assets: ~
+    serializer:
+        enable_annotations: true
     php_errors:
         log: true

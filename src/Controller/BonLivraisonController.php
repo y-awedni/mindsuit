@@ -467,19 +467,22 @@ class BonLivraisonController extends BaseController {
      *
      * @Route("/{id}/print", name="bonlivraison_print", methods={"GET"})
      */
-    public function printAction(BonLivraison $bonlivraison, Request $request) {
+    public function printAction(BonLivraison $bonlivraison, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
         $em = $this->getDoctrine()->getManager();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($bonlivraison->getTotal());
         $totalMillimesEnTtLettres = explode('.', number_format($bonlivraison->getTotal() - intval($bonlivraison->getTotal()), 3))[1];
         $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
-        return $this->render('bonlivraison/print.html.twig', array(
-                    'bonlivraison' => $bonlivraison,
-                    'societe' => $societe,
-                    'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
-                    'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres
-        ));
+
+        return $pdf->renderResponse('bonlivraison/pdf.html.twig', [
+            'bonlivraison' => $bonlivraison,
+            'societe' => $societe,
+            'logoPath' => $this->societeLogoPath($societe),
+            'tvaBreakdown' => $calc->tvaBreakdown($bonlivraison->getLigneBonLivraisons()),
+            'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
+            'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres,
+        ], 'BL-' . $bonlivraison->getCode());
     }
 
     /**

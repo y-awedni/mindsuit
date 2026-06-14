@@ -445,19 +445,6 @@ class FactureController extends BaseController {
     }
 
     /**
-     * Absolute filesystem path to the company logo for embedding in PDFs,
-     * or null when no logo is configured.
-     */
-    private function societeLogoPath($societe): ?string
-    {
-        if (!$societe || !$societe->getMedia()) {
-            return null;
-        }
-
-        return $this->getParameter('kernel.project_dir') . '/public/' . $societe->getMedia()->getAssetPath();
-    }
-
-    /**
      * Reglements
      * 
      * @Route("/{id}/reglements",name="facture_reglements", methods={"GET","POST"})

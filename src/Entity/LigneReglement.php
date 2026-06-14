@@ -38,7 +38,6 @@ class LigneReglement
      *
      * @ORM\Column(name="date_reglement", type="date", nullable=true)
      * @Assert\NotBlank()
-     * @Assert\Date()
      */
     private $dateReglement;
 

@@ -30,15 +30,16 @@ class SearchIndexerSubscriber implements EventSubscriber {
 
     public function prePersist(LifecycleEventArgs $args) {
         $entity = $args->getEntity();
-        
+
         if (!$entity instanceof User) {
-            $user=$this->tokenStorageInterface->getToken()->getUser();
-            if($user){
-                $entity->setCreatedUser($user);
-                $entity->setUpdatedUser($user);
+            $token = $this->tokenStorageInterface->getToken();
+            $user = $token ? $token->getUser() : null;
+            if ($user) {
+                $this->callIfExists($entity, 'setCreatedUser', $user);
+                $this->callIfExists($entity, 'setUpdatedUser', $user);
             }
-            $entity->setCreatedAt(new \DateTime());
-            $entity->setUpdatedAt(new \DateTime());
+            $this->callIfExists($entity, 'setCreatedAt', new \DateTime());
+            $this->callIfExists($entity, 'setUpdatedAt', new \DateTime());
         }
     }
 
@@ -46,11 +47,24 @@ class SearchIndexerSubscriber implements EventSubscriber {
     public function preUpdate(LifecycleEventArgs $args) {
         $entity = $args->getEntity();
         if (!$entity instanceof User) {
-            $user=$this->tokenStorageInterface->getToken()->getUser();
-            if($user){
-                $entity->setUpdatedUser($user);
+            $token = $this->tokenStorageInterface->getToken();
+            $user = $token ? $token->getUser() : null;
+            if ($user) {
+                $this->callIfExists($entity, 'setUpdatedUser', $user);
             }
-            $entity->setUpdatedAt(new \DateTime());
+            $this->callIfExists($entity, 'setUpdatedAt', new \DateTime());
+        }
+    }
+
+    /**
+     * Audit fields are a convention most entities follow, but not all (e.g. the
+     * single-row Timbre config). Only stamp the ones an entity actually exposes
+     * so this global subscriber never fatals on a lightweight entity.
+     */
+    private function callIfExists(object $entity, string $method, $value): void
+    {
+        if (method_exists($entity, $method)) {
+            $entity->$method($value);
         }
     }
 }

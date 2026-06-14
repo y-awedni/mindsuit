@@ -7,10 +7,10 @@
                 {% endif %}
             </td>
             <td style="width:50%" class="center">
-                <span class="doc-title">Facture : {{ facture.code }}</span>
+                <span class="doc-title">Devis : {{ devis.code }}</span>
             </td>
             <td style="width:25%" class="right">
-                Date : {{ facture.dateCreation|date("d/m/Y") }}
+                Date : {{ devis.dateCreation|date("d/m/Y") }}
             </td>
         </tr>
     </table>
@@ -28,12 +28,12 @@
             </td>
             <td>
                 <div class="client-box">
-                    <b>Code client : </b>{{ facture.client.code }}<br>
-                    {% if facture.client.rs %}<b>Client : </b>{{ facture.client.rs }}<br>{% endif %}
-                    {% if facture.client.email %}<b>Email : </b>{{ facture.client.email }}<br>{% endif %}
-                    {% if facture.client.ville %}<b>Ville : </b>{{ facture.client.ville }}<br>{% endif %}
-                    {% if facture.client.mf %}<b>M.F : </b>{{ facture.client.mf }}<br>{% endif %}
-                    {% if facture.client.note %}<b>Note : </b>{{ facture.client.note }}<br>{% endif %}
+                    <b>Code client : </b>{{ devis.client.code }}<br>
+                    {% if devis.client.rs %}<b>Client : </b>{{ devis.client.rs }}<br>{% endif %}
+                    {% if devis.client.email %}<b>Email : </b>{{ devis.client.email }}<br>{% endif %}
+                    {% if devis.client.ville %}<b>Ville : </b>{{ devis.client.ville }}<br>{% endif %}
+                    {% if devis.client.mf %}<b>M.F : </b>{{ devis.client.mf }}<br>{% endif %}
+                    {% if devis.client.note %}<b>Note : </b>{{ devis.client.note }}<br>{% endif %}
                 </div>
             </td>
         </tr>
@@ -46,7 +46,7 @@
                 <th>Désignation</th>
                 <th class="center">Unité</th>
                 <th class="right">PU HT</th>
-                {% if facture.remise != 0.000 %}<th class="right">Remise</th>{% endif %}
+                {% if devis.remise != 0.000 %}<th class="right">Remise</th>{% endif %}
                 <th class="center">TVA</th>
                 <th class="right">PU TTC</th>
                 <th class="right">Qte</th>
@@ -54,13 +54,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for ligne in facture.lignesFactures %}
+            {% for ligne in devis.lignesDevis %}
                 <tr>
                     <td>{{ ligne.article.code }}</td>
                     <td>{{ ligne.designation }}</td>
                     <td class="center">{{ ligne.article.unite }}</td>
                     <td class="right">{{ ligne.prixUnitaire|number_format(3, '.', ' ') }}</td>
-                    {% if facture.remise != 0.000 %}<td class="right">{{ ligne.remise|number_format(0, '.', '') }} %</td>{% endif %}
+                    {% if devis.remise != 0.000 %}<td class="right">{{ ligne.remise|number_format(0, '.', '') }} %</td>{% endif %}
                     <td class="center">{{ ligne.tva }} %</td>
                     <td class="right">{{ ligne.qte ? (ligne.ttc / ligne.qte)|number_format(3, '.', ' ') : '0.000' }}</td>
                     <td class="right">{{ ligne.qte|number_format(0, '.', '') }}</td>
@@ -76,7 +76,7 @@
         <tr>
             <td>
                 <div class="lettres">
-                    Arreté la présente facture à la somme de:<br>
+                    Arreté le présent devis à la somme de:<br>
                     <b>{{ totalDinarsEnTtLettres|upper }} DINARS</b>
                     {% if totalMillimesEnTtLettres %}<b>{{ totalMillimesEnTtLettres }} MILLIMES</b>{% endif %}
                 </div>
@@ -98,11 +98,10 @@
                 </table>
                 <div class="totaux">
                     <table>
-                        <tr><th>Total HT</th><td class="right">{{ facture.ht|number_format(3, '.', ' ') }}</td></tr>
-                        {% if facture.remise != 0.000 %}<tr><th>Total Remise</th><td class="right">{{ facture.remise|number_format(3, '.', ' ') }}</td></tr>{% endif %}
-                        <tr><th>Total TVA</th><td class="right">{{ facture.tva|number_format(3, '.', ' ') }}</td></tr>
-                        <tr><th>Timbre</th><td class="right">{{ facture.timbre|number_format(3, '.', ' ') }}</td></tr>
-                        <tr><th>Total TTC</th><td class="right"><b>{{ facture.total|number_format(3, '.', ' ') }}</b></td></tr>
+                        <tr><th>Total HT</th><td class="right">{{ devis.ht|number_format(3, '.', ' ') }}</td></tr>
+                        {% if devis.remise != 0.000 %}<tr><th>Total Remise</th><td class="right">{{ devis.remise|number_format(3, '.', ' ') }}</td></tr>{% endif %}
+                        <tr><th>Total TVA</th><td class="right">{{ devis.tva|number_format(3, '.', ' ') }}</td></tr>
+                        <tr><th>Total TTC</th><td class="right"><b>{{ devis.total|number_format(3, '.', ' ') }}</b></td></tr>
                     </table>
                 </div>
             </td>
@@ -111,7 +110,7 @@
 
     <table class="signatures">
         <tr>
-            <td>Note<br>{{ facture.note }}</td>
+            <td>Note<br>{{ devis.note }}</td>
             <td>Signature Client</td>
             <td>Signature Societé</td>
         </tr>

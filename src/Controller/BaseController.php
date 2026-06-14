@@ -47,4 +47,13 @@ abstract class BaseController extends AbstractController
     {
         return $this->getDoctrine()->getManager();
     }
+
+    protected function societeLogoPath($societe): ?string
+    {
+        if (!$societe || !$societe->getMedia()) {
+            return null;
+        }
+
+        return $this->getParameter('kernel.project_dir') . '/public/' . $societe->getMedia()->getAssetPath();
+    }
 }

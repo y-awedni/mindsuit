@@ -230,13 +230,15 @@ class BonCommandeFrsController extends BaseController {
      *
      * @Route("/{id}/print", name="boncommandefrs_print", methods={"GET"})
      */
-    public function printAction(BonCommandeFrs $bonCommandeFrs) {
+    public function printAction(BonCommandeFrs $bonCommandeFrs, \App\Service\PdfGenerator $pdf) {
         $em = $this->getDoctrine()->getManager();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
-        return $this->render('boncommandefrs/print.html.twig', array(
-                    'bonCommandeFrs' => $bonCommandeFrs,
-                    'societe' => $societe
-        ));
+
+        return $pdf->renderResponse('boncommandefrs/pdf.html.twig', [
+            'bonCommandeFrs' => $bonCommandeFrs,
+            'societe' => $societe,
+            'logoPath' => $this->societeLogoPath($societe),
+        ], 'BC-' . $bonCommandeFrs->getCode());
     }
 
     /**

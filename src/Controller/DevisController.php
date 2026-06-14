@@ -311,20 +311,22 @@ class DevisController extends BaseController {
      *
      * @Route("/{id}/print", name="devis_print", methods={"GET"})
      */
-    public function printAction(Devis $devi,Request $request) {
+    public function printAction(Devis $devi, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
         $em = $this->getDoctrine()->getManager();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
-        
+
         $totalDinars = intval($devi->getTotal());
-        $totalMillimesEnTtLettres=explode('.',number_format($devi->getTotal()-intval($devi->getTotal()),3) )[1];
+        $totalMillimesEnTtLettres = explode('.', number_format($devi->getTotal() - intval($devi->getTotal()), 3))[1];
         $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
-        
-        return $this->render('devis/print.html.twig', array(
-                    'devis' => $devi,
-                    'societe' => $societe,
-                    'totalDinarsEnTtLettres'=>$totalDinarsEnTtLettres,
-            'totalMillimesEnTtLettres'=>$totalMillimesEnTtLettres
-        ));
+
+        return $pdf->renderResponse('devis/pdf.html.twig', [
+            'devis' => $devi,
+            'societe' => $societe,
+            'logoPath' => $this->societeLogoPath($societe),
+            'tvaBreakdown' => $calc->tvaBreakdown($devi->getLignesDevis()),
+            'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
+            'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres,
+        ], 'Devis-' . $devi->getCode());
     }
 
     /**

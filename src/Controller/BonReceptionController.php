@@ -447,7 +447,7 @@ class BonReceptionController extends BaseController {
      *
      * @Route("/{id}/print", name="bonreception_print", methods={"GET"})
      */
-    public function printAction(BonReception $bonreception, Request $request) {
+    public function printAction(BonReception $bonreception, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
         $em = $this->getDoctrine()->getManager();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
@@ -455,12 +455,14 @@ class BonReceptionController extends BaseController {
         $totalMillimesEnTtLettres = explode('.', number_format($bonreception->getTotal() - intval($bonreception->getTotal()), 3))[1];
         $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
 
-        return $this->render('bonreception/print.html.twig', array(
-                    'bonreception' => $bonreception,
-                    'societe' => $societe,
-                    'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
-                    'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres
-        ));
+        return $pdf->renderResponse('bonreception/pdf.html.twig', [
+            'bonreception' => $bonreception,
+            'societe' => $societe,
+            'logoPath' => $this->societeLogoPath($societe),
+            'tvaBreakdown' => $calc->tvaBreakdown($bonreception->getLigneBonReceptions()),
+            'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
+            'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres,
+        ], 'BR-' . $bonreception->getCode());
     }
 
     /**

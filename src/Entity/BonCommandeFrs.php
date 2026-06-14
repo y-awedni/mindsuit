@@ -52,7 +52,6 @@ class BonCommandeFrs {
      * @var \DateTime
      *
      * @ORM\Column(name="date_creation", type="date", nullable=true)
-     * @Assert\Date()
      * @Assert\NotBlank()
      */
     private $dateCreation;
@@ -61,7 +60,6 @@ class BonCommandeFrs {
      * @var \DateTime
      *
      * @ORM\Column(name="date_commande", type="date", nullable=true)
-     * @Assert\Date()
      * @Assert\NotBlank()
      */
     private $dateCommande;

@@ -118,7 +118,6 @@ class BonReception {
      * @var \DateTime
      *
      * @ORM\Column(name="date_reception", type="date", nullable=true)
-     * @Assert\Date()
      * @Assert\NotBlank()
      */
     private $dateReception;

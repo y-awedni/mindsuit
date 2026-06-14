@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Categorie
  *
- * @ORM\Table(name="categorie", indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"})})
+ * @ORM\Table(name="categorie", uniqueConstraints={@ORM\UniqueConstraint(name="libelle", columns={"libelle"})}, indexes={@ORM\Index(name="updated_user_id", columns={"updated_user_id"}), @ORM\Index(name="created_user_id", columns={"created_user_id"})})
  * @ORM\Entity
  * @UniqueEntity("libelle")
  */

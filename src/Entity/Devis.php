@@ -86,7 +86,6 @@ class Devis {
      * @var \Date
      *
      * @ORM\Column(name="date_creation", type="date", nullable=true)
-     * @Assert\Date()
      */
     private $dateCreation;
     
@@ -94,7 +93,6 @@ class Devis {
      * @var \Date
      *
      * @ORM\Column(name="date_validite", type="date", nullable=true)
-     * @Assert\Date()
      */
     private $dateValidite;
 

@@ -1,0 +1,69 @@
+{% block body %}
+    <table class="header">
+        <tr>
+            <td style="width:25%">
+                {% if societe.desactiverPhoto == false and logoPath %}
+                    <img src="{{ logoPath }}" style="width:80px;">
+                {% endif %}
+            </td>
+            <td style="width:50%" class="center">
+                <span class="doc-title">Bon de Commande : {{ bonCommandeFrs.code }}</span>
+            </td>
+            <td style="width:25%" class="right">
+                Date : {{ bonCommandeFrs.dateCreation|date("d/m/Y") }}
+            </td>
+        </tr>
+    </table>
+
+    <table class="parties">
+        <tr>
+            <td>
+                {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
+                {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
+                {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
+                {% if societe.mobile %}<b>Mobile : </b>{{ societe.mobile }}<br>{% endif %}
+                {% if societe.mf %}<b>M.F : </b>{{ societe.mf }}<br>{% endif %}
+                {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
+                {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
+            </td>
+            <td>
+                <div class="client-box">
+                    <b>Code fournisseur : </b>{{ bonCommandeFrs.fournisseur.code }}<br>
+                    {% if bonCommandeFrs.fournisseur.rs %}<b>Raison sociale : </b>{{ bonCommandeFrs.fournisseur.rs }}<br>{% endif %}
+                    {% if bonCommandeFrs.fournisseur.mobile %}<b>Mobile : </b>{{ bonCommandeFrs.fournisseur.mobile }}<br>{% endif %}
+                    {% if bonCommandeFrs.fournisseur.email %}<b>Email : </b>{{ bonCommandeFrs.fournisseur.email }}<br>{% endif %}
+                    {% if bonCommandeFrs.fournisseur.mf %}<b>M.F : </b>{{ bonCommandeFrs.fournisseur.mf }}<br>{% endif %}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="lines">
+        <thead>
+            <tr>
+                <th>Réf</th>
+                <th>Désignation</th>
+                <th class="center">Qte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in bonCommandeFrs.ligneBonCommandeFrss %}
+                <tr>
+                    <td>{{ ligne.article.code }}</td>
+                    <td>{{ ligne.designation }}</td>
+                    <td class="center">{{ ligne.qte }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block footer %}
+    <table class="signatures">
+        <tr>
+            <td>Note<br>{{ bonCommandeFrs.note }}</td>
+            <td>Signature Fournisseur</td>
+            <td>Signature Societé</td>
+        </tr>
+    </table>
+{% endblock %}

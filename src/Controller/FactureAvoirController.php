@@ -360,19 +360,22 @@ class FactureAvoirController extends BaseController {
      *
      * @Route("/{id}/print", name="factureavoir_print", methods={"GET"})
      */
-    public function printAction(FactureAvoir $factureAvoir, Request $request) {
+    public function printAction(FactureAvoir $factureAvoir, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
         $em = $this->getDoctrine()->getManager();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($factureAvoir->getTotal());
         $totalMillimesEnTtLettres = explode('.', number_format($factureAvoir->getTotal() - intval($factureAvoir->getTotal()), 3))[1];
         $totalDinarsEnTtLettres = (new Numbers_Words())->toWords($totalDinars, $request->getLocale());
-        return $this->render('factureavoir/print.html.twig', array(
-                    'factureAvoir' => $factureAvoir,
-                    'societe' => $societe,
-                    'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
-                    'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres
-        ));
+
+        return $pdf->renderResponse('factureavoir/pdf.html.twig', [
+            'factureAvoir' => $factureAvoir,
+            'societe' => $societe,
+            'logoPath' => $this->societeLogoPath($societe),
+            'tvaBreakdown' => $calc->tvaBreakdown($factureAvoir->getLigneFactureAvoirs()),
+            'totalDinarsEnTtLettres' => $totalDinarsEnTtLettres,
+            'totalMillimesEnTtLettres' => $totalMillimesEnTtLettres,
+        ], 'Avoir-' . $factureAvoir->getCode());
     }
 
 }
