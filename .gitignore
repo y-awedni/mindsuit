@@ -15,8 +15,6 @@
 *.sql
 *.sql.gz
 *.dump
-# Structure-only tenant schema template (no data) used by tenant:provision.
-!/migrations/tenant_schema.sql
 
 # === Symfony runtime (cache, logs, sessions) ===
 /var/*

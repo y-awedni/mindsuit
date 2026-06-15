@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Doctrine\TenantConnection;
+use App\Doctrine\TenantMigrator;
 use App\Entity\Control\Owner;
 use App\Entity\Control\Plan;
 use App\Entity\Control\Subscription;
@@ -24,7 +25,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Provisions a new tenant end to end: creates its database, runs the ERP
- * migrations, seeds the minimum data (TVA, timbre, société, admin user), and
+ * migrations from empty (migrations are the single source of truth for the
+ * schema), seeds the minimum data (TVA, timbre, société, admin user), and
  * records the tenant + owner + trial subscription in the control plane.
  *
  * Rolls back (drops the database, removes control rows) on any failure.
@@ -41,9 +43,8 @@ class TenantProvisionCommand extends Command
         private readonly EntityManagerInterface $tenantEm,
         #[Autowire(service: 'doctrine.dbal.tenant_connection')]
         private readonly TenantConnection $tenantConnection,
+        private readonly TenantMigrator $migrator,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir,
     ) {
         parent::__construct();
     }
@@ -78,8 +79,7 @@ class TenantProvisionCommand extends Command
             return Command::FAILURE;
         }
 
-        $controlRepo = $this->controlEm->getRepository(Tenant::class);
-        if ($controlRepo->findOneBy(['subdomain' => $subdomain])) {
+        if ($this->controlEm->getRepository(Tenant::class)->findOneBy(['subdomain' => $subdomain])) {
             $io->error(sprintf('A tenant with subdomain "%s" already exists.', $subdomain));
 
             return Command::FAILURE;
@@ -102,14 +102,14 @@ class TenantProvisionCommand extends Command
             $this->controlEm->persist($tenant);
             $this->controlEm->flush();
 
-            $io->writeln('Building ERP schema...');
-            $this->tenantConnection->selectDatabase($dbName);
-            $this->createTenantSchema();
-            // Record the current migrations as applied so future incremental
-            // migrations run on top of this freshly-built schema.
-            $this->recordMigrationsAsApplied();
+            $io->writeln('Running ERP migrations...');
+            [$code, $migrateOutput] = $this->migrator->migrate($dbName);
+            if ($code !== 0) {
+                throw new \RuntimeException("Tenant migrations failed:\n" . $migrateOutput);
+            }
 
             $io->writeln('Seeding tenant data...');
+            $this->tenantConnection->selectDatabase($dbName);
             $this->seedTenant($company, $email, $password);
 
             $this->createControlRecords($tenant, $email, $password, (string) $input->getOption('plan'));
@@ -128,74 +128,8 @@ class TenantProvisionCommand extends Command
         }
     }
 
-    /**
-     * Loads the canonical ERP schema (a structure-only dump of the reference
-     * tenant) into the freshly-created tenant database. Using the proven dump
-     * avoids SchemaTool's FK-ordering issues with the legacy schema; the dump
-     * toggles FOREIGN_KEY_CHECKS itself. The connection is already pointed at
-     * the new tenant database.
-     */
-    private function createTenantSchema(): void
-    {
-        $path = $this->projectDir . '/migrations/tenant_schema.sql';
-        $sql = file_get_contents($path);
-        if ($sql === false) {
-            throw new \RuntimeException(sprintf('Schema template not found: %s', $path));
-        }
-
-        foreach ($this->splitSqlStatements($sql) as $statement) {
-            $this->tenantConnection->executeStatement($statement);
-        }
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function splitSqlStatements(string $sql): array
-    {
-        $statements = [];
-        foreach (preg_split('/;\s*\n/', $sql) as $chunk) {
-            $lines = array_filter(
-                explode("\n", $chunk),
-                static fn (string $line): bool => !str_starts_with(ltrim($line), '--')
-            );
-            $statement = trim(implode("\n", $lines));
-            if ($statement !== '') {
-                $statements[] = $statement;
-            }
-        }
-
-        return $statements;
-    }
-
-    /**
-     * Records every existing tenant migration as already applied (the schema
-     * was just built from the ORM mappings), so later incremental migrations
-     * apply on top. Done with direct SQL to avoid running migration commands
-     * in-process (which freezes the shared Doctrine migrations factory).
-     */
-    private function recordMigrationsAsApplied(): void
-    {
-        $conn = $this->tenantConnection;
-        $conn->executeStatement(
-            'CREATE TABLE IF NOT EXISTS doctrine_migration_versions '
-            . '(version VARCHAR(191) NOT NULL, executed_at DATETIME DEFAULT NULL, '
-            . 'execution_time INT DEFAULT NULL, PRIMARY KEY(version)) '
-            . 'DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
-        );
-
-        foreach (glob($this->projectDir . '/migrations/tenant/Version*.php') as $file) {
-            $version = 'DoctrineMigrations\\' . basename($file, '.php');
-            $conn->executeStatement(
-                'INSERT IGNORE INTO doctrine_migration_versions (version, executed_at, execution_time) VALUES (?, NOW(), 0)',
-                [$version]
-            );
-        }
-    }
-
     private function seedTenant(string $company, string $email, string $password): void
     {
-        // Connection is already pointed at the new tenant DB by migrateTenantDatabase().
         $tva = (new Tva())->setTaux('19');
 
         $timbre = new Timbre();

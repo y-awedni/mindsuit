@@ -20,6 +20,12 @@ services:
     # Request-scoped holder of the resolved tenant (set by TenantResolver).
     App\Doctrine\TenantContext: ~
 
+    # Runs ERP migrations against a single tenant database (subprocess).
+    App\Doctrine\TenantMigrator:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $databaseUrl: '%env(DATABASE_URL)%'
+
     # Resolves the tenant from the request Host and switches the tenant
     # connection. Runs early (before security/firewall) so the User provider
     # queries the right database.
