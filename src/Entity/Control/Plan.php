@@ -8,6 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * A subscription plan offered to tenants (Starter, Pro, Entreprise...).
  * Lives in the control database.
+ *
+ * Limits are stored as a flexible key => value map ({@see PlanLimit} keys),
+ * where the value is an integer cap or null for "unlimited". New limit types
+ * can be added without a schema change; values are editable from the operator
+ * dashboard.
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'plan')]
@@ -24,17 +29,28 @@ class Plan
     #[ORM\Column(type: Types::STRING, length: 100)]
     private string $name;
 
-    /** Monthly price in millimes (or DT) — 0 for free/trial-only plans. */
+    /** Monthly price in millimes (1 DT = 1000). 0 for a free plan. */
     #[ORM\Column(type: Types::INTEGER)]
     private int $priceMonthly = 0;
 
-    /** Null = unlimited. */
+    /** Yearly price in millimes; null = no yearly option. */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    private ?int $maxUsers = null;
+    private ?int $priceYearly = null;
 
-    /** Null = unlimited. */
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    private ?int $maxDocsPerMonth = null;
+    /** Whether the plan can be subscribed to / shown. */
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $active = true;
+
+    /**
+     * Limit key => cap (int) or null for unlimited. See {@see PlanLimit}.
+     *
+     * @var array<string,int|null>
+     */
+    #[ORM\Column(type: Types::JSON)]
+    private array $limits = [];
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $sortOrder = 0;
 
     public function getId(): ?int
     {
@@ -77,26 +93,77 @@ class Plan
         return $this;
     }
 
-    public function getMaxUsers(): ?int
+    public function getPriceYearly(): ?int
     {
-        return $this->maxUsers;
+        return $this->priceYearly;
     }
 
-    public function setMaxUsers(?int $maxUsers): self
+    public function setPriceYearly(?int $priceYearly): self
     {
-        $this->maxUsers = $maxUsers;
+        $this->priceYearly = $priceYearly;
 
         return $this;
     }
 
-    public function getMaxDocsPerMonth(): ?int
+    public function isActive(): bool
     {
-        return $this->maxDocsPerMonth;
+        return $this->active;
     }
 
-    public function setMaxDocsPerMonth(?int $maxDocsPerMonth): self
+    public function setActive(bool $active): self
     {
-        $this->maxDocsPerMonth = $maxDocsPerMonth;
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string,int|null>
+     */
+    public function getLimits(): array
+    {
+        return $this->limits;
+    }
+
+    /**
+     * @param array<string,int|null> $limits
+     */
+    public function setLimits(array $limits): self
+    {
+        $this->limits = $limits;
+
+        return $this;
+    }
+
+    /**
+     * The cap for a limit key, or null when unlimited / not configured.
+     */
+    public function getLimit(string $key): ?int
+    {
+        return $this->limits[$key] ?? null;
+    }
+
+    public function setLimit(string $key, ?int $value): self
+    {
+        $this->limits[$key] = $value;
+
+        return $this;
+    }
+
+    /** A finite cap is configured for this key (i.e. not unlimited). */
+    public function hasLimit(string $key): bool
+    {
+        return isset($this->limits[$key]) && $this->limits[$key] !== null;
+    }
+
+    public function getSortOrder(): int
+    {
+        return $this->sortOrder;
+    }
+
+    public function setSortOrder(int $sortOrder): self
+    {
+        $this->sortOrder = $sortOrder;
 
         return $this;
     }
