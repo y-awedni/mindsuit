@@ -1,4 +1,8 @@
 doctrine_migrations:
+    # Default config = the per-tenant ERP migrations. Run with --em=tenant
+    # (per tenant DB). The control-plane migrations use a separate config file:
+    #   doctrine:migrations:migrate --configuration=migrations/control.php
+    # See migrations/tenant.php and migrations/control.php.
     migrations_paths:
-        'DoctrineMigrations': '%kernel.project_dir%/migrations'
+        'DoctrineMigrations': '%kernel.project_dir%/migrations/tenant'
     enable_profiler: false

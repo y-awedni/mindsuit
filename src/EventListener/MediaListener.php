@@ -2,25 +2,36 @@
 
 namespace App\EventListener;
 
+use App\Doctrine\TenantContext;
 use App\Entity\Media;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class MediaListener {
 
     private $imagesDirectory;
+    private TenantContext $tenantContext;
     public $tempFile;
     public $oldFile;
 
-    public function __construct($imagesDirectory) {
+    public function __construct($imagesDirectory, TenantContext $tenantContext) {
         $this->imagesDirectory = $imagesDirectory;
+        $this->tenantContext = $tenantContext;
     }
-    
-    
+
+
     //functions_________________________________________________________________
     public function getUploadRootDir() {
         return $this->imagesDirectory;
     }
-    
+
+    // Per-tenant subfolder so uploaded files are isolated between tenants.
+    // Stored inside Media::path, so getAssetPath() (uploads/images/<path>)
+    // and the physical location stay in sync. Legacy files (no prefix) still
+    // resolve.
+    private function tenantSubdir(): string {
+        return $this->tenantContext->getSubdomain() ?: 'shared';
+    }
+
     public function getAbsolutePath($media) {
         return null === $media->getPath() ? null : $this->getUploadRootDir() . '/' . $media->getPath();
     }
@@ -29,13 +40,17 @@ class MediaListener {
         $this->oldFile = $media->getPath();
         $this->updateAt = new \DateTime();
         if (null !== $media->file) {
-            $media->setPath(sha1(uniqid(mt_rand(), true)) . '.' . $media->file->guessExtension());
+            $media->setPath($this->tenantSubdir() . '/' . sha1(uniqid(mt_rand(), true)) . '.' . $media->file->guessExtension());
         }
     }
-    
+
     public function postUpload($media) {
         if (null !== $media->file) {
-            $media->file->move($this->getUploadRootDir(), $media->getPath());
+            $dir = $this->getUploadRootDir() . '/' . $this->tenantSubdir();
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0775, true);
+            }
+            $media->file->move($dir, basename($media->getPath()));
             unset($media->file);
 
             if ($this->oldFile != null) {

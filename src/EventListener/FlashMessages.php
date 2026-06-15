@@ -41,6 +41,9 @@ class FlashMessages {
             return;
         }
 
+        if ($this->requestStack->getCurrentRequest() === null) {
+            return; // CLI / no request (e.g. tenant provisioning): nothing to flash.
+        }
         $session = $this->requestStack->getSession();
         $session->getFlashBag()->add(
                 'notice', $this->translator->trans(
@@ -55,6 +58,9 @@ class FlashMessages {
         if(in_array($name, ['Media','LigneDevis','LigneFacture','LigneBonLivraison','LigneBonReception','LigneBonCommandeFrs'])){
             return;
         }
+        if ($this->requestStack->getCurrentRequest() === null) {
+            return; // CLI / no request (e.g. tenant provisioning): nothing to flash.
+        }
         $session = $this->requestStack->getSession();
         $session->getFlashBag()->add(
                 'notice', $this->translator->trans(
@@ -68,6 +74,9 @@ class FlashMessages {
         $name = $this->getName($entity);
         if(in_array($name, ['Media','LigneDevis','LigneFacture','LigneBonLivraison','LigneBonReception','LigneBonCommandeFrs'])){
             return;
+        }
+        if ($this->requestStack->getCurrentRequest() === null) {
+            return; // CLI / no request (e.g. tenant provisioning): nothing to flash.
         }
         $session = $this->requestStack->getSession();
         $session->getFlashBag()->add(
