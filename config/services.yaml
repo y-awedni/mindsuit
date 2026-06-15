@@ -26,6 +26,10 @@ services:
             $projectDir: '%kernel.project_dir%'
             $databaseUrl: '%env(DATABASE_URL)%'
 
+    # End-to-end tenant provisioning (used by CLI + future signup).
+    App\Tenant\TenantProvisioner:
+        autowire: true
+
     # Resolves the tenant from the request Host and switches the tenant
     # connection. Runs early (before security/firewall) so the User provider
     # queries the right database.
