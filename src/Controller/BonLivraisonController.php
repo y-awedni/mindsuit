@@ -179,7 +179,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/", name="bonlivraison_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
 
         if (!$request->get('sort')) {
@@ -212,7 +212,7 @@ class BonLivraisonController extends BaseController {
         $request->query->set('endDateCreation', $endDateCreation);
         $request->query->set('startDateLivraison', $startDateLivraison);
         $request->query->set('endDateLivraison', $endDateLivraison);
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qbTous = $this->getQbByParametres($em, $request)
                 ->select('sum(a.total) as total')
                 ->addSelect('sum(a.regle) as regle')
@@ -250,7 +250,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/blglobal", name="blglobal", methods={"GET"})
      */
     public function blglobalAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
         $client = null;
@@ -275,7 +275,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/export/xls", name="bonlivraison_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -350,7 +350,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/new", name="bonlivraison_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $bonLivraison = new Bonlivraison();
         $form = $this->createForm('App\Form\BonLivraisonType', $bonLivraison);
@@ -399,17 +399,17 @@ class BonLivraisonController extends BaseController {
         $form_imprimer->handleRequest($request);
         $form_converter->handleRequest($request);
         if ($form_regler->isSubmitted() && $form_regler->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('bonlivraison_reglements', array('id' => $bonlivraison->getId()));
         }
         if ($form_imprimer->isSubmitted() && $form_imprimer->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('bonlivraison_print', array('id' => $bonlivraison->getId()));
         }
         if ($form_converter->isSubmitted() && $form_converter->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('bonlivraison_to_facture', array('id' => $bonlivraison->getId()));
         }
@@ -427,7 +427,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/{id}/edit", name="bonlivraison_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, BonLivraison $bonLivraison) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $originalLigneBonLivraisons = new ArrayCollection();
 
@@ -468,7 +468,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/{id}/print", name="bonlivraison_print", methods={"GET"})
      */
     public function printAction(BonLivraison $bonlivraison, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($bonlivraison->getTotal());
@@ -495,7 +495,7 @@ class BonLivraisonController extends BaseController {
             $this->get('session')->getFlashBag()->add('info', 'Il faut terminer la bon de livraison pour faire un réglement');
             return $this->redirectToRoute('bonlivraison_show', array('id' => $bonlivraison->getId()));
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneReglement = new LigneReglementBonLivraison();
         $ligneReglement->setBonLivraison($bonlivraison);
         $ligneReglement->setType('reglement');
@@ -522,7 +522,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/{id}/reglement/{idLigneReglement}/delete",name="bonlivraison_reglement_delete", methods={"GET"})
      */
     public function reglementDeleteAction($id, $idLigneReglement) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneReglement = $em->getRepository('App\\Entity\\LigneReglementBonLivraison')->find($idLigneReglement);
         $em->remove($ligneReglement);
         $em->flush($ligneReglement);
@@ -542,7 +542,7 @@ class BonLivraisonController extends BaseController {
             $this->get('session')->getFlashBag()->add('info', 'Cette bon de livraison est déja converti en facture');
             return $this->redirectToRoute('bonlivraison_show', array('id' => $bonlivraison->getId()));
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $facture = new Facture();
         $facture->setFromBl(true);
         $facture->setClient($bonlivraison->getClient());
@@ -681,7 +681,7 @@ class BonLivraisonController extends BaseController {
         }
         $bls = $session->get('bls');
         if (count($bls) > 0) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $facture = new Facture();
             $facture->setFromBl(true);
             $facture->setTermine(true);
@@ -791,7 +791,7 @@ class BonLivraisonController extends BaseController {
      * @Route("/{id}/delete", name="bonlivraison_delete", methods={"GET"})
      */
     public function deleteAction(BonLivraison $bonlivraison) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneBonLivraisons = $bonlivraison->getLigneBonLivraisons();
         foreach ($ligneBonLivraisons as $ligne) {
             $qteEnStock = $ligne->getArticle()->getQteEnStock();

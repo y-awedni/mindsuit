@@ -20,7 +20,7 @@ class BanqueController extends BaseController {
      * @Route("/", name="banque_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $banques = $em->getRepository('App\\Entity\\Banque')->findBy([], ['id' => 'DESC']);
 
@@ -43,7 +43,7 @@ class BanqueController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($banque);
             $em->flush($banque);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -68,7 +68,7 @@ class BanqueController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('banque_index');
         }
@@ -87,7 +87,7 @@ class BanqueController extends BaseController {
     public function deleteAction(Banque $banque) {
         if ($banque) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($banque);
                 $em->flush($banque);
             } catch (\Doctrine\DBAL\DBALException $e) {

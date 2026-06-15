@@ -20,7 +20,7 @@ class LigneDevisController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneDevis = $em->getRepository('App\\Entity\\LigneDevis')->findAll();
 
@@ -41,7 +41,7 @@ class LigneDevisController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneDevi);
             $em->flush($ligneDevi);
 
@@ -81,7 +81,7 @@ class LigneDevisController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignedevis_edit', array('id' => $ligneDevi->getId()));
         }
@@ -104,7 +104,7 @@ class LigneDevisController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneDevi);
             $em->flush($ligneDevi);
         }

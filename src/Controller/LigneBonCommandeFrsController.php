@@ -20,7 +20,7 @@ class LigneBonCommandeFrsController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneBonCommandeFrs = $em->getRepository('App\\Entity\\LigneBonCommandeFrs')->findAll();
 
@@ -41,7 +41,7 @@ class LigneBonCommandeFrsController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneBonCommandeFr);
             $em->flush($ligneBonCommandeFr);
 
@@ -81,7 +81,7 @@ class LigneBonCommandeFrsController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('ligneboncommandefrs_edit', array('id' => $ligneBonCommandeFr->getId()));
         }
@@ -104,7 +104,7 @@ class LigneBonCommandeFrsController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneBonCommandeFr);
             $em->flush($ligneBonCommandeFr);
         }

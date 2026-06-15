@@ -108,7 +108,7 @@ class DevisController extends BaseController {
      * @Route("/", name="devis_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         if (!$request->get('sort')) {
             $qb->orderBy('a.id', 'DESC');
@@ -131,7 +131,7 @@ class DevisController extends BaseController {
      * @Route("/export/xls", name="devis_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -212,7 +212,7 @@ class DevisController extends BaseController {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($devi);
             $em->flush($devi);
 
@@ -233,7 +233,7 @@ class DevisController extends BaseController {
      * @Route("/{id}/facture",name="devis_to_facture", methods={"GET"})
      */
     public function devisToFacture(Devis $devi) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $facture = new Facture();
         $facture->setClient($devi->getClient());
         $facture->setHt($devi->getHt());
@@ -284,7 +284,7 @@ class DevisController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             // remove the relationship between the tag and the Task
             foreach ($originalLignesDevis as $ligne) {
                 if (false === $devi->getLignesDevis()->contains($ligne)) {
@@ -312,7 +312,7 @@ class DevisController extends BaseController {
      * @Route("/{id}/print", name="devis_print", methods={"GET"})
      */
     public function printAction(Devis $devi, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($devi->getTotal());
@@ -339,7 +339,7 @@ class DevisController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($devi);
             $em->flush($devi);
         }

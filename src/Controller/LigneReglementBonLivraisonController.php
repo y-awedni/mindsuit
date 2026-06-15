@@ -20,7 +20,7 @@ class LigneReglementBonLivraisonController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneReglementBonLivraisons = $em->getRepository('App\\Entity\\LigneReglementBonLivraison')->findAll();
 
@@ -41,7 +41,7 @@ class LigneReglementBonLivraisonController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneReglementBonLivraison);
             $em->flush($ligneReglementBonLivraison);
 
@@ -81,7 +81,7 @@ class LigneReglementBonLivraisonController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignereglementbonlivraison_edit', array('id' => $ligneReglementBonLivraison->getId()));
         }
@@ -104,7 +104,7 @@ class LigneReglementBonLivraisonController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneReglementBonLivraison);
             $em->flush($ligneReglementBonLivraison);
         }

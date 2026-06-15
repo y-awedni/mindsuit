@@ -107,7 +107,7 @@ class ArticleController extends BaseController {
      * @Route("/", name="article_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         if (!$request->get('sort')) {
             if ($request->get('customSort')) {
@@ -139,7 +139,7 @@ class ArticleController extends BaseController {
      * @Route("/export/xls", name="article_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -256,7 +256,7 @@ class ArticleController extends BaseController {
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             if ($article->getSousfamille()) {
                 $article->setFamille($article->getSousfamille()->getFamille());
             }
@@ -304,7 +304,7 @@ class ArticleController extends BaseController {
             if ($article->getSousfamille()) {
                 $article->setFamille($article->getSousfamille()->getFamille());
             }
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('article_index');
         }
@@ -323,7 +323,7 @@ class ArticleController extends BaseController {
     public function deleteAction(Article $article) {
         if ($article) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($article);
                 $em->flush($article);
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -348,7 +348,7 @@ class ArticleController extends BaseController {
             );
             return new JsonResponse($myresponse);
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $id = $request->query->get('id');
         $article = $em->getRepository('App\\Entity\\Article')->find($id);
 
@@ -372,7 +372,7 @@ class ArticleController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($article);
             $em->flush($article);
             //a redefinir
@@ -402,7 +402,7 @@ class ArticleController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($article);
             $em->flush($article);
             //a redefinir

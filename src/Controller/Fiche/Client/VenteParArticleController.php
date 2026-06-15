@@ -51,7 +51,7 @@ class VenteParArticleController extends BaseController {
      * @Route("/{id}", name="fiche_client_vente_article", methods={"GET"})
      */
     public function venteParArticleAction(Request $request, Client $client, $offset = 0, $limit = 10) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getVenteParArticleQbByParametres($em, $request, $client->getId());
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
             $qb->orderBy('a.id', 'DESC');
@@ -92,7 +92,7 @@ class VenteParArticleController extends BaseController {
      * @Route("/export/xls", name="fiche_client_vente_article_xls", methods={"GET"})
      */
     public function venteParArticleExportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getVenteParArticleQbByParametres($em, $request, $request->query->get('client'))
                 ->addGroupBy('a.article');
 

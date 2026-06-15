@@ -113,7 +113,7 @@ class BonCommandeFrsController extends BaseController {
      * @Route("/", name="boncommandefrs_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         if (!$request->get('sort')) {
             $qb->orderBy('a.id', 'DESC');
@@ -136,7 +136,7 @@ class BonCommandeFrsController extends BaseController {
      * @Route("/export/xls", name="boncommandefrs_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -198,7 +198,7 @@ class BonCommandeFrsController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($bonCommandeFrs);
             $em->flush($bonCommandeFrs);
 
@@ -231,7 +231,7 @@ class BonCommandeFrsController extends BaseController {
      * @Route("/{id}/print", name="boncommandefrs_print", methods={"GET"})
      */
     public function printAction(BonCommandeFrs $bonCommandeFrs, \App\Service\PdfGenerator $pdf) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         return $pdf->renderResponse('boncommandefrs/pdf.html.twig', [
@@ -257,7 +257,7 @@ class BonCommandeFrsController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             foreach ($originalLigneBonCommandeFrss as $ligne) {
                 if (false === $bonCommandeFrs->getLigneBonCommandeFrss()->contains($ligne)) {
                     $ligne->setBonCommandeFrs(null);
@@ -288,7 +288,7 @@ class BonCommandeFrsController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($bonCommandeFrs);
             $em->flush($bonCommandeFrs);
         }

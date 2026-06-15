@@ -19,7 +19,7 @@ class FournisseurController extends BaseController {
      * @Route("/", name="fournisseurs_stats", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $dateFormat = $this->get('app.format_date');
         $dixFournisseursPlusBenefiques = $em->createQueryBuilder()
                 ->select('frs.code as code', 'SUM(s.ttc) as ttc')
@@ -181,7 +181,7 @@ class FournisseurController extends BaseController {
      */
     public function showAction(Request $request) {
         $id = $request->query->get('id');
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $fournisseur = $em->getRepository('App\\Entity\\Fournisseur')->find($id);
         if (!$fournisseur) {
             $this->get('session')->getFlashBag()->add('info', 'Il faut sélectionner un client.');

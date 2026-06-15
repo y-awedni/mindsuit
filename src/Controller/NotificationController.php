@@ -21,7 +21,7 @@ class NotificationController extends BaseController {
      * @Route("/", name="notification_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\Notification')->createQueryBuilder('a');
         //filter
         if ($request->query->get('description')) {
@@ -58,7 +58,7 @@ class NotificationController extends BaseController {
      * @Route("/news",name="notification_news", methods={"GET"})
      */
     public function newsAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $notifications = $notifications = $em->getRepository('App\\Entity\\Notification')->findBy([], ['id' => 'DESC'], '8');
         $countAlerts = count($em->getRepository('App\\Entity\\Notification')->findByVu(false));
         return $this->render('notification/news.html.twig', array(
@@ -73,7 +73,7 @@ class NotificationController extends BaseController {
      * @Route("/vu/all", name="notification_vu_all", methods={"GET"})
      */
     public function vuAllAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $notifications = $em->getRepository('App\\Entity\\Notification')->findByVu(false);
         foreach ($notifications as $notification) {
             $notification->setVu(true);
@@ -95,7 +95,7 @@ class NotificationController extends BaseController {
             );
             return new JsonResponse($myresponse);
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $notification = $em->getRepository('App\\Entity\\Notification')->find($request->request->get('id'));
         $notification->setVu(true);
         $em->flush($notification);

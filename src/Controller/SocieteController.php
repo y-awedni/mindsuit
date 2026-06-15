@@ -20,7 +20,7 @@ class SocieteController extends BaseController {
      * @Route("/", name="societe_index", methods={"GET","POST"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
@@ -33,7 +33,7 @@ class SocieteController extends BaseController {
                 $societe ->getMedia()->setName(sha1(uniqid(mt_rand(), true)));
             }
         	
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('societe_index');
         }
@@ -59,7 +59,7 @@ class SocieteController extends BaseController {
             if($societe->getMedia()){
                 $societe->getMedia()->setName(sha1(uniqid(mt_rand(), true)));
             }
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('societe_edit', array('id' => $societe->getId()));
         }
@@ -81,7 +81,7 @@ class SocieteController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($societe);
             $em->flush($societe);
         }

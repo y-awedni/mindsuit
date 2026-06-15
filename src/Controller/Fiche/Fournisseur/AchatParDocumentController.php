@@ -78,7 +78,7 @@ class AchatParDocumentController extends BaseController {
      * @Route("/{id}", name="fiche_fournisseur_achat_document", methods={"GET"})
      */
     public function achatParDocumentAction(Request $request, Fournisseur $fournisseur, $offset = 0, $limit = 10) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getAchatParDocumentQbByParametres($em, $request, $fournisseur->getId());
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
             $qb->orderBy('a.id', 'DESC');
@@ -123,7 +123,7 @@ class AchatParDocumentController extends BaseController {
      * @Route("/export/xls", name="fiche_client_vente_document_xls", methods={"GET"})
      */
     public function achatParDocumentExportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getVenteParDocumentQbByParametres($em, $request, $request->query->get('fournisseur'))
                 ->addGroupBy('a.designation');
         $fournisseur = $em->getRepository('App\\Entity\\Fournisseur')->find($request->query->get('fournisseur'));

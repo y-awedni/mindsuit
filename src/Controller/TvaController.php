@@ -20,7 +20,7 @@ class TvaController extends BaseController {
      * @Route("/", name="tva_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $tvas = $em->getRepository('App\\Entity\\Tva')->findBy([], ['id' => 'DESC']);
 
@@ -43,7 +43,7 @@ class TvaController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($tva);
             $em->flush($tva);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -68,7 +68,7 @@ class TvaController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('tva_index');
         }
@@ -87,7 +87,7 @@ class TvaController extends BaseController {
     public function deleteAction(Tva $tva) {
         if ($tva) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($tva);
                 $em->flush($tva);
             } catch (\Doctrine\DBAL\DBALException $e) {

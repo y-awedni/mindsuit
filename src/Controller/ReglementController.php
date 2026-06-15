@@ -20,7 +20,7 @@ class ReglementController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $reglements = $em->getRepository('App\\Entity\\Reglement')->findAll();
 
@@ -41,7 +41,7 @@ class ReglementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($reglement);
             $em->flush($reglement);
 
@@ -81,7 +81,7 @@ class ReglementController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('reglement_edit', array('id' => $reglement->getId()));
         }
@@ -104,7 +104,7 @@ class ReglementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($reglement);
             $em->flush($reglement);
         }

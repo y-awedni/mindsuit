@@ -117,7 +117,7 @@ class ServiceController extends BaseController {
      * @Route("/", name="services_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
 
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
@@ -145,7 +145,7 @@ class ServiceController extends BaseController {
      * @Route("/export/xls", name="service_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();

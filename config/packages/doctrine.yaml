@@ -1,16 +1,38 @@
 doctrine:
     dbal:
-        driver: pdo_mysql
-        url: '%env(resolve:DATABASE_URL)%'
-        charset: UTF8
+        default_connection: default
+        connections:
+            # Control plane: tenants, plans, subscriptions, payments, owners.
+            default:
+                url: '%env(resolve:DATABASE_URL)%'
+                charset: UTF8
+            # Tenant ERP data. Bootstraps to the control DB, then switches to the
+            # resolved tenant's database via `USE` (see App\Doctrine\TenantConnection).
+            tenant:
+                url: '%env(resolve:DATABASE_URL)%'
+                charset: UTF8
+                wrapper_class: App\Doctrine\TenantConnection
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
-        mappings:
-            App:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                mappings:
+                    Control:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Entity/Control'
+                        prefix: 'App\Entity\Control'
+                        alias: Control
+            tenant:
+                connection: tenant
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                mappings:
+                    App:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity'
+                        alias: App

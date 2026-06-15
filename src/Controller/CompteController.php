@@ -20,7 +20,7 @@ class CompteController extends BaseController {
      * @Route("/", name="compte_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $comptes = $em->getRepository('App\\Entity\\Compte')->findBy([], ['id' => 'DESC']);
 
@@ -43,7 +43,7 @@ class CompteController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($compte);
             $em->flush($compte);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -68,7 +68,7 @@ class CompteController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('compte_index');
         }
@@ -86,7 +86,7 @@ class CompteController extends BaseController {
     public function deleteAction(Compte $compte) {
         if ($compte) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($compte);
                 $em->flush($compte);
             } catch (\Doctrine\DBAL\DBALException $e) {

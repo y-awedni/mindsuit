@@ -98,7 +98,7 @@ class FactureAvoirController extends BaseController {
      * @Route("/", name="factureavoir_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $factures = $em->getRepository('App\\Entity\\Facture')->findAll();
         $clients = $em->getRepository('App\\Entity\\Client')->findAll();
         $qb = $this->getQbByParametres($em, $request);
@@ -120,7 +120,7 @@ class FactureAvoirController extends BaseController {
      * @Route("/export/xls", name="factureavoir_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -194,7 +194,7 @@ class FactureAvoirController extends BaseController {
             $this->get('session')->getFlashBag()->add('info', 'Il faut régler la facture pour faire un avoir');
             return $this->redirectToRoute('facture_show', array('id' => $facture->getId()));
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\FactureAvoir')->createQueryBuilder('a');
         $qb->join('a.facture', 'f');
         $qb->where('f.id=' . $facture->getId());
@@ -255,7 +255,7 @@ class FactureAvoirController extends BaseController {
         $form = $this->createForm('App\Form\FactureAvoirType', $factureAvoir);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $maxAvoire = 0;
             foreach ($factureAvoir->getLigneFactureAvoirs() as $key => $ligne) {
                 $maxInitiale = $ligne->getQteMax();
@@ -322,7 +322,7 @@ class FactureAvoirController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $maxAvoire = 0;
             foreach ($factureAvoir->getLigneFactureAvoirs() as $key => $ligne) {
                 $maxInitiale = $ligne->getQteMax();
@@ -361,7 +361,7 @@ class FactureAvoirController extends BaseController {
      * @Route("/{id}/print", name="factureavoir_print", methods={"GET"})
      */
     public function printAction(FactureAvoir $factureAvoir, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($factureAvoir->getTotal());

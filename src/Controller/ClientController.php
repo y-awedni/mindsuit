@@ -71,7 +71,7 @@ class ClientController extends BaseController {
      * @Route("/", name="client_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         if (!$request->get('sort')) {
             $qb->orderBy('a.id', 'DESC');
@@ -92,7 +92,7 @@ class ClientController extends BaseController {
      * @Route("/export/xls", name="client_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -200,7 +200,7 @@ class ClientController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             if ($client->getPassager()) {
                 $clientPassager = $em->getRepository('App\\Entity\\Client')->findOneByPassager(true);
                 if ($clientPassager) {
@@ -235,7 +235,7 @@ class ClientController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             if ($client->getPassager()) {
                 $qb = $em->getRepository('App\\Entity\\Client')->createQueryBuilder('c');
                 $qb->where('c.passager=true')->andWhere('c.id != ' . $client->getId());
@@ -267,7 +267,7 @@ class ClientController extends BaseController {
     public function deleteAction(Client $client) {
         if ($client) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($client);
                 $em->flush($client);
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -328,7 +328,7 @@ class ClientController extends BaseController {
             );
             return new JsonResponse($myresponse);
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $id = $request->query->get('id');
         $client = $em->getRepository('App\\Entity\\Client')->findOneById($id);
         $response = array();
@@ -366,7 +366,7 @@ class ClientController extends BaseController {
         $form = $this->createForm('App\Form\Custom\ClientType', $client);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($client);
             $em->flush($client);
             //a redefinir

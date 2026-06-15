@@ -109,7 +109,7 @@ class StockController extends BaseController {
      * @Route("/", name="stock_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
             $qb->orderBy('a.id', 'DESC');
@@ -136,7 +136,7 @@ class StockController extends BaseController {
      * @Route("/export/xls", name="stock_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -227,7 +227,7 @@ class StockController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($stock);
             $em->flush($stock);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -264,7 +264,7 @@ class StockController extends BaseController {
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($stock->getQte() <= $stock->getArticle()->getQteEnStock()) {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->persist($stock);
                 $em->flush($stock);
                 if ($form->get('saveAndNew')->isClicked()) {

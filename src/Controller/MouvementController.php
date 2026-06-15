@@ -169,7 +169,7 @@ class MouvementController extends BaseController {
      * @Route("/", name="mouvement_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
 
         if (!$request->get('sort')) {
@@ -209,7 +209,7 @@ class MouvementController extends BaseController {
      * @Route("/export/xls", name="mouvement_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -289,7 +289,7 @@ class MouvementController extends BaseController {
      * @Route("/depense/new", name="depense_new", methods={"GET", "POST"})
      */
     public function depenseNewAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $mouvement = new Mouvement();
         $mouvement->setMouvement('depense');
@@ -314,14 +314,14 @@ class MouvementController extends BaseController {
      * @Route("/revenu/new", name="revenu_new", methods={"GET", "POST"})
      */
     public function revenuNewAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $mouvement = new Mouvement();
         $mouvement->setMouvement('revenu');
         $form = $this->createForm('App\Form\MouvementType', $mouvement);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($mouvement);
             $em->flush($mouvement);
             return $this->redirectToRoute('mouvement_index');

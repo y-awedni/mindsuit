@@ -45,7 +45,10 @@ abstract class BaseController extends AbstractController
 
     protected function getEm(): ObjectManager
     {
-        return $this->getDoctrine()->getManager();
+        // All ERP data lives in the per-tenant database, served by the
+        // "tenant" entity manager (see config/packages/doctrine.yaml). The
+        // "default" manager is the control plane (tenants, plans, billing).
+        return $this->getDoctrine()->getManager('tenant');
     }
 
     protected function societeLogoPath($societe): ?string

@@ -125,7 +125,7 @@ class ArticleController extends BaseController {
      * @Route("/", name="articles_stats", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $dateFormat = $this->get('app.format_date');
         $startDateCreation = null;
         if ($request->query->get('startDateCreation')) {
@@ -203,7 +203,7 @@ class ArticleController extends BaseController {
      */
     public function showAction(Request $request) {
         $id = $request->query->get('id');
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $article = $em->getRepository('App\\Entity\\Article')->find($id);
         if (!$article) {
             $this->get('session')->getFlashBag()->add('info', 'Il faut sélectionner un article.');

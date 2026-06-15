@@ -20,7 +20,7 @@ class LigneReglementController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneReglements = $em->getRepository('App\\Entity\\LigneReglement')->findAll();
 
@@ -41,7 +41,7 @@ class LigneReglementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneReglement);
             $em->flush($ligneReglement);
 
@@ -81,7 +81,7 @@ class LigneReglementController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignereglement_edit', array('id' => $ligneReglement->getId()));
         }
@@ -104,7 +104,7 @@ class LigneReglementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneReglement);
             $em->flush($ligneReglement);
         }

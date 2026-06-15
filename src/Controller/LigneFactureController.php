@@ -20,7 +20,7 @@ class LigneFactureController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneFactures = $em->getRepository('App\\Entity\\LigneFacture')->findAll();
 
@@ -41,7 +41,7 @@ class LigneFactureController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneFacture);
             $em->flush($ligneFacture);
 
@@ -81,7 +81,7 @@ class LigneFactureController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignefacture_edit', array('id' => $ligneFacture->getId()));
         }
@@ -104,7 +104,7 @@ class LigneFactureController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneFacture);
             $em->flush($ligneFacture);
         }

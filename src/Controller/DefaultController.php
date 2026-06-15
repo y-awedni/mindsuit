@@ -11,7 +11,7 @@ class DefaultController extends BaseController {
      * @Route("/", name="homepage")
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $stocks = $em->getRepository('App\\Entity\\Stock')->findBy(array(), array('id' => 'DESC'), 10);
         $mouvements = $em->getRepository('App\\Entity\\Mouvement')->findBy(array(), array('id' => 'DESC'), 10);
         $countDevis = $em->getRepository('App\\Entity\\Devis')->findAllCount();

@@ -160,7 +160,7 @@ class FactureController extends BaseController {
      * @Route("/", name="facture_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $qb = $this->getQbByParametres($em, $request);
 
         if (!$request->get('sort')) {
@@ -192,7 +192,7 @@ class FactureController extends BaseController {
         $request->query->set('endDateCreation', $endDateCreation);
         $request->query->set('startDateEcheance', $startDateEcheance);
         $request->query->set('endDateEcheance', $endDateEcheance);
-        $em= $this->getDoctrine()->getManager();
+        $em= $this->getEm();
         $qb = $this->getQbByParametres($em, $request)
                 ->select('sum(a.total) as total')
                 ->addSelect('sum(a.regle) as regle')
@@ -212,7 +212,7 @@ class FactureController extends BaseController {
      * @Route("/factureglobal", name="factureglobal", methods={"GET"})
      */
     public function factureGlobalAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
         $client = null;
@@ -237,7 +237,7 @@ class FactureController extends BaseController {
      * @Route("/export/xls", name="facture_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -318,7 +318,7 @@ class FactureController extends BaseController {
      * @Route("/new", name="facture_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request, \App\Service\TimbreProvider $timbreProvider) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $facture = new Facture();
         $form = $this->createForm('App\Form\FactureType', $facture);
@@ -360,12 +360,12 @@ class FactureController extends BaseController {
         $form_regler->handleRequest($request);
         $form_imprimer->handleRequest($request);
         if ($form_regler->isSubmitted() && $form_regler->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('facture_reglements', array('id' => $facture->getId()));
         }
         if ($form_imprimer->isSubmitted() && $form_imprimer->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('facture_print', array('id' => $facture->getId()));
         }
@@ -382,7 +382,7 @@ class FactureController extends BaseController {
      * @Route("/{id}/edit", name="facture_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, Facture $facture) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         if ($facture->getTermine()) {
             $this->get('session')->getFlashBag()->add('info', 'Cette facture est terminé, on ne peut pas la modifier.');
@@ -427,7 +427,7 @@ class FactureController extends BaseController {
      * @Route("/{id}/print", name="facture_print", methods={"GET"})
      */
     public function printAction(Facture $facture, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($facture->getTotal());
@@ -454,7 +454,7 @@ class FactureController extends BaseController {
             $this->get('session')->getFlashBag()->add('info', 'Il faut terminer la facture pour faire un réglement');
             return $this->redirectToRoute('facture_show', array('id' => $facture->getId()));
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneReglement = new LigneReglement();
         $ligneReglement->setFacture($facture);
         $ligneReglement->setType('reglement');
@@ -484,7 +484,7 @@ class FactureController extends BaseController {
      * @Route("/{id}/reglement/{idLigneReglement}/delete",name="facture_reglement_delete", methods={"GET"})
      */
     public function reglementDeleteAction($id, $idLigneReglement) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneReglement = $em->getRepository('App\\Entity\\LigneReglement')->find($idLigneReglement);
         $em->remove($ligneReglement);
         $em->flush($ligneReglement);
@@ -506,7 +506,7 @@ class FactureController extends BaseController {
             );
             return new JsonResponse($myresponse);
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $id = $request->query->get('id');
         $facture = $em->getRepository('App\\Entity\\Facture')->findOneById($id);
         $response = array();

@@ -51,7 +51,7 @@ class AchatParArticleController extends BaseController {
      * @Route("/{id}", name="fiche_fournisseur_achat_article", methods={"GET"})
      */
     public function achatParArticleAction(Request $request, Fournisseur $fournisseur, $offset = 0, $limit = 10) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getAchatParArticleQbByParametres($em, $request, $fournisseur->getId());
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
             $qb->orderBy('a.id', 'DESC');
@@ -92,7 +92,7 @@ class AchatParArticleController extends BaseController {
      * @Route("/export/xls", name="fiche_fournisseur_achat_article_xls", methods={"GET"})
      */
     public function achatParArticleExportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getAchatParArticleQbByParametres($em, $request, $request->query->get('fournisseur'))
                 ->addGroupBy('a.article');
 

@@ -21,7 +21,7 @@ class FamilleController extends BaseController {
      * @Route("/", name="famille_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $familles = $em->getRepository('App\\Entity\\Famille')->findBy([], ['id' => 'DESC']);
 
@@ -44,7 +44,7 @@ class FamilleController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($famille);
             $em->flush($famille);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -69,7 +69,7 @@ class FamilleController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('famille_index');
         }
@@ -88,7 +88,7 @@ class FamilleController extends BaseController {
     public function deleteAction(Famille $famille) {
         if ($famille) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($famille);
                 $em->flush($famille);
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -111,7 +111,7 @@ class FamilleController extends BaseController {
             );
             return new JsonResponse($myresponse);
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $categorie = $request->query->get('categorie');
         $familles = $em->getRepository('App\\Entity\\Famille')->findByCategorie($categorie);
 

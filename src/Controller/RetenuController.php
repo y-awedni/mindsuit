@@ -21,7 +21,7 @@ class RetenuController extends BaseController {
      * @Route("/", name="retenu_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
 
@@ -44,7 +44,7 @@ class RetenuController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($retenu);
             $em->flush($retenu);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -83,7 +83,7 @@ class RetenuController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('retenu_index');
         }
@@ -102,7 +102,7 @@ class RetenuController extends BaseController {
     public function deleteAction(Retenu $retenu) {
         if ($retenu) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($retenu);
                 $em->flush($retenu);
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -125,7 +125,7 @@ class RetenuController extends BaseController {
             );
             return new JsonResponse($myresponse);
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $taux = $request->query->get('taux');
         $retenu = $em->getRepository('App\\Entity\\Retenu')->findOneByTaux($taux);
         

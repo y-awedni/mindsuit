@@ -154,7 +154,7 @@ class BonReceptionController extends BaseController {
      * @Route("/", name="bonreception_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         if (!$request->get('sort')) {
             $qb->orderBy('a.id', 'DESC');
@@ -187,7 +187,7 @@ class BonReceptionController extends BaseController {
         $request->query->set('endDateCreation', $endDateCreation);
         $request->query->set('startDateEcheance', $startDateReception);
         $request->query->set('endDateEcheance', $endDateReception);
-        $em= $this->getDoctrine()->getManager();
+        $em= $this->getEm();
         $qb = $this->getQbByParametres($em, $request)
                 ->select('sum(a.total) as total')
                 ->addSelect('sum(a.regle) as regle')
@@ -207,7 +207,7 @@ class BonReceptionController extends BaseController {
      * @Route("/export/xls", name="bonreception_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -298,7 +298,7 @@ class BonReceptionController extends BaseController {
      * @Route("/boncommande/new", name="bonreception_boncommande_new", methods={"GET", "POST"})
      */
     public function bonreceptionBoncommandeNewAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $bonReception = new BonReception();
         $bonCommandeId = $request->query->get('id');
@@ -316,7 +316,7 @@ class BonReceptionController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $bonReception->setBonCommande($bonCommande);
             $em->persist($bonReception);
             $em->flush($bonReception);
@@ -340,14 +340,14 @@ class BonReceptionController extends BaseController {
      * @Route("/new", name="bonreception_new", methods={"GET", "POST"})
      */
     public function newAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $bonReception = new BonReception();
         $form = $this->createForm('App\Form\BonReceptionType', $bonReception);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($bonReception);
             $em->flush($bonReception);
 
@@ -383,12 +383,12 @@ class BonReceptionController extends BaseController {
         $form_regler->handleRequest($request);
         $form_imprimer->handleRequest($request);
         if ($form_regler->isSubmitted() && $form_regler->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('bonreception_reglements', array('id' => $bonreception->getId()));
         }
         if ($form_imprimer->isSubmitted() && $form_imprimer->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('bonreception_print', array('id' => $bonreception->getId()));
         }
@@ -405,7 +405,7 @@ class BonReceptionController extends BaseController {
      * @Route("/{id}/edit", name="bonreception_edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, BonReception $bonReception) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $bonCommande = $bonReception->getBonCommande();
         if ($bonReception->getTermine()) {
@@ -420,7 +420,7 @@ class BonReceptionController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $bonReception->setBonCommande($bonCommande);
             foreach ($originalLigneBonReceptions as $ligne) {
                 if (false === $bonReception->getLigneBonReceptions()->contains($ligne)) {
@@ -448,7 +448,7 @@ class BonReceptionController extends BaseController {
      * @Route("/{id}/print", name="bonreception_print", methods={"GET"})
      */
     public function printAction(BonReception $bonreception, Request $request, \App\Service\PdfGenerator $pdf, \App\Service\DocumentCalculator $calc) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $societe = $em->getRepository('App\\Entity\\Societe')->find(1);
 
         $totalDinars = intval($bonreception->getTotal());
@@ -475,7 +475,7 @@ class BonReceptionController extends BaseController {
             $this->get('session')->getFlashBag()->add('info', 'Il faut terminer la bon de reception pour faire un réglement');
             return $this->redirectToRoute('bonreception_show', array('id' => $bonreception->getId()));
         }
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneReglement = new LigneReglementBonReception();
         $ligneReglement->setBonReception($bonreception);
         $ligneReglement->setType('reglement');
@@ -502,7 +502,7 @@ class BonReceptionController extends BaseController {
      * @Route("/{id}/reglement/{idLigneReglement}/delete",name="bonreception_reglement_delete", methods={"GET"})
      */
     public function reglementDeleteAction($id, $idLigneReglement) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $ligneReglement = $em->getRepository('App\\Entity\\LigneReglementBonReception')->find($idLigneReglement);
         $em->remove($ligneReglement);
         $em->flush($ligneReglement);

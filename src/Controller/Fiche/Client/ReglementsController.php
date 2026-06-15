@@ -89,7 +89,7 @@ class ReglementsController extends BaseController {
      * @Route("/{id}", name="fiche_client_reglements", methods={"GET"})
      */
     public function reglementsAction(Request $request, Client $client, $offset = 0, $limit = 10) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getReglementsQbByParametres($em, $request, $client->getId());
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
             $qb->orderBy('a.id', 'DESC');
@@ -129,7 +129,7 @@ class ReglementsController extends BaseController {
      * @Route("/export/xls", name="fiche_client_reglements_xls", methods={"GET"})
      */
     public function reglementsExportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getReglementsQbByParametres($em, $request, $request->query->get('client'));
         $client = $em->getRepository('App\\Entity\\Client')->find($request->query->get('client'));
         $titre = $this->getTitreReglementsByParameteres($em, $request);

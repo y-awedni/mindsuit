@@ -20,7 +20,7 @@ class CategorieController extends BaseController {
      * @Route("/", name="categorie_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $categories = $em->getRepository('App\\Entity\\Categorie')->findBy([], ['id' => 'DESC']);
 
@@ -43,7 +43,7 @@ class CategorieController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($categorie);
             $em->flush($categorie);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -68,7 +68,7 @@ class CategorieController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('categorie_index');
         }
@@ -87,7 +87,7 @@ class CategorieController extends BaseController {
     public function deleteAction(Categorie $categorie) {
         if ($categorie) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($categorie);
                 $em->flush($categorie);
             } catch (\Doctrine\DBAL\DBALException $e) {

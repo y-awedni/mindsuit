@@ -21,7 +21,7 @@ class TimbreController extends BaseController
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $timbre = $em->getRepository('App\\Entity\\Timbre')->findOneBy([]);
         if (null === $timbre) {
             $timbre = new Timbre();

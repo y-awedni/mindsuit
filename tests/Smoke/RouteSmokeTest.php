@@ -2,6 +2,7 @@
 
 namespace Tests\Smoke;
 
+use App\Entity\Control\Tenant;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -78,7 +79,16 @@ class RouteSmokeTest extends WebTestCase
     private function logIn(KernelBrowser $client): void
     {
         $container = static::getContainer();
-        $em = $container->get('doctrine')->getManager();
+
+        // The smoke test runs on bare localhost -> DEFAULT_TENANT (minduos).
+        // Mirror TenantResolver here so the pre-request User lookup (below)
+        // hits the tenant database rather than the control DB.
+        $tenant = $container->get('doctrine')->getManager('default')
+            ->getRepository(Tenant::class)->findOneBy(['subdomain' => 'minduos']);
+        self::assertNotNull($tenant, 'The "minduos" tenant must exist in the control DB.');
+        $container->get('doctrine.dbal.tenant_connection')->selectDatabase($tenant->getDbName());
+
+        $em = $container->get('doctrine')->getManager('tenant');
         $user = $em->getRepository(User::class)->findOneBy(['username' => 'admin']);
         self::assertNotNull($user, 'The admin user must exist in the database.');
 

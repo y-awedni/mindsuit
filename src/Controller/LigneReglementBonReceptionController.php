@@ -20,7 +20,7 @@ class LigneReglementBonReceptionController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneReglementBonReceptions = $em->getRepository('App\\Entity\\LigneReglementBonReception')->findAll();
 
@@ -41,7 +41,7 @@ class LigneReglementBonReceptionController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneReglementBonReception);
             $em->flush($ligneReglementBonReception);
 
@@ -81,7 +81,7 @@ class LigneReglementBonReceptionController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignereglementbonreception_edit', array('id' => $ligneReglementBonReception->getId()));
         }
@@ -104,7 +104,7 @@ class LigneReglementBonReceptionController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneReglementBonReception);
             $em->flush($ligneReglementBonReception);
         }

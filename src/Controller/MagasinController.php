@@ -20,7 +20,7 @@ class MagasinController extends BaseController {
      * @Route("/", name="magasin_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $magasins = $em->getRepository('App\\Entity\\Magasin')->findAll();
 
@@ -43,7 +43,7 @@ class MagasinController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($magasin);
             $em->flush($magasin);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -68,7 +68,7 @@ class MagasinController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('magasin_index');
         }
@@ -88,7 +88,7 @@ class MagasinController extends BaseController {
     public function deleteAction(Magasin $magasin) {
         if ($magasin) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($magasin);
                 $em->flush($magasin);
             } catch (\Doctrine\DBAL\DBALException $e) {

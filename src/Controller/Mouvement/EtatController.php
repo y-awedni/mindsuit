@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 class EtatController extends BaseController {
 
     public function getTotalEtat($request, $etat, $modeReglement,$mouvement) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\Mouvement')->createQueryBuilder('a');
         $qb->select("SUM(a.ttc) as total_etat");
         $qb->where('a.modeReglement like :modeReglement')->setParameter('modeReglement', $modeReglement);
@@ -104,7 +104,7 @@ class EtatController extends BaseController {
      * @Route("/cheque", name="mouvement_cheque_index", methods={"GET"})
      */
     public function chequeAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\Mouvement')->createQueryBuilder('a');
         $qb->where('a.modeReglement like :modeReglement')->setParameter('modeReglement', 'Chéque');
         if ($request->query->get('etat')) {
@@ -225,7 +225,7 @@ class EtatController extends BaseController {
         $mouvementId = $request->request->get('mouvementId');
         $etat = $request->request->get('etat');
         $dateEcheance = $request->request->get('dateEcheance');
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $mouvement = $em->getRepository('App\\Entity\\Mouvement')->findOneById($mouvementId);
         $mouvement->setEtat($etat);
         $date = date_create(str_replace('/', '-', $dateEcheance));
@@ -244,7 +244,7 @@ class EtatController extends BaseController {
      * @Route("/traite", name="mouvement_traite_index", methods={"GET"})
      */
     public function traiteAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\Mouvement')->createQueryBuilder('a');
         $qb->andWhere('a.modeReglement like :modeReglement')->setParameter('modeReglement', 'Traite');
         $mvt_designation = null;

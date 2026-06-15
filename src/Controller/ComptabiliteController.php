@@ -55,7 +55,7 @@ class ComptabiliteController extends BaseController {
             $mouvements = null;
             $autresMvts = null;
             $typeMvt = null;
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             if ($form->get('saveDepences')->isClicked()) {
                 $typeMvt = 'depenses';
                 $mouvements = $em->getRepository('App\\Entity\\Mouvement')->findAllDepencesByInterval($dateDebut, $dateFin);

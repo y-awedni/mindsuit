@@ -20,7 +20,7 @@ class LigneBonLivraisonController extends BaseController {
      * @Route("/", name="lignebonlivraison_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneBonLivraisons = $em->getRepository('App\\Entity\\LigneBonLivraison')->findAll();
 
@@ -40,7 +40,7 @@ class LigneBonLivraisonController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneBonLivraison);
             $em->flush($ligneBonLivraison);
 
@@ -78,7 +78,7 @@ class LigneBonLivraisonController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignebonlivraison_edit', array('id' => $ligneBonLivraison->getId()));
         }
@@ -100,7 +100,7 @@ class LigneBonLivraisonController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneBonLivraison);
             $em->flush($ligneBonLivraison);
         }

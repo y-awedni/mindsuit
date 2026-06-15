@@ -16,6 +16,29 @@ services:
         autoconfigure: true
         tags: ['controller.service_arguments']
 
+    # --- Multi-tenancy ------------------------------------------------------
+    # Request-scoped holder of the resolved tenant (set by TenantResolver).
+    App\Doctrine\TenantContext: ~
+
+    # Resolves the tenant from the request Host and switches the tenant
+    # connection. Runs early (before security/firewall) so the User provider
+    # queries the right database.
+    App\EventListener\TenantResolver:
+        arguments:
+            $controlEm: '@doctrine.orm.default_entity_manager'
+            $tenantConnection: '@doctrine.dbal.tenant_connection'
+            $tenantContext: '@App\Doctrine\TenantContext'
+            $baseDomain: '%env(APP_BASE_DOMAIN)%'
+            $defaultTenant: '%env(DEFAULT_TENANT)%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 200 }
+
+    # Console commands (autowired; #[Autowire] picks the right EM/connection).
+    App\Command\:
+        resource: '../src/Command/'
+        autowire: true
+        autoconfigure: true
+
     # --- Application services ----------------------------------------------
     # Registered by FQCN so the controller locator can resolve them by type.
     App\Service\FormatDate: ~
@@ -23,8 +46,9 @@ services:
     App\Service\ExcelFactory: ~
 
     # Current droit de timbre value; also exposed as the `timbre` Twig global.
+    # Reads tenant data -> tenant entity manager.
     App\Service\TimbreProvider:
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.tenant_entity_manager']
         public: true
 
     # Server-side PDF rendering for printable documents.
@@ -32,7 +56,7 @@ services:
         arguments: ['@twig', '%kernel.cache_dir%']
     App\Service\DocumentCalculator: ~
     App\Service\NotificationSystem:
-        arguments: ['@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.orm.tenant_entity_manager']
 
     # Historical id kept public: SetQteArticleListener pulls it from the container.
     app.notification_system:
@@ -46,83 +70,86 @@ services:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     # --- Flash messages -----------------------------------------------------
+    # All Doctrine listeners below operate on tenant ERP data, so they are
+    # bound to the "tenant" connection (the default connection is now the
+    # control plane: tenants, plans, subscriptions).
     App\EventListener\FlashMessages:
         arguments: ['@request_stack', '@translator']
         tags:
-            - { name: doctrine.event_listener, event: postUpdate }
-            - { name: doctrine.event_listener, event: postRemove }
-            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate, connection: tenant }
+            - { name: doctrine.event_listener, event: postRemove, connection: tenant }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
 
     # --- Stock movement listeners ------------------------------------------
     App\EventListener\SetQteArticleListener:
         arguments: ['@service_container']
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
 
     App\EventListener\AddStockListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preUpdate, connection: tenant }
+            - { name: doctrine.event_listener, event: postUpdate, connection: tenant }
 
     App\EventListener\RemoveStockListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preUpdate, connection: tenant }
+            - { name: doctrine.event_listener, event: postUpdate, connection: tenant }
 
     # --- Financial movement listeners --------------------------------------
     App\EventListener\SetRevenuListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preRemove, connection: tenant }
 
     App\EventListener\SetDepenseListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preRemove, connection: tenant }
 
     App\EventListener\RetenuAlaSourceListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preUpdate, connection: tenant }
+            - { name: doctrine.event_listener, event: postUpdate, connection: tenant }
 
     App\EventListener\FactureAvoirListener:
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: postUpdate, connection: tenant }
 
     # --- Code generation / regle flags -------------------------------------
     App\EventListener\CodeGeneratorListener:
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: prePersist, connection: tenant }
 
     App\EventListener\SetRegleFactureListener:
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: prePersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preRemove, connection: tenant }
 
     App\EventListener\SetRegleBonReceptionListener:
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: prePersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preRemove, connection: tenant }
 
     App\EventListener\SetRegleBonLivraisonListener:
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: prePersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preRemove, connection: tenant }
 
     # --- Media listener -----------------------------------------------------
     App\EventListener\MediaListener:
         arguments: ['%images_directory%']
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postPersist }
-            - { name: doctrine.event_listener, event: postUpdate }
-            - { name: doctrine.event_listener, event: preRemove }
-            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: prePersist, connection: tenant }
+            - { name: doctrine.event_listener, event: preUpdate, connection: tenant }
+            - { name: doctrine.event_listener, event: postPersist, connection: tenant }
+            - { name: doctrine.event_listener, event: postUpdate, connection: tenant }
+            - { name: doctrine.event_listener, event: preRemove, connection: tenant }
+            - { name: doctrine.event_listener, event: postRemove, connection: tenant }
 
     # --- Request / search listeners ----------------------------------------
     App\Event\UserLoginRouteListener:
@@ -133,4 +160,4 @@ services:
     App\EventListener\SearchIndexerSubscriber:
         arguments: ['@security.token_storage']
         tags:
-            - { name: doctrine.event_subscriber, connection: default }
+            - { name: doctrine.event_subscriber, connection: tenant }

@@ -20,7 +20,7 @@ class LigneBonReceptionController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
 
         $ligneBonReceptions = $em->getRepository('App\\Entity\\LigneBonReception')->findAll();
 
@@ -41,7 +41,7 @@ class LigneBonReceptionController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($ligneBonReception);
             $em->flush($ligneBonReception);
 
@@ -81,7 +81,7 @@ class LigneBonReceptionController extends BaseController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
 
             return $this->redirectToRoute('lignebonreception_edit', array('id' => $ligneBonReception->getId()));
         }
@@ -104,7 +104,7 @@ class LigneBonReceptionController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->remove($ligneBonReception);
             $em->flush($ligneBonReception);
         }

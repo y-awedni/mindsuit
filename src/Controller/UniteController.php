@@ -20,7 +20,7 @@ class UniteController extends BaseController {
      * @Route("/", name="unite_index", methods={"GET"})
      */
     public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $unites = $em->getRepository('App\\Entity\\Unite')->findBy([], ['id' => 'DESC']);
         return $this->render('unite/index.html.twig', array(
                     'unites' => $unites,
@@ -41,7 +41,7 @@ class UniteController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($unite);
             $em->flush($unite);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -66,7 +66,7 @@ class UniteController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
             return $this->redirectToRoute('unite_index');
         }
 
@@ -84,7 +84,7 @@ class UniteController extends BaseController {
     public function deleteAction(Unite $unite) {
         if ($unite) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($unite);
                 $em->flush($unite);
             } catch (\Doctrine\DBAL\DBALException $e) {

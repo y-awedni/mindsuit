@@ -39,7 +39,7 @@ class TotauxFicheClientController extends BaseController {
      * @Route("/totaux/document/{code}/{typeDoc}/{client}/{startDateCreation}/{endDateCreation}", name="fiche_client_vente_document_totaux", methods={"GET"})
      */
     public function totauxParDocumentAction($code = null, $typeDoc = null, $client = null, $startDateCreation = null, $endDateCreation = null) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getVenteParDocumentQbByParametres($em, $code, $typeDoc, $client, $startDateCreation, $endDateCreation);
         $qb->addGroupBy('a.designation');
         $entities = $qb->getQuery()->getResult();
@@ -77,7 +77,7 @@ class TotauxFicheClientController extends BaseController {
      * @Route("/totaux/article/{code}/{designation}/{client}", name="fiche_client_vente_article_totaux", methods={"GET"})
      */
     public function totauxParArticleAction($code = null, $designation = null, $client = null) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getVenteParArticleQbByParametres($em, $code, $designation, $client);
         $qb->addGroupBy('a.article');
         $entities = $qb->getQuery()->getResult();
@@ -124,7 +124,7 @@ class TotauxFicheClientController extends BaseController {
      * @Route("/totaux/avoirs/{codeAvoir}/{startDateCreation}/{endDateCreation}/{client}/{codeArticle}/{designationArticle}", name="fiche_client_vente_avoirs_totaux", methods={"GET"})
      */
     public function totauxAvoirsAction($codeAvoir = null, $startDateCreation = null, $endDateCreation = null, $client = null, $codeArticle = null, $designationArticle = null) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getAvoirsQbByParametres($em, $codeAvoir, $startDateCreation, $endDateCreation, $client, $codeArticle, $designationArticle);
         $entities = $qb->getQuery()->getResult();
         $totalNonRembourse = 0;
@@ -170,7 +170,7 @@ class TotauxFicheClientController extends BaseController {
      * @Route("/totaux/reglements/{designation}/{startDateCreation}/{endDateCreation}/{client}/{typeDoc}/{modeReglement}", name="fiche_client_vente_avoirs_totaux", methods={"GET"})
      */
     public function totauxReglementsAction($designation = null, $startDateCreation = null, $endDateCreation = null, $client = null, $typeDoc = null, $modeReglement = null) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getReglementsQbByParametres($em, $designation, $startDateCreation, $endDateCreation, $client, $typeDoc, $modeReglement);
         $entities = $qb->getQuery()->getResult();
         $totalEspece = 0;

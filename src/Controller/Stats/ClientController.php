@@ -69,7 +69,7 @@ class ClientController extends BaseController {
      * @Route("/", name="clients_stats", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $dateFormat = $this->get('app.format_date');
         $startDateCreation = null;
         if ($request->query->get('startDateCreation')) {
@@ -191,7 +191,7 @@ class ClientController extends BaseController {
      */
     public function showAction(Request $request) {
         $id = $request->query->get('id');
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $client = $em->getRepository('App\\Entity\\Client')->find($id);
         if (!$client) {
             $this->get('session')->getFlashBag()->add('info', 'Il faut sélectionner un client.');

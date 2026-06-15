@@ -13,6 +13,8 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
+                # Users live in the per-tenant database, not the control DB.
+                manager_name: tenant
 
     firewalls:
         dev:

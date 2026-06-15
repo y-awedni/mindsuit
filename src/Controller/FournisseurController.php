@@ -48,7 +48,7 @@ class FournisseurController extends BaseController {
      * @Route("/", name="fournisseur_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         
         if (!$request->get('sort')) {
@@ -70,7 +70,7 @@ class FournisseurController extends BaseController {
      * @Route("/export/xls", name="fournisseur_export_xls", methods={"GET"})
      */
     public function exportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getQbByParametres($em, $request);
         $titre = $this->getTitreByParameteres($em, $request);
         $entities = $qb->getQuery()->getResult();
@@ -161,7 +161,7 @@ class FournisseurController extends BaseController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($fournisseur);
             $em->flush($fournisseur);
             if ($form->get('saveAndNew')->isClicked()) {
@@ -186,7 +186,7 @@ class FournisseurController extends BaseController {
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getEm()->flush();
             return $this->redirectToRoute('fournisseur_edit', array('id' => $fournisseur->getId()));
         }
 
@@ -204,7 +204,7 @@ class FournisseurController extends BaseController {
     public function deleteAction(Fournisseur $fournisseur) {
         if ($fournisseur) {
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEm();
                 $em->remove($fournisseur);
                 $em->flush($fournisseur);
             } catch (\Doctrine\DBAL\DBALException $e) {
@@ -224,7 +224,7 @@ class FournisseurController extends BaseController {
         $form = $this->createForm('App\Form\Custom\FournisseurType', $fournisseur);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->persist($fournisseur);
             $em->flush($fournisseur);
             //a redefinir

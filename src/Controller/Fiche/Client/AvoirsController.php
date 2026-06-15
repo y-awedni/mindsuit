@@ -87,7 +87,7 @@ class AvoirsController extends BaseController {
      * @Route("/{id}", name="fiche_client_avoirs", methods={"GET"})
      */
     public function avoirsAction(Request $request, Client $client, $offset = 0, $limit = 10) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getAvoirsQbByParametres($em, $request, $client->getId());
         if (!$request->get('sort') or $request->get('sort') !== 'a.createdAt') {
             $qb->orderBy('a.id', 'DESC');
@@ -127,7 +127,7 @@ class AvoirsController extends BaseController {
      * @Route("/export/xls", name="fiche_client_avoirs_xls", methods={"GET"})
      */
     public function avoirsExportXlsAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $this->getAvoirsQbByParametres($em, $request, $request->query->get('client'))
                 ->addGroupBy('a.article');
         $client = $em->getRepository('App\\Entity\\Client')->find($request->query->get('client'));

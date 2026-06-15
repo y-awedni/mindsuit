@@ -20,7 +20,7 @@ class BenificeController extends BaseController {
      * @Route("/", name="facture_benifice_index", methods={"GET"})
      */
     public function indexAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\Facture')->createQueryBuilder('a');
         //filter
         $code = null;
@@ -104,7 +104,7 @@ class BenificeController extends BaseController {
      * @Route("/{code}/{total}/{client}/{startDateCreation}/{endDateCreation}/{startDateEcheance}/{endDateEcheance}/benefice",name="facture_benefice_get", methods={"GET"})
      */
     public function getBeneficeAction($code = null, $total = null, $client = null, $startDateCreation = null, $endDateCreation = null, $startDateEcheance = null, $endDateEcheance = null) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEm();
         $qb = $em->getRepository('App\\Entity\\Facture')->createQueryBuilder('a');
         if ($code) {
             $qb->where('a.code like :code')->setParameter('code', '%' . $code . '%');
@@ -163,12 +163,12 @@ class BenificeController extends BaseController {
         $form_regler->handleRequest($request);
         $form_imprimer->handleRequest($request);
         if ($form_regler->isSubmitted() && $form_regler->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('facture_reglements', array('id' => $facture->getId()));
         }
         if ($form_imprimer->isSubmitted() && $form_imprimer->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEm();
             $em->flush();
             return $this->redirectToRoute('facture_print', array('id' => $facture->getId()));
         }
