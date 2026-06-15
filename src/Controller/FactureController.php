@@ -4,6 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Facture;
 use App\Controller\BaseController;
+use App\Subscription\LimitExceededException;
+use App\Subscription\PlanLimit;
+use App\Subscription\PlanLimitChecker;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -317,22 +321,27 @@ class FactureController extends BaseController {
      *
      * @Route("/new", name="facture_new", methods={"GET", "POST"})
      */
-    public function newAction(Request $request, \App\Service\TimbreProvider $timbreProvider) {
+    public function newAction(Request $request, \App\Service\TimbreProvider $timbreProvider, PlanLimitChecker $limitChecker) {
         $em = $this->getEm();
         $retenus = $em->getRepository('App\\Entity\\Retenu')->findAll();
         $facture = new Facture();
         $form = $this->createForm('App\Form\FactureType', $facture);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Capture the timbre that applied at creation so the stored total
-            // stays consistent if the configured value changes later.
-            $facture->setTimbre($timbreProvider->getValeur());
-            $em->persist($facture);
-            $em->flush($facture);
-            if ($form->get('saveAndPrint')->isClicked()) {
-                return $this->redirectToRoute('facture_print', array('id' => $facture->getId()));
+            try {
+                $limitChecker->assertCanAdd(PlanLimit::DOCS_PER_MONTH);
+                // Capture the timbre that applied at creation so the stored total
+                // stays consistent if the configured value changes later.
+                $facture->setTimbre($timbreProvider->getValeur());
+                $em->persist($facture);
+                $em->flush($facture);
+                if ($form->get('saveAndPrint')->isClicked()) {
+                    return $this->redirectToRoute('facture_print', array('id' => $facture->getId()));
+                }
+                return $this->redirectToRoute('facture_show', array('id' => $facture->getId()));
+            } catch (LimitExceededException $e) {
+                $form->addError(new FormError($e->getMessage()));
             }
-            return $this->redirectToRoute('facture_show', array('id' => $facture->getId()));
         }
         return $this->render('facture/new.html.twig', array(
                     'facture' => $facture,

@@ -30,6 +30,10 @@ services:
     App\Tenant\TenantProvisioner:
         autowire: true
 
+    # Plan-limit enforcement (queries tenant DB, reads caps from control plan).
+    App\Subscription\PlanLimitChecker:
+        autowire: true
+
     # Resolves the tenant from the request Host and switches the tenant
     # connection. Runs early (before security/firewall) so the User provider
     # queries the right database.
