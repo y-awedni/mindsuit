@@ -47,12 +47,12 @@ class MouvementRepository extends EntityRepository {
                                 . "where m.mouvement LIKE 'revenu' "
                                 . "And m.etat IN ('En cours', 'Impayé')"
                                 . "AND m.modeReglement LIKE 'Chéque' "
-                                . "AND m.dateEcheance >='" . $towards . "'"
-                                . "AND m.dateEcheance <='" . $from . "'"
+                                . ($towards !== null ? "AND m.dateEcheance >='{$towards}' " : "")
+                                . ($from !== null ? "AND m.dateEcheance <='{$from}'" : "")
                         )
                         ->getSingleScalarResult();
     }
-    
+
     public function findAllCountTraiteEntrants($from, $towards) {
         if ($from!==null) {
             $from_date = new \DateTime(date('Y-m-d'));
@@ -70,8 +70,8 @@ class MouvementRepository extends EntityRepository {
                                 . "where m.mouvement LIKE 'revenu' "
                                 . "And m.etat IN ('En cours', 'Impayé')"
                                 . "AND m.modeReglement LIKE 'Traite' "
-                                . "AND m.dateEcheance >='" . $towards . "'"
-                                . "AND m.dateEcheance <='" . $from . "'"
+                                . ($towards !== null ? "AND m.dateEcheance >='{$towards}' " : "")
+                                . ($from !== null ? "AND m.dateEcheance <='{$from}'" : "")
                         )
                         ->getSingleScalarResult();
     }
@@ -93,12 +93,12 @@ class MouvementRepository extends EntityRepository {
                                 . "where m.mouvement LIKE 'depense' "
                                 . "And m.etat IN ('En cours', 'Impayé')"
                                 . "AND m.modeReglement LIKE 'Traite' "
-                                . "AND m.dateEcheance >='" . $towards . "'"
-                                . "AND m.dateEcheance <='" . $from . "'"
+                                . ($towards !== null ? "AND m.dateEcheance >='{$towards}' " : "")
+                                . ($from !== null ? "AND m.dateEcheance <='{$from}'" : "")
                         )
                         ->getSingleScalarResult();
     }
-    
+
     public function findAllCountChequeSortie($from, $towards) {
         if ($from!==null) {
             $from_date = new \DateTime(date('Y-m-d'));
@@ -116,11 +116,10 @@ class MouvementRepository extends EntityRepository {
                                 . "where m.mouvement LIKE 'depense' "
                                 . "And m.etat IN ('En cours', 'Impayé')"
                                 . "AND m.modeReglement LIKE 'Chéque' "
-                                . "AND m.dateEcheance >='" . $towards . "'"
-                                . "AND m.dateEcheance <='" . $from . "'"
+                                . ($towards !== null ? "AND m.dateEcheance >='{$towards}' " : "")
+                                . ($from !== null ? "AND m.dateEcheance <='{$from}'" : "")
                         )
                         ->getSingleScalarResult();
-        
     }
 
 }
