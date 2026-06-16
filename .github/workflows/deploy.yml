@@ -64,9 +64,13 @@ jobs:
             git pull --ff-only
             echo "APP_IMAGE=${{ needs.build-push.outputs.image }}" > .image.env
             docker compose --env-file .env --env-file .image.env -f docker-compose.prod.yml pull php
-            docker compose --env-file .env --env-file .image.env -f docker-compose.prod.yml up -d
-            # Run migrations on the control DB and every tenant DB (Phase 4).
+            docker compose --env-file .env --env-file .image.env -f docker-compose.prod.yml up -d --force-recreate php
+            # Copy bundle assets from the new container to host public/ so Caddy serves them.
+            mkdir -p public/bundles
+            docker cp mindsuit-php-1:/app/public/bundles/. public/bundles/
+            # Run control DB migrations.
             docker compose --env-file .env --env-file .image.env -f docker-compose.prod.yml exec -T php \
-              php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
+              php bin/console doctrine:migrations:migrate --configuration=migrations/control.php --em=default --no-interaction --all-or-nothing
+            # Run tenant DB migrations (best-effort — new tenants may not exist yet).
             docker compose --env-file .env --env-file .image.env -f docker-compose.prod.yml exec -T php \
               php bin/console tenants:migrate --no-interaction || true
