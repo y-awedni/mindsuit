@@ -46,7 +46,7 @@ COPY --from=build /app /app
 # Stub .env so Symfony's DotEnv bootstrap finds the file at /app/.env.
 # Real values are injected by Docker via env_file / environment; this just
 # prevents a PathException when bin/console loads before the kernel boots.
-RUN printf 'APP_ENV=prod\n' > /app/.env
+RUN printf 'APP_ENV=prod\n' > /app/.env && chmod 644 /app/.env
 
 # Runtime dirs writable by www-data.
 RUN mkdir -p var/cache var/log public/uploads && chown -R www-data:www-data var public/uploads

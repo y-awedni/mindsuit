@@ -4,15 +4,12 @@ namespace App\Entity\Control;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * The platform-level account that signed up for a tenant and manages billing.
- * Distinct from the per-tenant ERP {@see \App\Entity\User} accounts.
- * Lives in the control database.
- */
 #[ORM\Entity]
-#[ORM\Table(name: 'owner')]
-class Owner
+#[ORM\Table(name: 'admin_user')]
+class AdminUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,13 +19,11 @@ class Owner
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     private string $email;
 
-    /** Hashed password. */
     #[ORM\Column(type: Types::STRING)]
     private string $password;
 
-    #[ORM\ManyToOne(targetEntity: Tenant::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Tenant $tenant;
+    #[ORM\Column(type: Types::JSON)]
+    private array $roles = [];
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
@@ -67,14 +62,17 @@ class Owner
         return $this;
     }
 
-    public function getTenant(): Tenant
+    public function getRoles(): array
     {
-        return $this->tenant;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_OPERATOR';
+
+        return array_unique($roles);
     }
 
-    public function setTenant(Tenant $tenant): self
+    public function setRoles(array $roles): self
     {
-        $this->tenant = $tenant;
+        $this->roles = $roles;
 
         return $this;
     }
@@ -82,6 +80,15 @@ class Owner
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
     }
 
     public function __toString(): string

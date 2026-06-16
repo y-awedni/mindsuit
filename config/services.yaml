@@ -1,6 +1,7 @@
 parameters:
     locale: fr
     images_directory: '%kernel.project_dir%/public/uploads/images'
+    app.base_domain: '%env(APP_BASE_DOMAIN)%'
 
 services:
     _defaults:
@@ -76,6 +77,30 @@ services:
     app.notification_system:
         alias: App\Service\NotificationSystem
         public: true
+
+    # --- Subscription gate --------------------------------------------------
+    # Blocks expired trials / lapsed subscriptions with a renewal page.
+    # Priority 190: after TenantResolver (200), before security firewall.
+    App\EventListener\SubscriptionGateListener:
+        arguments:
+            $tenantContext: '@App\Doctrine\TenantContext'
+            $controlEm: '@doctrine.orm.default_entity_manager'
+            $urlGenerator: '@router'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 190 }
+
+    # --- Operator dashboard (admin.moudir.pro) --------------------------------
+    App\Controller\Operator\:
+        resource: '../src/Controller/Operator/'
+        autowire: true
+        autoconfigure: true
+        tags: ['controller.service_arguments']
+
+    App\Command\AdminCreateCommand:
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $controlEm: '@doctrine.orm.default_entity_manager'
 
     # --- Exception listener -------------------------------------------------
     App\EventListener\ExceptionListener:

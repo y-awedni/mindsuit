@@ -19,6 +19,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^2.14",
         "doctrine/persistence": "^3.0",
+        "easycorp/easyadmin-bundle": "^4.0",
         "knplabs/knp-paginator-bundle": "^6.0",
         "knplabs/knp-time-bundle": "^2.0",
         "masterminds/html5": "^2.10",

@@ -45,6 +45,9 @@ class RouteSmokeTest extends WebTestCase
             if (\in_array($name, ['app_logout', 'app_login_check'], true)) {
                 continue;
             }
+            if (str_starts_with($name, 'operator_')) {
+                continue;
+            }
             if (\in_array($name, self::KNOWN_BROKEN, true)) {
                 continue;
             }

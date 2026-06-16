@@ -1,3 +1,11 @@
+operator_controllers:
+    resource: '../src/Controller/Operator/'
+    type: annotation
+    host: 'admin.{domain}'
+    defaults:
+        domain: '%app.base_domain%'
+
 controllers:
     resource: '../src/Controller/'
     type: annotation
+    exclude: '../src/Controller/Operator/'

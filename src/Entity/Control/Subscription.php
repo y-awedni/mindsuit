@@ -136,4 +136,9 @@ class Subscription
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return sprintf('#%d %s (%s)', $this->id ?? 0, $this->tenant, $this->status);
+    }
 }

@@ -131,4 +131,9 @@ class Payment
     {
         return $this->createdAt;
     }
+
+    public function __toString(): string
+    {
+        return sprintf('#%d %.3f %s', $this->id ?? 0, $this->amount, $this->status);
+    }
 }

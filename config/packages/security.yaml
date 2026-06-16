@@ -3,23 +3,46 @@ security:
         App\Entity\User:
             algorithm: bcrypt
             cost: 13
+        App\Entity\Control\AdminUser:
+            algorithm: auto
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_OPERATOR:    []
 
     providers:
         app_users:
             entity:
                 class: App\Entity\User
                 property: username
-                # Users live in the per-tenant database, not the control DB.
                 manager_name: tenant
+        operator_users:
+            entity:
+                class: App\Entity\Control\AdminUser
+                property: email
+                manager_name: default
 
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        operator:
+            host: ^admin\.
+            lazy: true
+            provider: operator_users
+            form_login:
+                login_path: operator_login
+                check_path: operator_login_check
+                enable_csrf: true
+                default_target_path: operator_dashboard
+            logout:
+                path: operator_logout
+                target: operator_login
+            remember_me:
+                secret:   '%env(APP_SECRET)%'
+                lifetime: 604800
+                path:     /
         main:
             pattern: ^/
             lazy: true
@@ -34,10 +57,13 @@ security:
                 target: app_login
             remember_me:
                 secret:   '%env(APP_SECRET)%'
-                lifetime: 604800 # 1 week
+                lifetime: 604800
                 path:     /
 
     access_control:
+        - { path: ^/login$, host: ^admin\., role: PUBLIC_ACCESS }
+        - { path: ^/, host: ^admin\., role: ROLE_OPERATOR }
         - { path: ^/login$, role: PUBLIC_ACCESS }
+        - { path: ^/subscription/expired, role: PUBLIC_ACCESS }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/, role: ROLE_USER }

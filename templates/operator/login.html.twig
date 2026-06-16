@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moudir — Administration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,.08);
+            width: 380px;
+            padding: 40px 32px;
+        }
+        h1 { font-size: 22px; text-align: center; margin-bottom: 8px; color: #1CA3DE; }
+        .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 28px; }
+        label { display: block; font-size: 14px; font-weight: 500; color: #333; margin-bottom: 6px; }
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 15px; margin-bottom: 16px; outline: none; transition: border-color .15s;
+        }
+        input:focus { border-color: #1CA3DE; }
+        button {
+            width: 100%; padding: 12px; background: #1CA3DE; color: #fff; border: none;
+            border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+            transition: opacity .15s;
+        }
+        button:hover { opacity: .85; }
+        .error { background: #fef2f2; color: #b91c1c; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Moudir Admin</h1>
+    <p class="subtitle">Panneau d'administration</p>
+
+    {% if error %}
+        <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form method="post" action="{{ path('operator_login_check') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="_username" value="{{ last_username }}" required autofocus>
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="_password" required>
+        <button type="submit">Connexion</button>
+    </form>
+</div>
+</body>
+</html>

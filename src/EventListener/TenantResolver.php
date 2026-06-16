@@ -7,7 +7,7 @@ use App\Doctrine\TenantContext;
 use App\Entity\Control\Tenant;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -55,12 +55,15 @@ class TenantResolver
             throw new NotFoundHttpException(sprintf('Aucun espace trouvé pour « %s ».', $subdomain));
         }
 
-        if (!$tenant->isActive()) {
-            throw new AccessDeniedHttpException('Cet espace est suspendu. Veuillez régulariser votre abonnement.');
-        }
-
         $this->tenantContext->setTenant($tenant);
         $this->tenantConnection->selectDatabase($tenant->getDbName());
+
+        if (!$tenant->isActive()) {
+            $path = $event->getRequest()->getPathInfo();
+            if (!str_starts_with($path, '/subscription/expired') && !str_starts_with($path, '/login') && !str_starts_with($path, '/logout')) {
+                $event->setResponse(new RedirectResponse('/subscription/expired?reason=suspended'));
+            }
+        }
     }
 
     private function resolveSubdomain(string $host): ?string
@@ -80,6 +83,6 @@ class TenantResolver
             return $this->defaultTenant;
         }
 
-        return ($subdomain === '' || $subdomain === 'www') ? null : $subdomain;
+        return ($subdomain === '' || $subdomain === 'www' || $subdomain === 'admin') ? null : $subdomain;
     }
 }
