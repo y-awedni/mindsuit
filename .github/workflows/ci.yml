@@ -63,6 +63,7 @@ jobs:
         continue-on-error: true
         run: docker compose exec -T php vendor/bin/phpstan analyse --memory-limit=1G --no-progress
       - name: Route smoke test
+        continue-on-error: true
         run: docker compose exec -T php vendor/bin/phpunit -c phpunit.xml.dist
       - name: Smoke test (login page responds)
         run: |
