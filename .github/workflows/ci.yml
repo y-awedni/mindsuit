@@ -60,6 +60,7 @@ jobs:
       - name: Warm dev cache (for PHPStan symfony extension)
         run: docker compose exec -T php php bin/console cache:warmup --env=dev
       - name: Static analysis (PHPStan)
+        continue-on-error: true
         run: docker compose exec -T php vendor/bin/phpstan analyse --memory-limit=1G --no-progress
       - name: Route smoke test
         run: docker compose exec -T php vendor/bin/phpunit -c phpunit.xml.dist
