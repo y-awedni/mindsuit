@@ -34,7 +34,7 @@ class SearchIndexerSubscriber implements EventSubscriber {
         if (!$entity instanceof User) {
             $token = $this->tokenStorageInterface->getToken();
             $user = $token ? $token->getUser() : null;
-            if ($user) {
+            if ($user instanceof User) {
                 $this->callIfExists($entity, 'setCreatedUser', $user);
                 $this->callIfExists($entity, 'setUpdatedUser', $user);
             }
@@ -49,7 +49,7 @@ class SearchIndexerSubscriber implements EventSubscriber {
         if (!$entity instanceof User) {
             $token = $this->tokenStorageInterface->getToken();
             $user = $token ? $token->getUser() : null;
-            if ($user) {
+            if ($user instanceof User) {
                 $this->callIfExists($entity, 'setUpdatedUser', $user);
             }
             $this->callIfExists($entity, 'setUpdatedAt', new \DateTime());
