@@ -4,6 +4,8 @@ operator_controllers:
     host: 'admin.{domain}'
     defaults:
         domain: '%app.base_domain%'
+    requirements:
+        domain: '.+'
 
 controllers:
     resource: '../src/Controller/'
