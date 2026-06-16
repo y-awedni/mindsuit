@@ -93,14 +93,8 @@ class TenantCrudController extends AbstractCrudController
             return;
         }
 
-        /** @var AdminContext $context */
-        $context = $this->getContext();
-        $form = $context->getCrud()->getCurrentPage() ? $context->getEntity()->getInstance() : null;
-
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        $allPost = $request->request->all();
-        $formKey = array_key_first($allPost) ?: 'Tenant';
-        $formData = $allPost[$formKey] ?? [];
+        $formData = $request->request->all('ea_crud') ?: $request->request->all('Tenant') ?: [];
 
         $ownerEmail = $formData['ownerEmail'] ?? '';
         $ownerPassword = $formData['ownerPassword'] ?? '';
