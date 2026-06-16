@@ -48,8 +48,8 @@ COPY --from=build /app /app
 # prevents a PathException when bin/console loads before the kernel boots.
 RUN printf 'APP_ENV=prod\n' > /app/.env && chmod 644 /app/.env
 
-# Runtime dirs writable by www-data.
-RUN mkdir -p var/cache var/log public/uploads && chown -R www-data:www-data var public/uploads
+# Runtime dirs + public/ writable by www-data (assets:install needs to write public/bundles/).
+RUN mkdir -p var/cache var/log public/uploads && chown -R www-data:www-data var public/
 USER www-data
 
 EXPOSE 9000
