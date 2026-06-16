@@ -35,8 +35,8 @@ jobs:
           push: false
           load: true
           tags: mindsuit-php:ci
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=ci-dev
+          cache-to: type=gha,scope=ci-dev,mode=max
 
   smoke:
     name: Boot + smoke test
