@@ -31,7 +31,7 @@ class OwnerCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
         yield EmailField::new('email', 'Email');
-        yield AssociationField::new('tenant', 'Locataire');
+        yield AssociationField::new('tenant', 'Espace');
         yield DateTimeField::new('createdAt', 'Créé le')->hideOnForm();
     }
 

@@ -33,7 +33,7 @@ class SubscriptionCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
-        yield AssociationField::new('tenant', 'Locataire');
+        yield AssociationField::new('tenant', 'Espace');
         yield AssociationField::new('plan', 'Plan');
         yield ChoiceField::new('status', 'Statut')
             ->setChoices([

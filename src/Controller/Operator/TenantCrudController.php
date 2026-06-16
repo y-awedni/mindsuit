@@ -2,6 +2,7 @@
 
 namespace App\Controller\Operator;
 
+use App\Entity\Control\Owner;
 use App\Entity\Control\Tenant;
 use App\Tenant\ProvisioningException;
 use App\Tenant\TenantProvisioner;
@@ -10,7 +11,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -23,6 +23,7 @@ class TenantCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly TenantProvisioner $provisioner,
+        private readonly EntityManagerInterface $controlEm,
     ) {
     }
 
@@ -34,8 +35,8 @@ class TenantCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Locataire')
-            ->setEntityLabelInPlural('Locataires')
+            ->setEntityLabelInSingular('Espace')
+            ->setEntityLabelInPlural('Espaces')
             ->setDefaultSort(['createdAt' => 'DESC']);
     }
 
@@ -44,6 +45,17 @@ class TenantCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('subdomain', 'Sous-domaine');
         yield TextField::new('companyName', 'Société');
+
+        if ($pageName === Crud::PAGE_INDEX) {
+            yield TextField::new('instanceUrl', 'URL')
+                ->formatValue(fn ($value, Tenant $entity) => sprintf(
+                    '<a href="https://%s.moudir.pro" target="_blank">%s.moudir.pro</a>',
+                    $entity->getSubdomain(),
+                    $entity->getSubdomain(),
+                ))
+                ->renderAsHtml();
+        }
+
         yield TextField::new('dbName', 'Base de données')->hideOnForm();
 
         if ($pageName === Crud::PAGE_NEW) {
@@ -53,6 +65,17 @@ class TenantCrudController extends AbstractCrudController
             yield TextField::new('ownerPassword', 'Mot de passe')
                 ->setFormTypeOption('mapped', false)
                 ->setRequired(true);
+        }
+
+        if ($pageName === Crud::PAGE_EDIT) {
+            yield TextField::new('ownerEmail', 'Email du propriétaire')
+                ->setFormTypeOption('mapped', false)
+                ->setRequired(false)
+                ->setHelp('Laisser vide pour ne pas modifier');
+            yield TextField::new('newOwnerPassword', 'Nouveau mot de passe')
+                ->setFormTypeOption('mapped', false)
+                ->setRequired(false)
+                ->setHelp('Laisser vide pour ne pas modifier');
         }
 
         yield ChoiceField::new('status', 'Statut')
@@ -107,12 +130,38 @@ class TenantCrudController extends AbstractCrudController
                 $ownerPassword,
             );
             $this->addFlash('success', sprintf(
-                'Locataire « %s » provisionné ! URL : %s.moudir.pro',
+                'Espace « %s » provisionné ! URL : %s.moudir.pro',
                 $entityInstance->getCompanyName(),
                 $entityInstance->getSubdomain(),
             ));
         } catch (ProvisioningException $e) {
             $this->addFlash('danger', $e->getMessage());
         }
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Tenant) {
+            parent::updateEntity($entityManager, $entityInstance);
+            return;
+        }
+
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $formData = $request->request->all('ea_crud') ?: $request->request->all('Tenant') ?: [];
+
+        $ownerEmail = trim($formData['ownerEmail'] ?? '');
+        $newPassword = trim($formData['newOwnerPassword'] ?? '');
+
+        $owner = $this->controlEm->getRepository(Owner::class)->findOneBy(['tenant' => $entityInstance]);
+
+        if ($owner && $ownerEmail !== '') {
+            $owner->setEmail($ownerEmail);
+        }
+
+        if ($owner && $newPassword !== '') {
+            $owner->setPassword(password_hash($newPassword, \PASSWORD_BCRYPT));
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
     }
 }

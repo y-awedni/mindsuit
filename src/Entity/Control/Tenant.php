@@ -125,6 +125,11 @@ class Tenant
         return $this->createdAt;
     }
 
+    public function getInstanceUrl(): string
+    {
+        return $this->subdomain . '.moudir.pro';
+    }
+
     public function __toString(): string
     {
         return $this->companyName;
