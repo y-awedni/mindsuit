@@ -28,6 +28,7 @@ services:
       - .env
     volumes:
       - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./public:/app/public:ro
       - uploads:/app/public/uploads:ro
       - caddy_data:/data
       - caddy_config:/config
