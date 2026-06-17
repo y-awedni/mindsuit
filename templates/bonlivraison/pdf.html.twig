@@ -17,23 +17,29 @@
 
     <table class="parties">
         <tr>
-            <td style="width:58%; padding-right:15px;">
+            <td class="societe-col">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
                 {% if societe.tel %}<b>Tél : </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.mobile %}<b>Mobile : </b>{{ societe.mobile }}<br>{% endif %}
                 {% if societe.mf %}<b>M.F : </b>{{ societe.mf }}<br>{% endif %}
                 {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}{% endif %}
             </td>
-            <td style="width:42%;">
-                <fieldset style="border:1px solid #555; padding:6px 10px;">
-                    <legend style="font-weight:bold; font-size:12px; padding:0 4px;">Code client : {{ bonlivraison.client.code }}</legend>
-                    {% if bonlivraison.client.rs %}<b>Client : </b>{{ bonlivraison.client.rs }}<br>{% endif %}
-                    {% if bonlivraison.client.adresse %}<b>Adresse : </b>{{ bonlivraison.client.adresse }}<br>{% endif %}
-                    {% if bonlivraison.client.tel %}<b>Tél : </b>{{ bonlivraison.client.tel }}<br>{% endif %}
-                    {% if bonlivraison.client.email %}<b>Email : </b>{{ bonlivraison.client.email }}<br>{% endif %}
-                    {% if bonlivraison.client.ville %}<b>Ville : </b>{{ bonlivraison.client.ville }}<br>{% endif %}
-                    {% if bonlivraison.client.mf %}<b>M.F : </b>{{ bonlivraison.client.mf }}{% endif %}
-                </fieldset>
+            <td class="client-col">
+                <table class="client-box">
+                    <tr>
+                        <th>Code client : {{ bonlivraison.client.code }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if bonlivraison.client.rs %}<b>Client : </b>{{ bonlivraison.client.rs }}<br>{% endif %}
+                            {% if bonlivraison.client.adresse %}<b>Adresse : </b>{{ bonlivraison.client.adresse }}<br>{% endif %}
+                            {% if bonlivraison.client.tel %}<b>Tél : </b>{{ bonlivraison.client.tel }}<br>{% endif %}
+                            {% if bonlivraison.client.email %}<b>Email : </b>{{ bonlivraison.client.email }}<br>{% endif %}
+                            {% if bonlivraison.client.ville %}<b>Ville : </b>{{ bonlivraison.client.ville }}<br>{% endif %}
+                            {% if bonlivraison.client.mf %}<b>M.F : </b>{{ bonlivraison.client.mf }}{% endif %}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
