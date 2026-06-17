@@ -41,11 +41,27 @@
                 padding-bottom: 40px;
             }
             .print-box table tr.information table td.societe {
-                width: 50%;
+                width: 55%;
+                vertical-align: top;
             }
             .print-box table tr.information table td.client {
-                width: 30%;
+                width: 40%;
                 text-align: left;
+                vertical-align: top;
+            }
+            .print-box table tr.information table td.client fieldset {
+                border: 1px solid #13b3d9;
+                padding: 8px 12px;
+                margin: 0;
+            }
+            .print-box table tr.information table td.client fieldset legend {
+                font-size: 13px;
+                font-weight: bold;
+                color: #333;
+                width: auto;
+                padding: 0 6px;
+                margin-bottom: 4px;
+                border: none;
             }
             .print-box table tr.heading td {
                 background: #13b3d9;
@@ -188,9 +204,8 @@
                                             {{societe.adresse}}<br>
                                             {{societe.codePostale~' '~societe.ville~' '~societe.pays}}<br>
                                         {% endif %}
-
                                         {% if societe.tel %}
-                                            <b>Tél-Fax : </b>{{societe.tel}}<br>
+                                            <b>Tél : </b>{{societe.tel}}<br>
                                         {% endif %}
                                         {% if societe.mobile %}
                                             <b>Mobile : </b>{{ societe.mobile }}<br>
@@ -203,16 +218,19 @@
                                         {% endif %}
                                         {% if societe.rcs %}
                                             <b>R.Cs : </b>{{ societe.rcs }}<br>
-                                        {% endif %}<br>
-                                        {% if societe.compte %}
-                                            <b>RIB : </b>{{ societe.compte }}
                                         {% endif %}
                                     </td>
                                     <td class="client">
                                         <fieldset>
-                                            <legend><b>Code client : </b>{{ bonlivraison.client.code }}</legend>
+                                            <legend>Code client : {{ bonlivraison.client.code }}</legend>
                                             {% if bonlivraison.client.rs %}
                                                 <b>Client : </b>{{bonlivraison.client.rs}}<br>
+                                            {% endif %}
+                                            {% if bonlivraison.client.adresse %}
+                                                <b>Adresse : </b>{{ bonlivraison.client.adresse }}<br>
+                                            {% endif %}
+                                            {% if bonlivraison.client.tel %}
+                                                <b>Tél : </b>{{ bonlivraison.client.tel }}<br>
                                             {% endif %}
                                             {% if bonlivraison.client.email %}
                                                 <b>Email : </b>{{ bonlivraison.client.email }}<br>
@@ -221,7 +239,7 @@
                                                 <b>Ville : </b>{{ bonlivraison.client.ville }}<br>
                                             {% endif %}
                                             {% if bonlivraison.client.mf %}
-                                                <b>M.F : </b>{{ bonlivraison.client.mf }}<br>
+                                                <b>M.F : </b>{{ bonlivraison.client.mf }}
                                             {% endif %}
                                         </fieldset>
                                     </td>

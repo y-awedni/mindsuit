@@ -35,10 +35,10 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav" style="font-weight: bold;">
 
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vente<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vente <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="{{path('devis_index')}}">Devis</a>
@@ -55,7 +55,7 @@
                             </ul>
                         </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Achat <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Achat <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="{{path('bonreception_index')}}">Bons de reception</a>
@@ -65,48 +65,42 @@
                                 </li>
                             </ul>
                         </li>
-        
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Mouvements <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                            <li>
-                            <a href="{{path('stock_index')}}">Mouvements des Produits</a>
-                            </li>
-                            <li>
-                            <a href="{{path('services_index')}}">Mouvements des Services</a>
-                            </li>
-                               
-                            </ul>
-                        </li>
-        
 
-                       
-                        <li>
-                            <a href="{{path('services_index')}}">Services</a>
-                        </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Mouvements financiérs <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mouvements <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{path('mouvement_index')}}">Tout les Mouvements </a>
+                                    <a href="{{path('stock_index')}}">Mouvements des Produits</a>
+                                </li>
+                                <li>
+                                    <a href="{{path('services_index')}}">Mouvements des Services</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Finance et Comptabilité <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('mouvement_index')}}">Tout les Mouvements</a>
                                 </li>
                                 <li>
                                     <a href="{{path('mouvement_cheque_index')}}">Caisse des chéques</a>
                                 </li>
                                 <li>
                                     <a href="{{path('mouvement_traite_index')}}">Caisse des traites</a>
+                                </li>
                                 <li>
                                     <a href="{{path('comptabilite_index')}}">Comptabilité</a>
                                 </li>
-                                </li>
                             </ul>
                         </li>
-                        
+
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Statistiques <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Statistiques <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{path('articles_stats')}}">Articles </a>
+                                    <a href="{{path('articles_stats')}}">Articles</a>
                                 </li>
                                 <li>
                                     <a href="{{path('clients_stats')}}">Clients</a>
@@ -125,9 +119,18 @@
                         <li>
                             <a href="{{path('client_index')}}">Clients</a>
                         </li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" style="font-weight: bold;">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Paramétres<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-cog fa-fw"></i>
+                            </a>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{path('societe_index')}}">Societé</a>
+                                </li>
+                                <li class="divider"></li>
                                 <li>
                                     <a href="{{path('unite_index')}}">Unités article</a>
                                 </li>
@@ -140,6 +143,7 @@
                                 <li>
                                     <a href="{{path('sousfamille_index')}}">Sous Familles article</a>
                                 </li>
+                                <li class="divider"></li>
                                 <li>
                                     <a href="{{path('magasin_index')}}">Magasins</a>
                                 </li>
@@ -152,9 +156,7 @@
                                 <li>
                                     <a href="{{path('retenu_index')}}">Retenu à la source</a>
                                 </li>
-                                <li>
-                                    <a href="{{path('societe_index')}}">Societé</a>
-                                </li>
+                                <li class="divider"></li>
                                 <li>
                                     <a href="{{path('banque_index')}}">Banques</a>
                                 </li>
@@ -162,11 +164,7 @@
                                     <a href="{{path('compte_index')}}">Comptes</a>
                                 </li>
                             </ul>
-                            <!-- /.nav-second-level -->
                         </li>
-
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
                         {{ render(controller('App\\Controller\\NotificationController::newsAction')) }}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -176,7 +174,6 @@
                                 <li><a href="{{ path('app_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
                                 </li>
                             </ul>
-                            <!-- /.dropdown-user -->
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
