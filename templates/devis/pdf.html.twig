@@ -17,7 +17,7 @@
 
     <table class="parties">
         <tr>
-            <td>
+            <td class="societe-col">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
                 {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
@@ -26,15 +26,21 @@
                 {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
                 {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
             </td>
-            <td>
-                <div class="client-box">
-                    <b>Code client : </b>{{ devis.client.code }}<br>
-                    {% if devis.client.rs %}<b>Client : </b>{{ devis.client.rs }}<br>{% endif %}
-                    {% if devis.client.email %}<b>Email : </b>{{ devis.client.email }}<br>{% endif %}
-                    {% if devis.client.ville %}<b>Ville : </b>{{ devis.client.ville }}<br>{% endif %}
-                    {% if devis.client.mf %}<b>M.F : </b>{{ devis.client.mf }}<br>{% endif %}
-                    {% if devis.client.note %}<b>Note : </b>{{ devis.client.note }}<br>{% endif %}
-                </div>
+            <td class="client-col">
+                <table class="client-box">
+                    <tr>
+                        <th>Code client : {{ devis.client.code }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if devis.client.rs %}<b>Client : </b>{{ devis.client.rs }}<br>{% endif %}
+                            {% if devis.client.email %}<b>Email : </b>{{ devis.client.email }}<br>{% endif %}
+                            {% if devis.client.ville %}<b>Ville : </b>{{ devis.client.ville }}<br>{% endif %}
+                            {% if devis.client.mf %}<b>M.F : </b>{{ devis.client.mf }}<br>{% endif %}
+                            {% if devis.client.note %}<b>Note : </b>{{ devis.client.note }}{% endif %}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

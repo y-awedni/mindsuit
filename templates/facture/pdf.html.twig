@@ -17,7 +17,7 @@
 
     <table class="parties">
         <tr>
-            <td>
+            <td class="societe-col">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
                 {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
@@ -26,15 +26,21 @@
                 {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
                 {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
             </td>
-            <td>
-                <div class="client-box">
-                    <b>Code client : </b>{{ facture.client.code }}<br>
-                    {% if facture.client.rs %}<b>Client : </b>{{ facture.client.rs }}<br>{% endif %}
-                    {% if facture.client.email %}<b>Email : </b>{{ facture.client.email }}<br>{% endif %}
-                    {% if facture.client.ville %}<b>Ville : </b>{{ facture.client.ville }}<br>{% endif %}
-                    {% if facture.client.mf %}<b>M.F : </b>{{ facture.client.mf }}<br>{% endif %}
-                    {% if facture.client.note %}<b>Note : </b>{{ facture.client.note }}<br>{% endif %}
-                </div>
+            <td class="client-col">
+                <table class="client-box">
+                    <tr>
+                        <th>Code client : {{ facture.client.code }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if facture.client.rs %}<b>Client : </b>{{ facture.client.rs }}<br>{% endif %}
+                            {% if facture.client.email %}<b>Email : </b>{{ facture.client.email }}<br>{% endif %}
+                            {% if facture.client.ville %}<b>Ville : </b>{{ facture.client.ville }}<br>{% endif %}
+                            {% if facture.client.mf %}<b>M.F : </b>{{ facture.client.mf }}<br>{% endif %}
+                            {% if facture.client.note %}<b>Note : </b>{{ facture.client.note }}{% endif %}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

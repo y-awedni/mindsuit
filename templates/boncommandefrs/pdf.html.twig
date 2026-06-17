@@ -17,7 +17,7 @@
 
     <table class="parties">
         <tr>
-            <td>
+            <td class="societe-col">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
                 {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
@@ -26,14 +26,20 @@
                 {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
                 {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
             </td>
-            <td>
-                <div class="client-box">
-                    <b>Code fournisseur : </b>{{ bonCommandeFrs.fournisseur.code }}<br>
-                    {% if bonCommandeFrs.fournisseur.rs %}<b>Raison sociale : </b>{{ bonCommandeFrs.fournisseur.rs }}<br>{% endif %}
-                    {% if bonCommandeFrs.fournisseur.mobile %}<b>Mobile : </b>{{ bonCommandeFrs.fournisseur.mobile }}<br>{% endif %}
-                    {% if bonCommandeFrs.fournisseur.email %}<b>Email : </b>{{ bonCommandeFrs.fournisseur.email }}<br>{% endif %}
-                    {% if bonCommandeFrs.fournisseur.mf %}<b>M.F : </b>{{ bonCommandeFrs.fournisseur.mf }}<br>{% endif %}
-                </div>
+            <td class="client-col">
+                <table class="client-box">
+                    <tr>
+                        <th>Code fournisseur : {{ bonCommandeFrs.fournisseur.code }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if bonCommandeFrs.fournisseur.rs %}<b>Raison sociale : </b>{{ bonCommandeFrs.fournisseur.rs }}<br>{% endif %}
+                            {% if bonCommandeFrs.fournisseur.mobile %}<b>Mobile : </b>{{ bonCommandeFrs.fournisseur.mobile }}<br>{% endif %}
+                            {% if bonCommandeFrs.fournisseur.email %}<b>Email : </b>{{ bonCommandeFrs.fournisseur.email }}<br>{% endif %}
+                            {% if bonCommandeFrs.fournisseur.mf %}<b>M.F : </b>{{ bonCommandeFrs.fournisseur.mf }}{% endif %}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

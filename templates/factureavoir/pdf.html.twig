@@ -17,7 +17,7 @@
 
     <table class="parties">
         <tr>
-            <td>
+            <td class="societe-col">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
                 {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
@@ -26,15 +26,21 @@
                 {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
                 {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
             </td>
-            <td>
-                <div class="client-box">
-                    <b>Code client : </b>{{ factureAvoir.facture.client.code }}<br>
-                    {% if factureAvoir.facture.client.rs %}<b>Client : </b>{{ factureAvoir.facture.client.rs }}<br>{% endif %}
-                    {% if factureAvoir.facture.client.email %}<b>Email : </b>{{ factureAvoir.facture.client.email }}<br>{% endif %}
-                    {% if factureAvoir.facture.client.ville %}<b>Ville : </b>{{ factureAvoir.facture.client.ville }}<br>{% endif %}
-                    {% if factureAvoir.facture.client.mf %}<b>M.F : </b>{{ factureAvoir.facture.client.mf }}<br>{% endif %}
-                    {% if factureAvoir.facture.client.note %}<b>Note : </b>{{ factureAvoir.facture.client.note }}<br>{% endif %}
-                </div>
+            <td class="client-col">
+                <table class="client-box">
+                    <tr>
+                        <th>Code client : {{ factureAvoir.facture.client.code }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if factureAvoir.facture.client.rs %}<b>Client : </b>{{ factureAvoir.facture.client.rs }}<br>{% endif %}
+                            {% if factureAvoir.facture.client.email %}<b>Email : </b>{{ factureAvoir.facture.client.email }}<br>{% endif %}
+                            {% if factureAvoir.facture.client.ville %}<b>Ville : </b>{{ factureAvoir.facture.client.ville }}<br>{% endif %}
+                            {% if factureAvoir.facture.client.mf %}<b>M.F : </b>{{ factureAvoir.facture.client.mf }}<br>{% endif %}
+                            {% if factureAvoir.facture.client.note %}<b>Note : </b>{{ factureAvoir.facture.client.note }}{% endif %}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

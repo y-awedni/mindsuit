@@ -17,7 +17,7 @@
 
     <table class="parties">
         <tr>
-            <td>
+            <td class="societe-col">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
                 {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
@@ -26,15 +26,21 @@
                 {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
                 {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
             </td>
-            <td>
-                <div class="client-box">
-                    <b>Code fournisseur : </b>{{ bonreception.fournisseur.code }}<br>
-                    {% if bonreception.fournisseur.rs %}<b>Fournisseur : </b>{{ bonreception.fournisseur.rs }}<br>{% endif %}
-                    {% if bonreception.fournisseur.email %}<b>Email : </b>{{ bonreception.fournisseur.email }}<br>{% endif %}
-                    {% if bonreception.fournisseur.ville %}<b>Ville : </b>{{ bonreception.fournisseur.ville }}<br>{% endif %}
-                    {% if bonreception.fournisseur.mf %}<b>M.F : </b>{{ bonreception.fournisseur.mf }}<br>{% endif %}
-                    {% if bonreception.fournisseur.note %}<b>Note : </b>{{ bonreception.fournisseur.note }}<br>{% endif %}
-                </div>
+            <td class="client-col">
+                <table class="client-box">
+                    <tr>
+                        <th>Code fournisseur : {{ bonreception.fournisseur.code }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if bonreception.fournisseur.rs %}<b>Fournisseur : </b>{{ bonreception.fournisseur.rs }}<br>{% endif %}
+                            {% if bonreception.fournisseur.email %}<b>Email : </b>{{ bonreception.fournisseur.email }}<br>{% endif %}
+                            {% if bonreception.fournisseur.ville %}<b>Ville : </b>{{ bonreception.fournisseur.ville }}<br>{% endif %}
+                            {% if bonreception.fournisseur.mf %}<b>M.F : </b>{{ bonreception.fournisseur.mf }}<br>{% endif %}
+                            {% if bonreception.fournisseur.note %}<b>Note : </b>{{ bonreception.fournisseur.note }}{% endif %}
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
