@@ -17,23 +17,22 @@
 
     <table class="parties">
         <tr>
-            <td>
+            <td style="width:55%">
                 {% if societe.adresse %}{{ societe.adresse }}<br>{{ societe.codePostale~' '~societe.ville~' '~societe.pays }}<br>{% endif %}
-                {% if societe.tel %}<b>Tél: </b>{{ societe.tel }}<br>{% endif %}
-                {% if societe.fax %}<b>Tél-Fax : </b>{{ societe.fax }}<br>{% endif %}
+                {% if societe.tel %}<b>Tél : </b>{{ societe.tel }}<br>{% endif %}
                 {% if societe.mobile %}<b>Mobile : </b>{{ societe.mobile }}<br>{% endif %}
                 {% if societe.mf %}<b>M.F : </b>{{ societe.mf }}<br>{% endif %}
-                {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}<br>{% endif %}
-                {% if societe.compte %}<b>RIB : </b>{{ societe.compte }}{% endif %}
+                {% if societe.rcs %}<b>R.Cs : </b>{{ societe.rcs }}{% endif %}
             </td>
-            <td>
+            <td style="width:45%">
                 <div class="client-box">
-                    <b>Code client : </b>{{ bonlivraison.client.code }}<br>
+                    <div class="client-box-header">Code client : {{ bonlivraison.client.code }}</div>
                     {% if bonlivraison.client.rs %}<b>Client : </b>{{ bonlivraison.client.rs }}<br>{% endif %}
+                    {% if bonlivraison.client.adresse %}<b>Adresse : </b>{{ bonlivraison.client.adresse }}<br>{% endif %}
+                    {% if bonlivraison.client.tel %}<b>Tél : </b>{{ bonlivraison.client.tel }}<br>{% endif %}
                     {% if bonlivraison.client.email %}<b>Email : </b>{{ bonlivraison.client.email }}<br>{% endif %}
                     {% if bonlivraison.client.ville %}<b>Ville : </b>{{ bonlivraison.client.ville }}<br>{% endif %}
-                    {% if bonlivraison.client.mf %}<b>M.F : </b>{{ bonlivraison.client.mf }}<br>{% endif %}
-                    {% if bonlivraison.client.note %}<b>Note : </b>{{ bonlivraison.client.note }}<br>{% endif %}
+                    {% if bonlivraison.client.mf %}<b>M.F : </b>{{ bonlivraison.client.mf }}{% endif %}
                 </div>
             </td>
         </tr>
